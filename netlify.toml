@@ -2,9 +2,6 @@
   command = "npm run build"
   publish = ".next"
 
-[[plugins]]
-  package = "@netlify/plugin-nextjs"
-
 [build.environment]
   NODE_VERSION = "20"
 
@@ -14,10 +11,3 @@
   to = "https://remoteroles.online/:splat"
   status = 301
   force = true
-
-# SPA fallback — Netlify plugin handles Next.js routing,
-# but this catches any edge cases
-[[redirects]]
-  from = "/*"
-  to = "/.netlify/functions/___netlify-handler"
-  status = 200

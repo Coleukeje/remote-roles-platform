@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { curriculum } from "@/data/curriculum";
 import { useState, useMemo } from "react";
+import { useMobileNav } from "./MobileNav";
 
 /* ─── Tiny icons ─── */
 function ChevronIcon({ open }: { open: boolean }) {
@@ -37,6 +38,9 @@ const typeColors: Record<string, string> = {
   quiz: "bg-blue-500",
   roleplay: "bg-orange-500",
   download: "bg-teal-500",
+  youtube: "bg-red-600",
+  confirmation: "bg-indigo-500",
+  "video-upload": "bg-pink-500",
 };
 
 const typeLabels: Record<string, string> = {
@@ -47,10 +51,14 @@ const typeLabels: Record<string, string> = {
   quiz: "Quiz",
   roleplay: "Role Play",
   download: "Download",
+  youtube: "YouTube",
+  confirmation: "Confirmation",
+  "video-upload": "Video Upload",
 };
 
 export default function Sidebar() {
   const pathname = usePathname();
+  const { isOpen, close } = useMobileNav();
 
   const [expandedWeeks, setExpandedWeeks] = useState<Record<string, boolean>>(() => {
     const initial: Record<string, boolean> = {};
@@ -83,7 +91,14 @@ export default function Sidebar() {
   );
 
   return (
-    <aside className="w-[300px] h-full bg-ink flex flex-col border-r border-ink-light flex-shrink-0">
+    <aside
+      className={`
+        fixed inset-y-0 left-0 z-50 w-[280px] sm:w-[300px] bg-ink flex flex-col border-r border-ink-light
+        transform transition-transform duration-300 ease-in-out
+        lg:relative lg:translate-x-0 lg:flex-shrink-0
+        ${isOpen ? "translate-x-0" : "-translate-x-full"}
+      `}
+    >
       {/* ─── Logo ─── */}
       <div className="px-5 pt-5 pb-4">
         <Link href="/training" className="flex items-center gap-3 group">
@@ -219,6 +234,7 @@ export default function Sidebar() {
                         <div className="flex items-center">
                           <Link
                             href={`/training/${week.id}/${day.id}`}
+                            onClick={close}
                             className={`flex-1 flex items-center gap-2.5 pl-2 pr-1 py-2 rounded-lg transition-all text-left ${
                               isActiveDay
                                 ? "bg-purple-600/25 text-purple-200"

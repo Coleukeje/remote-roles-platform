@@ -22,7 +22,7 @@ export default function TrainingHome() {
       <TopBar title="Training Dashboard" subtitle="Your learning journey" />
       <div className="flex-1 overflow-y-auto">
         {/* ─── Hero banner ─── */}
-        <div className="relative overflow-hidden bg-gradient-to-br from-ink via-ink-light to-purple-900 px-8 py-10">
+        <div className="relative overflow-hidden bg-gradient-to-br from-ink via-ink-light to-purple-900 px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
           {/* Decorative circles */}
           <div className="absolute -top-20 -right-20 w-64 h-64 rounded-full bg-purple-600/10 blur-2xl" />
           <div className="absolute -bottom-10 -left-10 w-48 h-48 rounded-full bg-purple-500/8 blur-xl" />
@@ -31,10 +31,10 @@ export default function TrainingHome() {
             <p className="text-[11px] font-bold text-purple-400 uppercase tracking-[0.15em] mb-2">
               Welcome Back
             </p>
-            <h2 className="font-[family-name:var(--font-display)] text-3xl font-bold text-white mb-2">
+            <h2 className="font-[family-name:var(--font-display)] text-2xl sm:text-3xl font-bold text-white mb-2">
               Your Training Journey
             </h2>
-            <p className="text-purple-100/80 text-[15px] max-w-xl mb-6 leading-relaxed">
+            <p className="text-purple-100/80 text-sm sm:text-[15px] max-w-xl mb-6 leading-relaxed">
               Master remote work, build rapport, and become a top-performing cold caller.
               Each week builds on the last — complete them in order for the best results.
             </p>
@@ -50,7 +50,7 @@ export default function TrainingHome() {
           </div>
         </div>
 
-        <div className="p-8 space-y-8">
+        <div className="p-4 sm:p-6 lg:p-8 space-y-6 sm:space-y-8">
           {/* ─── Stats strip ─── */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             <StatCard value={`${weeks}`} label="Weeks" />
@@ -74,7 +74,7 @@ export default function TrainingHome() {
                   className="bg-white border border-surface-dim rounded-2xl overflow-hidden hover:shadow-lg transition-shadow"
                 >
                   {/* Week header */}
-                  <div className="bg-gradient-to-r from-ink to-ink-light p-6 flex items-start justify-between">
+                  <div className="bg-gradient-to-r from-ink to-ink-light p-4 sm:p-6 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
                     <div>
                       <div className="flex items-center gap-2 mb-1">
                         <span className="text-xl">{week.icon}</span>
@@ -87,7 +87,7 @@ export default function TrainingHome() {
                       </h3>
                       <p className="text-sm text-purple-100/70 mt-1 max-w-lg">{week.description}</p>
                     </div>
-                    <div className="flex gap-3 flex-shrink-0 ml-4">
+                    <div className="flex gap-3 flex-shrink-0 sm:ml-4">
                       <div className="text-center">
                         <p className="text-lg font-bold text-white">{weekLessons}</p>
                         <p className="text-[10px] text-purple-300/60 uppercase">Lessons</p>
@@ -108,7 +108,7 @@ export default function TrainingHome() {
                         <Link
                           key={day.id}
                           href={`/training/${week.id}/${day.id}`}
-                          className="flex items-center gap-4 px-6 py-4 hover:bg-purple-50/50 transition-colors group"
+                          className="flex items-center gap-3 sm:gap-4 px-4 sm:px-6 py-3 sm:py-4 hover:bg-purple-50/50 transition-colors group"
                         >
                           {/* Day number */}
                           <span className="flex-shrink-0 w-10 h-10 rounded-xl bg-surface-dim group-hover:bg-purple-100 flex items-center justify-center text-sm font-bold text-muted group-hover:text-purple-600 transition-colors">

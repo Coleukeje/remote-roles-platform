@@ -1,9 +1,10 @@
 import { Suspense } from "react";
 import Sidebar from "@/components/Sidebar";
+import { MobileNavProvider, MobileOverlay } from "@/components/MobileNav";
 
 function SidebarFallback() {
   return (
-    <aside className="w-72 h-full bg-ink text-surface flex flex-col border-r border-ink-light">
+    <aside className="hidden lg:flex w-[300px] h-full bg-ink text-surface flex-col border-r border-ink-light">
       <div className="px-5 py-5 border-b border-ink-light">
         <div className="flex items-center gap-2.5">
           <div className="w-9 h-9 rounded-lg bg-purple-600 flex items-center justify-center">
@@ -28,11 +29,14 @@ export default function TrainingLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex h-full">
-      <Suspense fallback={<SidebarFallback />}>
-        <Sidebar />
-      </Suspense>
-      <main className="flex-1 flex flex-col overflow-hidden">{children}</main>
-    </div>
+    <MobileNavProvider>
+      <div className="flex h-full">
+        <MobileOverlay />
+        <Suspense fallback={<SidebarFallback />}>
+          <Sidebar />
+        </Suspense>
+        <main className="flex-1 flex flex-col overflow-hidden min-w-0">{children}</main>
+      </div>
+    </MobileNavProvider>
   );
 }

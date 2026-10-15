@@ -52,7 +52,7 @@ export default async function DayPage({
       />
       <div className="flex-1 overflow-y-auto">
         {/* ─── Hero ─── */}
-        <div className="relative overflow-hidden bg-gradient-to-br from-ink via-ink-light to-purple-900 px-8 py-10">
+        <div className="relative overflow-hidden bg-gradient-to-br from-ink via-ink-light to-purple-900 px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
           <div className="absolute -top-16 -right-16 w-56 h-56 rounded-full bg-purple-600/10 blur-2xl" />
 
           <div className="relative z-10">
@@ -62,13 +62,13 @@ export default async function DayPage({
               </span>
             </div>
 
-            <h2 className="font-[family-name:var(--font-display)] text-3xl font-bold text-white mb-2">
+            <h2 className="font-[family-name:var(--font-display)] text-2xl sm:text-3xl font-bold text-white mb-2">
               {day.title}
             </h2>
-            <p className="text-base text-purple-100/70 max-w-2xl leading-relaxed">{day.description}</p>
+            <p className="text-sm sm:text-base text-purple-100/70 max-w-2xl leading-relaxed">{day.description}</p>
 
             {/* Stats pills */}
-            <div className="flex flex-wrap items-center gap-3 mt-5">
+            <div className="flex flex-wrap items-center gap-2 sm:gap-3 mt-4 sm:mt-5">
               <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-purple-200/80 bg-white/5 px-3 py-1.5 rounded-full border border-white/5">
                 <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
                   <path d="M6 1V6L8.5 8.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />

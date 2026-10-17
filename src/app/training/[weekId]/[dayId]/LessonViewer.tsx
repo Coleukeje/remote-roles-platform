@@ -709,14 +709,32 @@ export default function LessonViewer({
   lessons,
   nextLink,
   prevLink,
+  activeLessonId,
 }: {
   lessons: Lesson[];
   nextLink: string | null;
   prevLink: string | null;
+  activeLessonId?: string;
 }) {
   const [completed, setCompleted] = useState<Set<string>>(new Set());
   const [confirmed, setConfirmed] = useState<Set<string>>(new Set());
+  const [expandedLesson, setExpandedLesson] = useState<string>(
+    activeLessonId || lessons[0]?.id || ""
+  );
   const sectionRefs = useRef<Record<string, HTMLElement | null>>({});
+
+  // Sync with URL changes when clicking sidebar lessons
+  useEffect(() => {
+    if (activeLessonId) {
+      setExpandedLesson(activeLessonId);
+      setTimeout(() => {
+        const el = sectionRefs.current[activeLessonId];
+        if (el) {
+          el.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }, 100);
+    }
+  }, [activeLessonId]);
 
   function toggleComplete(lessonId: string) {
     setCompleted((prev) => {
@@ -740,7 +758,7 @@ export default function LessonViewer({
     lessons.length > 0 ? Math.round((completed.size / lessons.length) * 100) : 0;
 
   return (
-    <div className="px-4 sm:px-6 lg:px-8 py-6 max-w-4xl mx-auto">
+    <div className="px-4 sm:px-6 lg:px-8 py-6">
       {/* ─── Progress bar ─── */}
       <div className="flex items-center gap-3 mb-8">
         <div className="flex-1 h-2.5 bg-surface-dim rounded-full overflow-hidden">
@@ -769,8 +787,11 @@ export default function LessonViewer({
                 isComplete ? "border-green-200 bg-green-50/20" : "border-surface-dim bg-white"
               }`}
             >
-              {/* Section header */}
-              <div className={`px-4 sm:px-6 py-4 sm:py-5 bg-gradient-to-r ${config.gradient} border-b ${config.border}`}>
+              {/* Section header — click to expand/collapse */}
+              <div
+                onClick={() => setExpandedLesson(expandedLesson === lesson.id ? "" : lesson.id)}
+                className={`px-4 sm:px-6 py-4 sm:py-5 bg-gradient-to-r ${config.gradient} cursor-pointer select-none hover:opacity-90 transition-all ${expandedLesson === lesson.id ? `border-b ${config.border}` : ""}`}
+              >
                 <div className="flex items-start gap-3 sm:gap-4">
                   <div className={`flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-xl ${config.iconBg} flex items-center justify-center`}>
                     {typeIcons[lesson.type] || typeIcons.reading}
@@ -799,10 +820,19 @@ export default function LessonViewer({
                       <p className="text-xs sm:text-sm text-muted mt-1 leading-relaxed">{lesson.description}</p>
                     )}
                   </div>
-                  {/* Completion indicator */}
-                  <div className="flex-shrink-0">
+                  {/* Expand/collapse chevron + completion indicator */}
+                  <div className="flex items-center gap-2 flex-shrink-0">
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 16 16"
+                      fill="none"
+                      className={`text-muted/60 transition-transform duration-200 ${expandedLesson === lesson.id ? "rotate-180" : ""}`}
+                    >
+                      <path d="M4 6L8 10L12 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
                     <button
-                      onClick={() => toggleComplete(lesson.id)}
+                      onClick={(e) => { e.stopPropagation(); toggleComplete(lesson.id); }}
                       className={`w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center border-2 transition-all duration-200 ${
                         isComplete
                           ? "bg-green-500 border-green-500 text-white"
@@ -821,7 +851,8 @@ export default function LessonViewer({
                 </div>
               </div>
 
-              {/* Section content — always visible (full page view) */}
+              {/* Section content — shown only when expanded */}
+              {expandedLesson === lesson.id && (
               <div className="px-4 sm:px-6 py-5 sm:py-6">
                 {/* Meeting note banner */}
                 {lesson.meetingNote && (
@@ -1007,6 +1038,7 @@ export default function LessonViewer({
                   </button>
                 </div>
               </div>
+              )}
             </section>
           );
         })}

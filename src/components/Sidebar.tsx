@@ -137,22 +137,16 @@ export default function Sidebar() {
       </div>
 
       {/* ─── Quick nav ─── */}
-      <div className="mx-4 mb-3 flex gap-2">
+      <div className="mx-4 mb-3">
         <Link
           href="/training"
-          className={`flex-1 text-center text-[10px] font-bold py-2 rounded-lg transition-colors ${
+          className={`block text-center text-[10px] font-bold py-2 rounded-lg transition-colors ${
             pathname === "/training"
               ? "bg-purple-600/30 text-purple-300 border border-purple-500/20"
               : "bg-ink-light/40 text-muted hover:text-purple-300 border border-transparent"
           }`}
         >
           Dashboard
-        </Link>
-        <Link
-          href="/admin"
-          className="flex-1 text-center text-[10px] font-bold py-2 rounded-lg bg-ink-light/40 text-muted hover:text-purple-300 transition-colors border border-transparent"
-        >
-          Admin
         </Link>
       </div>
 
@@ -271,9 +265,11 @@ export default function Sidebar() {
                         {dayOpen && (
                           <div className="ml-5 pl-3 border-l border-ink-light/30 py-1 space-y-0.5 mb-1">
                             {day.lessons.map((lesson) => (
-                              <div
+                              <Link
                                 key={lesson.id}
-                                className="flex items-center gap-2 py-1.5 px-2 rounded-md text-[11px] text-muted/80 hover:text-purple-200 hover:bg-ink-light/20 transition-colors cursor-default group"
+                                href={`/training/${week.id}/${day.id}?lesson=${lesson.id}`}
+                                onClick={close}
+                                className="flex items-center gap-2 py-1.5 px-2 rounded-md text-[11px] text-muted/80 hover:text-purple-200 hover:bg-ink-light/20 transition-colors cursor-pointer group"
                               >
                                 <span
                                   className={`inline-block w-1.5 h-1.5 rounded-full flex-shrink-0 ${typeColors[lesson.type] || "bg-muted"}`}
@@ -285,7 +281,7 @@ export default function Sidebar() {
                                 <span className="text-[9px] text-muted/40 flex-shrink-0 tabular-nums group-hover:hidden">
                                   {lesson.duration}
                                 </span>
-                              </div>
+                              </Link>
                             ))}
 
                             {/* Day type summary */}

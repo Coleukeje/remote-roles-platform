@@ -7,10 +7,13 @@ export const instant = false;
 
 export default async function DayPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ weekId: string; dayId: string }>;
+  searchParams: Promise<{ lesson?: string }>;
 }) {
   const { weekId, dayId } = await params;
+  const { lesson: activeLessonId } = await searchParams;
 
   const week = curriculum.find((w) => w.id === weekId);
   if (!week) notFound();
@@ -111,6 +114,7 @@ export default async function DayPage({
           lessons={day.lessons}
           nextLink={nextLink}
           prevLink={prevLink}
+          activeLessonId={activeLessonId || day.lessons[0]?.id}
         />
       </div>
     </>

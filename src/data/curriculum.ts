@@ -58,8 +58,6 @@ export type Day = {
   description: string;
   objectives: string[];
   lessons: Lesson[];
-  /** Downloadable schedule/spreadsheet for the day */
-  scheduleDownload?: string;
 };
 
 export type Week = {
@@ -92,7 +90,6 @@ export const curriculum: Week[] = [
         title: "Introduction to Telemarketing Fundamentals",
         description:
           "Get oriented with the program, understand how we assess you, and dive into the world of telemarketing. This is where it all starts.",
-        scheduleDownload: "week1-day1-schedule.pdf",
         objectives: [
           "Understand the Remote Roles training structure and expectations",
           "Download and review the program syllabus",
@@ -172,14 +169,6 @@ export const curriculum: Week[] = [
               },
             ],
           },
-          {
-            id: "w1d1-schedule",
-            title: "Day 1 Training Schedule",
-            duration: "2 min",
-            type: "download",
-            description: "Download the full Day 1 schedule with activities and time blocks.",
-            downloadFile: "week1-day1-schedule.pdf",
-          },
         ],
       },
 
@@ -190,7 +179,6 @@ export const curriculum: Week[] = [
         title: "Cold Calling Overview & Script Introduction",
         description:
           "Get introduced to cold calling, download your first script, and begin understanding how objection handling ties into everything.",
-        scheduleDownload: "week1-day2-schedule.pdf",
         objectives: [
           "Understand the fundamentals of cold calling",
           "Download and familiarize yourself with the call script",
@@ -242,14 +230,6 @@ export const curriculum: Week[] = [
             content: "One of the best ways to learn is by listening to real calls. In this section, you'll hear recordings of past calls that demonstrate objection handling in action.\n\nWhat to Listen For:\n• How the caller opens — do they go straight to business?\n• When the prospect pushes back — how does the caller respond?\n• The tone of voice — is it confident, warm, professional?\n• How objections are turned into opportunities\n• How the call closes — is there a firm callback or appointment?\n\nAs you listen, take notes:\n• What did the caller do well?\n• What could they have done differently?\n• Which objections came up and how were they handled?\n• Did the caller follow the three-step framework (Acknowledge, Redirect, Provide Value)?\n\nYour trainer will upload recorded calls to this section. Check back regularly for new examples.",
             meetingNote: "Recorded calls are played and discussed during the live training meeting. You'll analyze them as a team.",
           },
-          {
-            id: "w1d2-schedule",
-            title: "Day 2 Training Schedule",
-            duration: "2 min",
-            type: "download",
-            description: "Download the full Day 2 schedule.",
-            downloadFile: "week1-day2-schedule.pdf",
-          },
         ],
       },
 
@@ -260,7 +240,6 @@ export const curriculum: Week[] = [
         title: "Script & Objection Handling Deep Dive",
         description:
           "Continue building on scripts and objections. Practice corrections, run role plays, and sharpen your responses. Get your first look at rapport building.",
-        scheduleDownload: "week1-day3-schedule.pdf",
         objectives: [
           "Review and refine your script delivery",
           "Master the top 10 objections with word-for-word responses",
@@ -390,14 +369,6 @@ export const curriculum: Week[] = [
               },
             ],
           },
-          {
-            id: "w1d3-schedule",
-            title: "Day 3 Training Schedule",
-            duration: "2 min",
-            type: "download",
-            description: "Download the full Day 3 schedule.",
-            downloadFile: "week1-day3-schedule.pdf",
-          },
         ],
       },
 
@@ -408,7 +379,6 @@ export const curriculum: Week[] = [
         title: "Final Role Play",
         description:
           "Virtual session — put everything together in a full mock call from open to close with trainer evaluation.",
-        scheduleDownload: "week1-day4-schedule.pdf",
         objectives: [
           "Execute a complete cold call from opening to close",
           "Handle objections mid-call without breaking flow",
@@ -504,14 +474,6 @@ export const curriculum: Week[] = [
               },
             ],
           },
-          {
-            id: "w1d4-schedule",
-            title: "Day 4 Training Schedule",
-            duration: "2 min",
-            type: "download",
-            description: "Download the Day 4 schedule with role play scenarios.",
-            downloadFile: "week1-day4-schedule.pdf",
-          },
         ],
       },
 
@@ -522,7 +484,6 @@ export const curriculum: Week[] = [
         title: "Cold Calling Deep Training",
         description:
           "Physical session — go deeper into cold calling, master rapport building, and practice mock role plays with your cohort.",
-        scheduleDownload: "week1-day5-schedule.pdf",
         objectives: [
           "Understand advanced rapport building techniques",
           "Apply rapport building in cold calling contexts",
@@ -577,14 +538,6 @@ export const curriculum: Week[] = [
             requiresConfirmation: true,
             confirmationText: "I confirm that I have attended the physical training session and participated in rapport building role plays.",
           },
-          {
-            id: "w1d5-schedule",
-            title: "Day 5 Training Schedule",
-            duration: "2 min",
-            type: "download",
-            description: "Download the Day 5 schedule.",
-            downloadFile: "week1-day5-schedule.pdf",
-          },
         ],
       },
     ],
@@ -609,7 +562,6 @@ export const curriculum: Week[] = [
         title: "Welcome to Real Estate",
         description:
           "Physical session — your introduction to the real estate investing world. Video overview, slide deck, workbook, quiz, and hands-on deal building.",
-        scheduleDownload: "week2-day1-schedule.pdf",
         objectives: [
           "Understand the basics of real estate investing and wholesaling",
           "Complete the real estate fundamentals workbook",
@@ -803,14 +755,6 @@ export const curriculum: Week[] = [
             content: "In this session, the team shares recorded practice calls from Week 1 and reviews them together.\n\nWhat to Listen For:\n• Is the opener direct and confident?\n• How does the caller handle objections?\n• Is the tone warm and professional?\n• Does the caller set a firm appointment or callback?\n\nThis is one of the best learning tools — hearing real calls (even practice ones) and breaking them down as a team.",
             meetingNote: "Recorded calls are shared and reviewed during the training meeting.",
           },
-          {
-            id: "w2d1-schedule",
-            title: "Day 1 Schedule & Resources",
-            duration: "2 min",
-            type: "download",
-            description: "Download the Week 2, Day 1 schedule.",
-            downloadFile: "week2-day1-schedule.pdf",
-          },
         ],
       },
 
@@ -821,7 +765,6 @@ export const curriculum: Week[] = [
         title: "DISC Personality Types & Sales Communication",
         description:
           "Learn to read people over the phone using the DISC framework. Identify personality types and adapt your approach to close more deals.",
-        scheduleDownload: "week2-day2-schedule.pdf",
         objectives: [
           "Understand the four DISC personality types",
           "Identify personality types from phone conversations",
@@ -878,14 +821,6 @@ export const curriculum: Week[] = [
               },
             ],
           },
-          {
-            id: "w2d2-schedule",
-            title: "Day 2 Schedule",
-            duration: "2 min",
-            type: "download",
-            description: "Download the Day 2 schedule.",
-            downloadFile: "week2-day2-schedule.pdf",
-          },
         ],
       },
 
@@ -896,7 +831,6 @@ export const curriculum: Week[] = [
         title: "Leads & Property Research",
         description:
           "Physical session — learn the tools of the trade. Master CRM, Google Sheets, Zillow, Redfin, and PropStream for lead research and property analysis.",
-        scheduleDownload: "week2-day3-schedule.pdf",
         objectives: [
           "Navigate 4-5 core research tools confidently",
           "Evaluate lead quality using research data",
@@ -1070,14 +1004,6 @@ export const curriculum: Week[] = [
             content: "RESEARCH PRACTICE:\n\nYour trainer will give you a real property address. You have 20 minutes to research it.\n\nWhat to Find:\n1. Owner name and contact info\n2. Property type and condition (from photos and records)\n3. Estimated value (ARV) using comps\n4. Ownership duration\n5. Mortgage status (is there equity?)\n6. Motivation indicators (vacant? tax delinquent? absentee?)\n7. Your assessment: Is this a lead worth calling? Why or why not?\n\nTools to Use:\n• PropStream for owner info and motivation indicators\n• Zillow or Redfin for photos and value estimates\n• Google Sheets to organize your findings\n\nPresent your findings to the team. Your trainer will evaluate your research process.\n\nIndependent Assignment: After the session, research a second property on your own and submit your findings.",
             meetingNote: "Research practice happens during the physical training session.",
           },
-          {
-            id: "w2d3-schedule",
-            title: "Day 3 Schedule",
-            duration: "2 min",
-            type: "download",
-            description: "Download the Day 3 schedule.",
-            downloadFile: "week2-day3-schedule.pdf",
-          },
         ],
       },
 
@@ -1088,7 +1014,6 @@ export const curriculum: Week[] = [
         title: "Cold Calling 101",
         description:
           "The anatomy of a real estate cold call — from opening to close. Watch live examples, build your opener, practice rounds, and submit recorded attempts.",
-        scheduleDownload: "week2-day4-schedule.pdf",
         objectives: [
           "Master the anatomy of a real estate cold call",
           "Analyze real cold calls from YouTube",
@@ -1218,14 +1143,6 @@ export const curriculum: Week[] = [
             content: "SUBMISSION — 3 Recorded Cold Call Attempts:\n\nRecord yourself running 3 mock cold calls. You can use the GPT AI tool or practice with a partner.\n\nFor Each Recording:\n• Run the full call from opening to close\n• Include at least 1 objection handling moment\n• Keep each recording under 5 minutes\n• Review your own recording before submitting\n\nSelf-Assessment:\nAfter recording, rate yourself on each call (1-10):\n• Opening confidence\n• Script flow\n• Objection handling\n• Natural delivery\n• Close strength\n\nSubmit your recordings and self-assessment to your trainer. They'll provide feedback before Day 5.",
             meetingNote: "Submit recordings before the Day 5 meeting for trainer review.",
           },
-          {
-            id: "w2d4-schedule",
-            title: "Day 4 Schedule",
-            duration: "2 min",
-            type: "download",
-            description: "Download the Day 4 schedule.",
-            downloadFile: "week2-day4-schedule.pdf",
-          },
         ],
       },
 
@@ -1236,7 +1153,6 @@ export const curriculum: Week[] = [
         title: "Seller Discovery",
         description:
           "Master the 4 Pillars of Seller Discovery — Motivation, Timeline, Condition, and Price. Learn to uncover what really drives a seller's decision.",
-        scheduleDownload: "week2-day5-schedule.pdf",
         objectives: [
           "Understand and apply the 4 Pillars of Seller Discovery",
           "Ask the right follow-up questions based on seller responses",
@@ -1340,14 +1256,6 @@ export const curriculum: Week[] = [
             requiresConfirmation: true,
             confirmationText: "I confirm that I have completed the Seller Interview roleplay session.",
           },
-          {
-            id: "w2d5-schedule",
-            title: "Day 5 Schedule",
-            duration: "2 min",
-            type: "download",
-            description: "Download the Day 5 schedule.",
-            downloadFile: "week2-day5-schedule.pdf",
-          },
         ],
       },
     ],
@@ -1372,7 +1280,6 @@ export const curriculum: Week[] = [
         title: "Objections & Follow-Up",
         description:
           "Master the ACKNOWLEDGE-CLARIFY-CONTINUE framework. Watch real objection handling in action, practice with flashcards, and survive 'Objection Roulette.'",
-        scheduleDownload: "week3-day1-schedule.pdf",
         objectives: [
           "Master the ACKNOWLEDGE-CLARIFY-CONTINUE objection framework",
           "Know when and how to respect opt-outs",
@@ -1497,14 +1404,6 @@ export const curriculum: Week[] = [
             requiresConfirmation: true,
             confirmationText: "I confirm that I have participated in the Objection Roulette drill.",
           },
-          {
-            id: "w3d1-schedule",
-            title: "Day 1 Schedule",
-            duration: "2 min",
-            type: "download",
-            description: "Download the Week 3, Day 1 schedule.",
-            downloadFile: "week3-day1-schedule.pdf",
-          },
         ],
       },
 
@@ -1515,7 +1414,6 @@ export const curriculum: Week[] = [
         title: "CRM Mastery — HubSpot",
         description:
           "Learn HubSpot CRM inside and out — import leads, manage pipelines, track activities, and build the documentation habits that get you placed with clients.",
-        scheduleDownload: "week3-day2-schedule.pdf",
         objectives: [
           "Navigate HubSpot Free CRM confidently",
           "Import leads from a CSV spreadsheet",
@@ -1636,14 +1534,6 @@ export const curriculum: Week[] = [
             content: "Confirm that you've completed the full HubSpot CRM training session including CSV import, lead updates, and workbook exercises.",
             requiresConfirmation: true,
             confirmationText: "I confirm that I have completed the HubSpot CRM training session and all practice exercises.",
-          },
-          {
-            id: "w3d2-schedule",
-            title: "Day 2 Schedule",
-            duration: "2 min",
-            type: "download",
-            description: "Download the Day 2 schedule.",
-            downloadFile: "week3-day2-schedule.pdf",
           },
         ],
       },

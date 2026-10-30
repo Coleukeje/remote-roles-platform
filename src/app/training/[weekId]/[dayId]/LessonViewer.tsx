@@ -772,88 +772,80 @@ export default function LessonViewer({
         </span>
       </div>
 
-      {/* ─── Full-page lesson sections ─── */}
-      <div className="space-y-8">
-        {lessons.map((lesson, index) => {
-          const config = typeConfig[lesson.type] || typeConfig.reading;
-          const isComplete = completed.has(lesson.id);
-          const isConfirmed = confirmed.has(lesson.id);
+      {/* ─── Single active lesson ─── */}
+      {(() => {
+        const activeIndex = lessons.findIndex((l) => l.id === expandedLesson);
+        const lesson = activeIndex >= 0 ? lessons[activeIndex] : lessons[0];
+        const index = activeIndex >= 0 ? activeIndex : 0;
+        if (!lesson) return null;
+        const config = typeConfig[lesson.type] || typeConfig.reading;
+        const isComplete = completed.has(lesson.id);
+        const isConfirmed = confirmed.has(lesson.id);
 
-          return (
-            <section
-              key={lesson.id}
-              ref={(el) => { sectionRefs.current[lesson.id] = el; }}
-              className={`rounded-2xl border overflow-hidden transition-all duration-300 ${
-                isComplete ? "border-green-200 bg-green-50/20" : "border-surface-dim bg-white"
-              }`}
+        return (
+          <section
+            key={lesson.id}
+            ref={(el) => { sectionRefs.current[lesson.id] = el; }}
+            className={`rounded-2xl border overflow-hidden transition-all duration-300 ${
+              isComplete ? "border-green-200 bg-green-50/20" : "border-surface-dim bg-white"
+            }`}
+          >
+            {/* Section header */}
+            <div
+              className={`px-4 sm:px-6 py-4 sm:py-5 bg-gradient-to-r ${config.gradient} border-b ${config.border}`}
             >
-              {/* Section header — click to expand/collapse */}
-              <div
-                onClick={() => setExpandedLesson(expandedLesson === lesson.id ? "" : lesson.id)}
-                className={`px-4 sm:px-6 py-4 sm:py-5 bg-gradient-to-r ${config.gradient} cursor-pointer select-none hover:opacity-90 transition-all ${expandedLesson === lesson.id ? `border-b ${config.border}` : ""}`}
-              >
-                <div className="flex items-start gap-3 sm:gap-4">
-                  <div className={`flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-xl ${config.iconBg} flex items-center justify-center`}>
-                    {typeIcons[lesson.type] || typeIcons.reading}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex flex-wrap items-center gap-2 mb-1">
-                      <span className="text-xs font-bold text-muted/60 tabular-nums">
-                        {String(index + 1).padStart(2, "0")}
+              <div className="flex items-start gap-3 sm:gap-4">
+                <div className={`flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-xl ${config.iconBg} flex items-center justify-center`}>
+                  {typeIcons[lesson.type] || typeIcons.reading}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex flex-wrap items-center gap-2 mb-1">
+                    <span className="text-xs font-bold text-muted/60 tabular-nums">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    <span className={`inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-full ${config.bg} ${config.text}`}>
+                      <span className={`w-1.5 h-1.5 rounded-full ${config.dot}`} />
+                      {config.label}
+                    </span>
+                    <span className="text-xs text-muted">{lesson.duration}</span>
+                    {lesson.meetingNote && (
+                      <span className="inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-600">
+                        <span className="w-1.5 h-1.5 rounded-full bg-indigo-500" />
+                        Live Meeting
                       </span>
-                      <span className={`inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-full ${config.bg} ${config.text}`}>
-                        <span className={`w-1.5 h-1.5 rounded-full ${config.dot}`} />
-                        {config.label}
-                      </span>
-                      <span className="text-xs text-muted">{lesson.duration}</span>
-                      {lesson.meetingNote && (
-                        <span className="inline-flex items-center gap-1 text-[11px] font-semibold px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-600">
-                          <span className="w-1.5 h-1.5 rounded-full bg-indigo-500" />
-                          Live Meeting
-                        </span>
-                      )}
-                    </div>
-                    <h3 className="font-[family-name:var(--font-display)] text-base sm:text-lg font-bold text-ink leading-tight">
-                      {lesson.title}
-                    </h3>
-                    {lesson.description && (
-                      <p className="text-xs sm:text-sm text-muted mt-1 leading-relaxed">{lesson.description}</p>
                     )}
                   </div>
-                  {/* Expand/collapse chevron + completion indicator */}
-                  <div className="flex items-center gap-2 flex-shrink-0">
-                    <svg
-                      width="16"
-                      height="16"
-                      viewBox="0 0 16 16"
-                      fill="none"
-                      className={`text-muted/60 transition-transform duration-200 ${expandedLesson === lesson.id ? "rotate-180" : ""}`}
-                    >
-                      <path d="M4 6L8 10L12 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                    <button
-                      onClick={(e) => { e.stopPropagation(); toggleComplete(lesson.id); }}
-                      className={`w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center border-2 transition-all duration-200 ${
-                        isComplete
-                          ? "bg-green-500 border-green-500 text-white"
-                          : "border-surface-dim text-muted hover:border-purple-300 hover:text-purple-500"
-                      }`}
-                    >
-                      {isComplete ? (
-                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                          <path d="M3 7.5L5.5 10L11 4" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                      ) : (
-                        <span className="text-xs font-bold">{index + 1}</span>
-                      )}
-                    </button>
-                  </div>
+                  <h3 className="font-[family-name:var(--font-display)] text-base sm:text-lg font-bold text-ink leading-tight">
+                    {lesson.title}
+                  </h3>
+                  {lesson.description && (
+                    <p className="text-xs sm:text-sm text-muted mt-1 leading-relaxed">{lesson.description}</p>
+                  )}
+                </div>
+                {/* Completion indicator */}
+                <div className="flex items-center gap-2 flex-shrink-0">
+                  <button
+                    onClick={() => toggleComplete(lesson.id)}
+                    className={`w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center border-2 transition-all duration-200 ${
+                      isComplete
+                        ? "bg-green-500 border-green-500 text-white"
+                        : "border-surface-dim text-muted hover:border-purple-300 hover:text-purple-500"
+                    }`}
+                  >
+                    {isComplete ? (
+                      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                        <path d="M3 7.5L5.5 10L11 4" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    ) : (
+                      <span className="text-xs font-bold">{index + 1}</span>
+                    )}
+                  </button>
                 </div>
               </div>
+            </div>
 
-              {/* Section content — shown only when expanded */}
-              {expandedLesson === lesson.id && (
-              <div className="px-4 sm:px-6 py-5 sm:py-6">
+            {/* Section content — always visible for the active lesson */}
+            <div className="px-4 sm:px-6 py-5 sm:py-6">
                 {/* Meeting note banner */}
                 {lesson.meetingNote && (
                   <div className="mb-5 flex items-start gap-3 p-3 sm:p-4 rounded-xl bg-indigo-50 border border-indigo-200">
@@ -1038,11 +1030,9 @@ export default function LessonViewer({
                   </button>
                 </div>
               </div>
-              )}
             </section>
           );
-        })}
-      </div>
+      })()}
 
       {/* ─── Navigation ─── */}
       <div className="mt-10 flex flex-col sm:flex-row items-center justify-between gap-4">

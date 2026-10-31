@@ -49,7 +49,7 @@ export default async function DayPage({
         title={day.title}
         breadcrumbs={[
           { label: "Training", href: "/training" },
-          { label: `Week ${week.week}`, href: "/training" },
+          { label: `Module ${week.week}`, href: "/training" },
           { label: `Day ${day.day}` },
         ]}
       />
@@ -61,7 +61,7 @@ export default async function DayPage({
           <div className="relative z-10">
             <div className="flex items-center gap-2 mb-3">
               <span className="text-[10px] font-bold text-purple-400 uppercase tracking-[0.15em] bg-purple-500/10 px-2.5 py-1 rounded-full">
-                Week {week.week} · Day {day.day}
+                Module {week.week} · Day {day.day}
               </span>
             </div>
 

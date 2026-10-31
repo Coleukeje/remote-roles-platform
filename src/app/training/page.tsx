@@ -14,7 +14,7 @@ function StatCard({ value, label }: { value: string; label: string }) {
 export default function TrainingHome() {
   const lessons = totalLessons();
   const duration = totalDuration();
-  const weeks = curriculum.length;
+  const modules = curriculum.length;
   const days = curriculum.reduce((s, w) => s + w.days.length, 0);
 
   return (
@@ -36,7 +36,7 @@ export default function TrainingHome() {
             </h2>
             <p className="text-purple-100/80 text-sm sm:text-[15px] max-w-xl mb-6 leading-relaxed">
               Master remote work, build rapport, and become a top-performing cold caller.
-              Each week builds on the last — complete them in order for the best results.
+              Each module builds on the last — complete them in order for the best results.
             </p>
             <Link
               href={`/training/${curriculum[0].id}/${curriculum[0].days[0].id}`}
@@ -53,7 +53,7 @@ export default function TrainingHome() {
         <div className="p-4 sm:p-6 lg:p-8 space-y-6 sm:space-y-8">
           {/* ─── Stats strip ─── */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            <StatCard value={`${weeks}`} label="Weeks" />
+            <StatCard value={`${modules}`} label="Modules" />
             <StatCard value={`${days}`} label="Training Days" />
             <StatCard value={`${lessons}`} label="Total Lessons" />
             <StatCard value={duration} label="Total Duration" />
@@ -79,7 +79,7 @@ export default function TrainingHome() {
                       <div className="flex items-center gap-2 mb-1">
                         <span className="text-xl">{week.icon}</span>
                         <span className="text-[10px] font-bold text-purple-400 uppercase tracking-[0.12em]">
-                          Week {week.week}
+                          Module {week.week}
                         </span>
                       </div>
                       <h3 className="font-[family-name:var(--font-display)] text-xl font-bold text-white">

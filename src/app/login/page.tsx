@@ -86,7 +86,7 @@ export default function LoginPage() {
             <span className="text-purple-300">Launch your career.</span>
           </h1>
           <p className="text-purple-100/60 text-base max-w-sm leading-relaxed">
-            3 weeks of intensive training in communication, sales psychology,
+            3 modules of intensive training in communication, sales psychology,
             and cold calling mastery — from anywhere in the world.
           </p>
         </div>
@@ -95,7 +95,7 @@ export default function LoginPage() {
         <div className="relative z-10 flex gap-8">
           <div>
             <p className="text-2xl font-bold text-white">3</p>
-            <p className="text-xs text-purple-300/50 uppercase tracking-wider">Weeks</p>
+            <p className="text-xs text-purple-300/50 uppercase tracking-wider">Modules</p>
           </div>
           <div>
             <p className="text-2xl font-bold text-white">12</p>

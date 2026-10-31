@@ -202,7 +202,7 @@ export default function Sidebar() {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-1.5">
                     <span className="text-[9px] font-bold text-purple-400 uppercase tracking-[0.14em]">
-                      Week {week.week}
+                      Module {week.week}
                     </span>
                     {!isLocked && (
                       <span className="text-[9px] text-muted/50">

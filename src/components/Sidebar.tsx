@@ -3,8 +3,10 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { curriculum } from "@/data/curriculum";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useMobileNav } from "./MobileNav";
+import { createClient } from "@/lib/supabase/client";
+import { signOut } from "@/app/actions/auth";
 
 /* ─── Tiny icons ─── */
 function ChevronIcon({ open }: { open: boolean }) {
@@ -59,6 +61,23 @@ const typeLabels: Record<string, string> = {
 export default function Sidebar() {
   const pathname = usePathname();
   const { isOpen, close } = useMobileNav();
+
+  // Fetch logged-in user info
+  const [userName, setUserName] = useState("Trainee");
+  const [userEmail, setUserEmail] = useState("");
+  const [userInitial, setUserInitial] = useState("T");
+
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (user) {
+        const name = user.user_metadata?.full_name || user.email?.split("@")[0] || "Trainee";
+        setUserName(name);
+        setUserEmail(user.email || "");
+        setUserInitial(name.charAt(0).toUpperCase());
+      }
+    });
+  }, []);
 
   const [expandedWeeks, setExpandedWeeks] = useState<Record<string, boolean>>(() => {
     const initial: Record<string, boolean> = {};
@@ -312,19 +331,23 @@ export default function Sidebar() {
       <div className="px-4 py-3 border-t border-ink-light/60">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-purple-700 flex items-center justify-center ring-2 ring-purple-500/20">
-            <span className="text-[11px] font-bold text-white">T</span>
+            <span className="text-[11px] font-bold text-white">{userInitial}</span>
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-[13px] font-semibold text-white truncate">Trainee</p>
-            <p className="text-[10px] text-muted truncate">trainee@remoteroles.online</p>
+            <p className="text-[13px] font-semibold text-white truncate">{userName}</p>
+            <p className="text-[10px] text-muted truncate">{userEmail}</p>
           </div>
-          <button className="p-1 text-muted hover:text-purple-300 transition-colors rounded">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <circle cx="8" cy="4" r="1.2" fill="currentColor" />
-              <circle cx="8" cy="8" r="1.2" fill="currentColor" />
-              <circle cx="8" cy="12" r="1.2" fill="currentColor" />
-            </svg>
-          </button>
+          <form action={signOut}>
+            <button
+              type="submit"
+              title="Sign out"
+              className="p-1.5 text-muted hover:text-red-400 transition-colors rounded"
+            >
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M6 2H4a2 2 0 00-2 2v8a2 2 0 002 2h2M10.5 11.5L14 8l-3.5-3.5M14 8H6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+          </form>
         </div>
       </div>
     </aside>

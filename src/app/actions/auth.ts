@@ -25,29 +25,46 @@ export async function login(formData: FormData) {
 
 export async function signup(formData: FormData) {
   const supabase = await createClient();
-  const headersList = await headers();
-  const origin = headersList.get("origin");
 
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
   const name = formData.get("name") as string;
 
-  const { error } = await supabase.auth.signUp({
+  const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
     email,
     password,
     options: {
       data: {
         full_name: name,
       },
-      emailRedirectTo: `${origin}/auth/callback`,
     },
   });
 
-  if (error) {
-    return { error: error.message };
+  if (signUpError) {
+    return { error: signUpError.message };
   }
 
-  return { success: "Check your email to confirm your account." };
+  // If email confirmation is disabled, the user is auto-confirmed.
+  // Sign them in and redirect straight to training.
+  if (signUpData.session) {
+    revalidatePath("/", "layout");
+    redirect("/training");
+  }
+
+  // If Supabase still requires confirmation (session is null),
+  // try signing in directly in case auto-confirm is on but session wasn't returned
+  const { error: signInError } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
+
+  if (!signInError) {
+    revalidatePath("/", "layout");
+    redirect("/training");
+  }
+
+  // Fallback: account created but couldn't auto-login
+  return { success: "Account created! You can now sign in." };
 }
 
 export async function signOut() {

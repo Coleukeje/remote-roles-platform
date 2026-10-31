@@ -30,7 +30,12 @@ export default function LoginPage() {
       if (mode === "signup") {
         const result = await signup(formData);
         if (result?.error) setError(result.error);
-        if (result?.success) setSuccess(result.success);
+        if (result?.success) {
+          setSuccess(result.success);
+          // Auto-switch to login mode so they can sign in right away
+          setTimeout(() => setMode("login"), 2000);
+        }
+        // If signup redirects (auto-login), no result is returned
         return;
       }
 

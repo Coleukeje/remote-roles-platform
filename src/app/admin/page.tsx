@@ -55,7 +55,7 @@ function getAllQuizzes() {
       day.lessons.forEach((lesson) => {
         if (lesson.type === "quiz" && lesson.quiz && lesson.quiz.length > 0) {
           quizzes.push({
-            weekTitle: `Week ${week.week}`,
+            weekTitle: `Module ${week.week}`,
             dayTitle: `Day ${day.day}: ${day.title}`,
             lessonTitle: lesson.title,
             lessonId: lesson.id,
@@ -76,11 +76,11 @@ function getAllRolePlays() {
       day.lessons.forEach((lesson) => {
         if (lesson.type === "roleplay" && lesson.content) {
           roleplays.push({
-            weekTitle: `Week ${week.week}`,
+            weekTitle: `Module ${week.week}`,
             dayTitle: `Day ${day.day}: ${day.title}`,
             lessonTitle: lesson.title,
             lessonId: lesson.id,
-            content: lesson.content,
+            content: typeof lesson.content === "string" ? lesson.content : "",
           });
         }
       });
@@ -97,7 +97,7 @@ function getAllDownloads() {
       day.lessons.forEach((lesson) => {
         if (lesson.downloadFile) {
           downloads.push({
-            weekTitle: `Week ${week.week}`,
+            weekTitle: `Module ${week.week}`,
             dayTitle: `Day ${day.day}: ${day.title}`,
             lessonTitle: lesson.title,
             file: lesson.downloadFile,
@@ -203,7 +203,7 @@ export default function AdminPage() {
           <div className="bg-white border border-surface-dim rounded-xl p-5">
             <p className="text-xs text-muted font-semibold uppercase tracking-wider mb-1">Total Content</p>
             <p className="font-[family-name:var(--font-display)] text-3xl font-bold text-ink">{totalLessons}</p>
-            <p className="text-[10px] text-muted mt-0.5">lessons across {curriculum.length} weeks</p>
+            <p className="text-[10px] text-muted mt-0.5">lessons across {curriculum.length} modules</p>
           </div>
         </div>
 
@@ -364,7 +364,7 @@ export default function AdminPage() {
                           <div className="flex items-center gap-2">
                             <span className="text-sm">{week.icon}</span>
                             <div>
-                              <p className="text-xs font-semibold text-ink">Week {week.week}</p>
+                              <p className="text-xs font-semibold text-ink">Module {week.week}</p>
                               <p className="text-[10px] text-muted">{week.title}</p>
                             </div>
                           </div>
@@ -645,7 +645,7 @@ export default function AdminPage() {
                     <div className="flex items-center gap-3">
                       <span className="text-xl">{week.icon}</span>
                       <div>
-                        <p className="text-sm font-bold text-ink">Week {week.week}: {week.title}</p>
+                        <p className="text-sm font-bold text-ink">Module {week.week}: {week.title}</p>
                         <p className="text-xs text-muted">{week.subtitle} &middot; {week.days.length} days &middot; {week.days.reduce((s, d) => s + d.lessons.length, 0)} lessons</p>
                       </div>
                     </div>

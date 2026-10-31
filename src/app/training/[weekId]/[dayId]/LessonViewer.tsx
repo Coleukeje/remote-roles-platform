@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import type { Lesson, QuizQuestion, YouTubeVideo, Comment } from "@/data/curriculum";
+import type { Lesson, QuizQuestion, YouTubeVideo, Comment, RichContentBlock } from "@/data/curriculum";
 import Link from "next/link";
+import RichContentRenderer from "@/components/RichContentRenderer";
 
 /* ═══════════════════════════════════════════════
    TYPE STYLING
@@ -583,9 +584,9 @@ function CommentsSection({ lessonId }: { lessonId: string }) {
 }
 
 /* ═══════════════════════════════════════════════
-   CONTENT RENDERER — handles bullet points
+   LEGACY CONTENT RENDERER — handles flat text strings
    ═══════════════════════════════════════════════ */
-function ContentBlock({ content }: { content: string }) {
+function LegacyContentRenderer({ content }: { content: string }) {
   const sections = content.split("\n\n");
 
   return (
@@ -698,6 +699,33 @@ function ContentBlock({ content }: { content: string }) {
           </p>
         );
       })}
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════
+   SMART CONTENT BLOCK — routes to rich or legacy
+   ═══════════════════════════════════════════════ */
+function ContentBlock({ content }: { content: string | RichContentBlock[] }) {
+  if (Array.isArray(content)) {
+    return <RichContentRenderer blocks={content} />;
+  }
+  return <LegacyContentRenderer content={content} />;
+}
+
+/* ═══════════════════════════════════════════════
+   HERO IMAGE BANNER — shown at top of lesson
+   ═══════════════════════════════════════════════ */
+function HeroImage({ src, alt }: { src: string; alt: string }) {
+  return (
+    <div className="relative w-full aspect-[2.4/1] overflow-hidden rounded-xl sm:rounded-2xl bg-surface-dim mb-6 -mt-1">
+      <img
+        src={src}
+        alt={alt}
+        className="absolute inset-0 w-full h-full object-cover"
+        loading="lazy"
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
     </div>
   );
 }
@@ -846,6 +874,11 @@ export default function LessonViewer({
 
             {/* Section content — always visible for the active lesson */}
             <div className="px-4 sm:px-6 py-5 sm:py-6">
+                {/* Hero image */}
+                {lesson.heroImage && (
+                  <HeroImage src={lesson.heroImage} alt={lesson.title} />
+                )}
+
                 {/* Meeting note banner */}
                 {lesson.meetingNote && (
                   <div className="mb-5 flex items-start gap-3 p-3 sm:p-4 rounded-xl bg-indigo-50 border border-indigo-200">
@@ -866,7 +899,7 @@ export default function LessonViewer({
                     <p className="text-sm font-bold text-ink mb-1">{lesson.title}</p>
                     {lesson.content && (
                       <div className="max-w-lg mb-5 text-center">
-                        <p className="text-xs text-muted leading-relaxed line-clamp-3">{lesson.content.split("\n")[0]}</p>
+                        <p className="text-xs text-muted leading-relaxed line-clamp-3">{typeof lesson.content === "string" ? lesson.content.split("\n")[0] : ""}</p>
                       </div>
                     )}
                     <a

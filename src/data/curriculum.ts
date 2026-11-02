@@ -202,7 +202,7 @@ export const curriculum: Week[] = [
                 { title: "See the Big Picture", content: "Understand the overall structure, timeline, and how each module builds on the last.", icon: "🗺️" }
               ] }
             ] as RichContentBlock[],
-            downloadFile: "remote-roles-training-syllabus.pdf",
+            downloadFile: "remote-roles-hub-syllabus-summary.pdf",
           },
           {
             id: "w1d1-points",
@@ -247,6 +247,7 @@ export const curriculum: Week[] = [
             type: "slides",
             description: "The core of what you'll be doing — understanding telemarketing, call types, and professional phone skills.",
             heroImage: "https://images.unsplash.com/photo-1556745757-8d76bdb6984b?w=1200&h=600&fit=crop&q=80",
+            downloadFile: "remote-roles-hub-telemarketing-training.pptx",
             content: [
               { type: "heading", level: 1, text: "The Foundation of Everything You'll Do" },
               { type: "paragraph", text: "Telemarketing is the foundation of everything you'll do at Remote Roles. Whether you're setting appointments, generating leads, or closing deals, it all starts with understanding how phone-based selling works." },

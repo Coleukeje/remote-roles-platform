@@ -1,6 +1,9 @@
 import { curriculum, totalLessons, totalDuration } from "@/data/curriculum";
 import Link from "next/link";
 import TopBar from "@/components/TopBar";
+import { getUserProfile, isDayFree } from "@/lib/access-control";
+
+export const instant = false;
 
 function StatCard({ value, label }: { value: string; label: string }) {
   return (
@@ -11,7 +14,11 @@ function StatCard({ value, label }: { value: string; label: string }) {
   );
 }
 
-export default function TrainingHome() {
+export default async function TrainingHome() {
+  const profile = await getUserProfile();
+  const accessLevel = profile?.access_level ?? "free";
+  const hasFullAccess = accessLevel === "full";
+
   const lessons = totalLessons();
   const duration = totalDuration();
   const modules = curriculum.length;
@@ -51,6 +58,28 @@ export default function TrainingHome() {
         </div>
 
         <div className="p-4 sm:p-6 lg:p-8 space-y-6 sm:space-y-8">
+          {/* ─── Access level banner ─── */}
+          {!hasFullAccess && (
+            <div className="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center gap-3">
+              <div className="flex items-center gap-2 flex-1">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="text-amber-600 flex-shrink-0">
+                  <rect x="3" y="11" width="18" height="11" rx="2" stroke="currentColor" strokeWidth="2" />
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                </svg>
+                <div>
+                  <p className="text-sm font-semibold text-amber-900">Free Access</p>
+                  <p className="text-xs text-amber-700">You have access to the introductory module. Upgrade to unlock all training content.</p>
+                </div>
+              </div>
+              <Link
+                href={`/training/${curriculum[0].id}/${curriculum[0].days[1]?.id || curriculum[0].days[0].id}`}
+                className="inline-flex items-center gap-1.5 bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold px-4 py-2 rounded-lg transition-colors flex-shrink-0"
+              >
+                Upgrade Access
+              </Link>
+            </div>
+          )}
+
           {/* ─── Stats strip ─── */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             <StatCard value={`${modules}`} label="Modules" />
@@ -103,21 +132,41 @@ export default function TrainingHome() {
                   <div className="divide-y divide-surface-dim">
                     {week.days.map((day) => {
                       const dayMins = day.lessons.reduce((s, l) => s + parseInt(l.duration), 0);
+                      const dayLocked = !hasFullAccess && !isDayFree(day.id);
 
                       return (
                         <Link
                           key={day.id}
                           href={`/training/${week.id}/${day.id}`}
-                          className="flex items-center gap-3 sm:gap-4 px-4 sm:px-6 py-3 sm:py-4 hover:bg-purple-50/50 transition-colors group"
+                          className={`flex items-center gap-3 sm:gap-4 px-4 sm:px-6 py-3 sm:py-4 transition-colors group ${
+                            dayLocked
+                              ? "hover:bg-amber-50/50"
+                              : "hover:bg-purple-50/50"
+                          }`}
                         >
                           {/* Day number */}
-                          <span className="flex-shrink-0 w-10 h-10 rounded-xl bg-surface-dim group-hover:bg-purple-100 flex items-center justify-center text-sm font-bold text-muted group-hover:text-purple-600 transition-colors">
-                            {day.day}
+                          <span
+                            className={`flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center text-sm font-bold transition-colors ${
+                              dayLocked
+                                ? "bg-amber-50 text-amber-400 group-hover:bg-amber-100 group-hover:text-amber-500"
+                                : "bg-surface-dim text-muted group-hover:bg-purple-100 group-hover:text-purple-600"
+                            }`}
+                          >
+                            {dayLocked ? (
+                              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                <rect x="3" y="11" width="18" height="11" rx="2" stroke="currentColor" strokeWidth="2" />
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                              </svg>
+                            ) : (
+                              day.day
+                            )}
                           </span>
 
                           {/* Info */}
                           <div className="flex-1 min-w-0">
-                            <p className="text-sm font-semibold text-ink">{day.title}</p>
+                            <p className={`text-sm font-semibold ${dayLocked ? "text-muted" : "text-ink"}`}>
+                              {day.title}
+                            </p>
                             <p className="text-xs text-muted truncate mt-0.5">{day.description}</p>
                           </div>
 
@@ -128,15 +177,21 @@ export default function TrainingHome() {
                             <span>{dayMins} min</span>
                           </div>
 
-                          {/* Arrow */}
-                          <svg
-                            width="14"
-                            height="14"
-                            viewBox="0 0 14 14"
-                            className="text-muted/40 group-hover:text-purple-500 transition-colors flex-shrink-0"
-                          >
-                            <path d="M5 3L9 7L5 11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                          </svg>
+                          {/* Arrow or lock */}
+                          {dayLocked ? (
+                            <span className="text-[10px] font-bold text-amber-500 uppercase tracking-wider flex-shrink-0">
+                              Pro
+                            </span>
+                          ) : (
+                            <svg
+                              width="14"
+                              height="14"
+                              viewBox="0 0 14 14"
+                              className="text-muted/40 group-hover:text-purple-500 transition-colors flex-shrink-0"
+                            >
+                              <path d="M5 3L9 7L5 11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                            </svg>
+                          )}
                         </Link>
                       );
                     })}

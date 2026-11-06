@@ -1,46 +1,24 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { curriculum } from "@/data/curriculum";
 import type { QuizQuestion } from "@/data/curriculum";
 import Link from "next/link";
 
-/* ─── Mock data — in production these come from Supabase ─── */
-type Trainee = {
+/* ─── Types ─── */
+type UserProfile = {
   id: string;
-  name: string;
-  email: string;
-  unlockedWeeks: string[];
-  completedLessons: number;
-  lastActive: string;
+  full_name: string | null;
+  email: string | null;
+  access_level: "free" | "full";
+  payment_status: string;
+  payment_reference: string | null;
+  paid_at: string | null;
+  invited_by: string | null;
+  invited_at: string | null;
+  created_at: string;
+  updated_at: string;
 };
-
-const mockTrainees: Trainee[] = [
-  {
-    id: "1",
-    name: "Thelma Okafor",
-    email: "thelma@remoteroles.online",
-    unlockedWeeks: ["week-1", "week-2"],
-    completedLessons: 18,
-    lastActive: "2 hours ago",
-  },
-  {
-    id: "2",
-    name: "Stuart Mensah",
-    email: "stuart@remoteroles.online",
-    unlockedWeeks: ["week-1"],
-    completedLessons: 8,
-    lastActive: "Yesterday",
-  },
-  {
-    id: "3",
-    name: "New Trainee",
-    email: "new@remoteroles.online",
-    unlockedWeeks: ["week-1"],
-    completedLessons: 0,
-    lastActive: "Never",
-  },
-];
 
 const totalLessons = curriculum.reduce(
   (s, w) => s + w.days.reduce((sd, d) => sd + d.lessons.length, 0),
@@ -109,47 +87,108 @@ function getAllDownloads() {
   return downloads;
 }
 
-type Tab = "trainees" | "quizzes" | "roleplays" | "downloads" | "content";
+type Tab = "users" | "quizzes" | "roleplays" | "downloads" | "content";
 
 export default function AdminPage() {
-  const [trainees, setTrainees] = useState<Trainee[]>(mockTrainees);
+  const [users, setUsers] = useState<UserProfile[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [selected, setSelected] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<Tab>("trainees");
+  const [activeTab, setActiveTab] = useState<Tab>("users");
   const [expandedQuiz, setExpandedQuiz] = useState<string | null>(null);
   const [expandedRoleplay, setExpandedRoleplay] = useState<string | null>(null);
+  const [toggling, setToggling] = useState<string | null>(null);
+
+  // Invite modal state
+  const [showInvite, setShowInvite] = useState(false);
+  const [inviteEmail, setInviteEmail] = useState("");
+  const [inviteName, setInviteName] = useState("");
+  const [inviteLoading, setInviteLoading] = useState(false);
+  const [inviteResult, setInviteResult] = useState<{ success?: string; error?: string; tempPassword?: string } | null>(null);
 
   const quizzes = getAllQuizzes();
   const roleplays = getAllRolePlays();
   const downloads = getAllDownloads();
 
-  function toggleWeekAccess(traineeId: string, weekId: string) {
-    setTrainees((prev) =>
-      prev.map((t) => {
-        if (t.id !== traineeId) return t;
-        const has = t.unlockedWeeks.includes(weekId);
-        return {
-          ...t,
-          unlockedWeeks: has
-            ? t.unlockedWeeks.filter((w) => w !== weekId)
-            : [...t.unlockedWeeks, weekId],
-        };
-      }),
-    );
+  const fetchUsers = useCallback(async () => {
+    try {
+      const res = await fetch("/api/admin/users");
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.error || "Failed to fetch users");
+        return;
+      }
+      setUsers(data.users || []);
+    } catch {
+      setError("Failed to load users");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchUsers();
+  }, [fetchUsers]);
+
+  async function toggleAccess(userId: string, newLevel: "free" | "full") {
+    setToggling(userId);
+    try {
+      const res = await fetch("/api/admin/users", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId, accessLevel: newLevel }),
+      });
+      if (res.ok) {
+        setUsers((prev) =>
+          prev.map((u) =>
+            u.id === userId ? { ...u, access_level: newLevel } : u,
+          ),
+        );
+      }
+    } catch {
+      // silently fail
+    } finally {
+      setToggling(null);
+    }
   }
 
-  function unlockAllWeeks(traineeId: string) {
-    setTrainees((prev) =>
-      prev.map((t) => {
-        if (t.id !== traineeId) return t;
-        return { ...t, unlockedWeeks: curriculum.map((w) => w.id) };
-      }),
-    );
+  async function handleInvite(e: React.FormEvent) {
+    e.preventDefault();
+    setInviteLoading(true);
+    setInviteResult(null);
+
+    try {
+      const res = await fetch("/api/admin/invite", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: inviteEmail, name: inviteName }),
+      });
+      const data = await res.json();
+
+      if (!res.ok) {
+        setInviteResult({ error: data.error });
+      } else {
+        setInviteResult({
+          success: data.message,
+          tempPassword: data.tempPassword,
+        });
+        setInviteEmail("");
+        setInviteName("");
+        fetchUsers(); // Refresh user list
+      }
+    } catch {
+      setInviteResult({ error: "Failed to invite user" });
+    } finally {
+      setInviteLoading(false);
+    }
   }
 
-  const selectedTrainee = trainees.find((t) => t.id === selected);
+  const selectedUser = users.find((u) => u.id === selected);
+  const fullAccessCount = users.filter((u) => u.access_level === "full").length;
+  const paidCount = users.filter((u) => u.payment_status === "paid").length;
 
   const tabs: { id: Tab; label: string; count?: number }[] = [
-    { id: "trainees", label: "Trainees", count: trainees.length },
+    { id: "users", label: "Users", count: users.length },
     { id: "quizzes", label: "Quizzes", count: quizzes.length },
     { id: "roleplays", label: "Role Plays", count: roleplays.length },
     { id: "downloads", label: "Downloads", count: downloads.length },
@@ -182,22 +221,21 @@ export default function AdminPage() {
         {/* ─── Stats ─── */}
         <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-8">
           <div className="bg-white border border-surface-dim rounded-xl p-5">
-            <p className="text-xs text-muted font-semibold uppercase tracking-wider mb-1">Total Trainees</p>
-            <p className="font-[family-name:var(--font-display)] text-3xl font-bold text-ink">{trainees.length}</p>
-          </div>
-          <div className="bg-white border border-surface-dim rounded-xl p-5">
-            <p className="text-xs text-muted font-semibold uppercase tracking-wider mb-1">Active This Week</p>
-            <p className="font-[family-name:var(--font-display)] text-3xl font-bold text-green-600">
-              {trainees.filter((t) => t.lastActive !== "Never").length}
+            <p className="text-xs text-muted font-semibold uppercase tracking-wider mb-1">Total Users</p>
+            <p className="font-[family-name:var(--font-display)] text-3xl font-bold text-ink">
+              {loading ? "—" : users.length}
             </p>
           </div>
           <div className="bg-white border border-surface-dim rounded-xl p-5">
-            <p className="text-xs text-muted font-semibold uppercase tracking-wider mb-1">Avg. Progress</p>
+            <p className="text-xs text-muted font-semibold uppercase tracking-wider mb-1">Full Access</p>
+            <p className="font-[family-name:var(--font-display)] text-3xl font-bold text-green-600">
+              {loading ? "—" : fullAccessCount}
+            </p>
+          </div>
+          <div className="bg-white border border-surface-dim rounded-xl p-5">
+            <p className="text-xs text-muted font-semibold uppercase tracking-wider mb-1">Paid Users</p>
             <p className="font-[family-name:var(--font-display)] text-3xl font-bold text-purple-600">
-              {Math.round(
-                trainees.reduce((s, t) => s + (t.completedLessons / totalLessons) * 100, 0) /
-                  trainees.length,
-              )}%
+              {loading ? "—" : paidCount}
             </p>
           </div>
           <div className="bg-white border border-surface-dim rounded-xl p-5">
@@ -233,167 +271,330 @@ export default function AdminPage() {
           ))}
         </div>
 
-        {/* ─── Trainees Tab ─── */}
-        {activeTab === "trainees" && (
+        {/* ─── Users Tab ─── */}
+        {activeTab === "users" && (
           <div className="flex gap-8">
             <div className="flex-1">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="font-[family-name:var(--font-display)] text-lg font-bold text-ink">
-                  Trainees
+                  User Management
                 </h2>
-                <button className="text-xs font-bold text-white bg-purple-600 px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors">
-                  + Invite Trainee
+                <button
+                  onClick={() => { setShowInvite(true); setInviteResult(null); }}
+                  className="text-xs font-bold text-white bg-purple-600 px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors"
+                >
+                  + Invite User
                 </button>
               </div>
 
-              <div className="bg-white border border-surface-dim rounded-xl overflow-hidden">
-                <table className="w-full">
-                  <thead>
-                    <tr className="border-b border-surface-dim">
-                      <th className="text-left text-[10px] font-bold text-muted uppercase tracking-wider px-5 py-3">
-                        Trainee
-                      </th>
-                      <th className="text-left text-[10px] font-bold text-muted uppercase tracking-wider px-5 py-3">
-                        Progress
-                      </th>
-                      <th className="text-left text-[10px] font-bold text-muted uppercase tracking-wider px-5 py-3">
-                        Access
-                      </th>
-                      <th className="text-left text-[10px] font-bold text-muted uppercase tracking-wider px-5 py-3">
-                        Last Active
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-surface-dim">
-                    {trainees.map((trainee) => {
-                      const pct = Math.round((trainee.completedLessons / totalLessons) * 100);
-                      const isSelected = selected === trainee.id;
+              {error && (
+                <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
+                  {error}
+                </div>
+              )}
 
-                      return (
-                        <tr
-                          key={trainee.id}
-                          onClick={() => setSelected(isSelected ? null : trainee.id)}
-                          className={`cursor-pointer transition-colors ${
-                            isSelected ? "bg-purple-50" : "hover:bg-surface-dim/50"
-                          }`}
-                        >
-                          <td className="px-5 py-3">
-                            <div className="flex items-center gap-3">
-                              <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center">
-                                <span className="text-xs font-bold text-purple-600">
-                                  {trainee.name
-                                    .split(" ")
-                                    .map((n) => n[0])
-                                    .join("")}
-                                </span>
+              {loading ? (
+                <div className="bg-white border border-surface-dim rounded-xl p-8 text-center">
+                  <p className="text-sm text-muted">Loading users...</p>
+                </div>
+              ) : (
+                <div className="bg-white border border-surface-dim rounded-xl overflow-hidden">
+                  <table className="w-full">
+                    <thead>
+                      <tr className="border-b border-surface-dim">
+                        <th className="text-left text-[10px] font-bold text-muted uppercase tracking-wider px-5 py-3">
+                          User
+                        </th>
+                        <th className="text-left text-[10px] font-bold text-muted uppercase tracking-wider px-5 py-3">
+                          Access
+                        </th>
+                        <th className="text-left text-[10px] font-bold text-muted uppercase tracking-wider px-5 py-3">
+                          Payment
+                        </th>
+                        <th className="text-left text-[10px] font-bold text-muted uppercase tracking-wider px-5 py-3">
+                          Joined
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-surface-dim">
+                      {users.map((u) => {
+                        const isSelected = selected === u.id;
+
+                        return (
+                          <tr
+                            key={u.id}
+                            onClick={() => setSelected(isSelected ? null : u.id)}
+                            className={`cursor-pointer transition-colors ${
+                              isSelected ? "bg-purple-50" : "hover:bg-surface-dim/50"
+                            }`}
+                          >
+                            <td className="px-5 py-3">
+                              <div className="flex items-center gap-3">
+                                <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center">
+                                  <span className="text-xs font-bold text-purple-600">
+                                    {(u.full_name || u.email || "?")
+                                      .split(" ")
+                                      .map((n) => n[0])
+                                      .join("")
+                                      .slice(0, 2)
+                                      .toUpperCase()}
+                                  </span>
+                                </div>
+                                <div>
+                                  <p className="text-sm font-semibold text-ink">
+                                    {u.full_name || "No name"}
+                                  </p>
+                                  <p className="text-[11px] text-muted">{u.email}</p>
+                                </div>
                               </div>
-                              <div>
-                                <p className="text-sm font-semibold text-ink">{trainee.name}</p>
-                                <p className="text-[11px] text-muted">{trainee.email}</p>
-                              </div>
-                            </div>
-                          </td>
-                          <td className="px-5 py-3">
-                            <div className="flex items-center gap-2">
-                              <div className="w-20 h-1.5 bg-surface-dim rounded-full overflow-hidden">
-                                <div
-                                  className="h-full bg-green-500 rounded-full"
-                                  style={{ width: `${pct}%` }}
-                                />
-                              </div>
-                              <span className="text-xs font-semibold text-muted">{pct}%</span>
-                            </div>
-                          </td>
-                          <td className="px-5 py-3">
-                            <div className="flex gap-1">
-                              {curriculum.map((week) => (
-                                <span
-                                  key={week.id}
-                                  className={`w-6 h-6 rounded flex items-center justify-center text-[10px] font-bold ${
-                                    trainee.unlockedWeeks.includes(week.id)
-                                      ? "bg-green-100 text-green-700"
-                                      : "bg-surface-dim text-muted/50"
-                                  }`}
-                                >
-                                  {week.week}
-                                </span>
-                              ))}
-                            </div>
-                          </td>
-                          <td className="px-5 py-3">
-                            <span className="text-xs text-muted">{trainee.lastActive}</span>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
+                            </td>
+                            <td className="px-5 py-3">
+                              <span
+                                className={`text-[11px] font-bold px-2.5 py-1 rounded-full ${
+                                  u.access_level === "full"
+                                    ? "bg-green-100 text-green-700"
+                                    : "bg-amber-100 text-amber-700"
+                                }`}
+                              >
+                                {u.access_level === "full" ? "Full Access" : "Free"}
+                              </span>
+                            </td>
+                            <td className="px-5 py-3">
+                              <span
+                                className={`text-[11px] font-bold px-2.5 py-1 rounded-full ${
+                                  u.payment_status === "paid"
+                                    ? "bg-green-100 text-green-700"
+                                    : u.payment_status === "pending"
+                                      ? "bg-amber-100 text-amber-700"
+                                      : "bg-surface-dim text-muted"
+                                }`}
+                              >
+                                {u.payment_status === "paid"
+                                  ? "Paid"
+                                  : u.payment_status === "pending"
+                                    ? "Pending"
+                                    : u.invited_at
+                                      ? "Invited"
+                                      : "None"}
+                              </span>
+                            </td>
+                            <td className="px-5 py-3">
+                              <span className="text-xs text-muted">
+                                {new Date(u.created_at).toLocaleDateString()}
+                              </span>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              )}
             </div>
 
             {/* Detail panel */}
-            {selectedTrainee && (
+            {selectedUser && (
               <div className="w-80 flex-shrink-0">
                 <div className="bg-white border border-surface-dim rounded-xl p-5 sticky top-8">
                   <div className="flex items-center gap-3 mb-5">
                     <div className="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center">
                       <span className="text-base font-bold text-purple-600">
-                        {selectedTrainee.name
+                        {(selectedUser.full_name || selectedUser.email || "?")
                           .split(" ")
                           .map((n) => n[0])
-                          .join("")}
+                          .join("")
+                          .slice(0, 2)
+                          .toUpperCase()}
                       </span>
                     </div>
                     <div>
-                      <p className="text-sm font-bold text-ink">{selectedTrainee.name}</p>
-                      <p className="text-xs text-muted">{selectedTrainee.email}</p>
+                      <p className="text-sm font-bold text-ink">
+                        {selectedUser.full_name || "No name"}
+                      </p>
+                      <p className="text-xs text-muted">{selectedUser.email}</p>
                     </div>
                   </div>
 
+                  {/* Access control */}
                   <p className="text-[10px] font-bold text-muted uppercase tracking-wider mb-3">
-                    Module Access
+                    Access Level
                   </p>
-                  <div className="space-y-2">
-                    {curriculum.map((week) => {
-                      const isUnlocked = selectedTrainee.unlockedWeeks.includes(week.id);
-                      return (
-                        <div
-                          key={week.id}
-                          className="flex items-center justify-between p-3 rounded-lg border border-surface-dim"
-                        >
-                          <div className="flex items-center gap-2">
-                            <span className="text-sm">{week.icon}</span>
-                            <div>
-                              <p className="text-xs font-semibold text-ink">Module {week.week}</p>
-                              <p className="text-[10px] text-muted">{week.title}</p>
-                            </div>
-                          </div>
-                          <button
-                            onClick={() => toggleWeekAccess(selectedTrainee.id, week.id)}
-                            className={`relative w-10 h-5 rounded-full transition-colors ${
-                              isUnlocked ? "bg-green-500" : "bg-surface-dim"
-                            }`}
-                          >
-                            <span
-                              className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-all ${
-                                isUnlocked ? "left-5.5" : "left-0.5"
-                              }`}
-                            />
-                          </button>
-                        </div>
-                      );
-                    })}
+                  <div className="flex items-center justify-between p-3 rounded-lg border border-surface-dim mb-4">
+                    <div>
+                      <p className="text-xs font-semibold text-ink">
+                        {selectedUser.access_level === "full" ? "Full Access" : "Free Access"}
+                      </p>
+                      <p className="text-[10px] text-muted">
+                        {selectedUser.access_level === "full"
+                          ? "All modules unlocked"
+                          : "Introductory module only"}
+                      </p>
+                    </div>
+                    <button
+                      onClick={() =>
+                        toggleAccess(
+                          selectedUser.id,
+                          selectedUser.access_level === "full" ? "free" : "full",
+                        )
+                      }
+                      disabled={toggling === selectedUser.id}
+                      className={`relative w-11 h-6 rounded-full transition-colors ${
+                        selectedUser.access_level === "full"
+                          ? "bg-green-500"
+                          : "bg-surface-dim"
+                      } ${toggling === selectedUser.id ? "opacity-50" : ""}`}
+                    >
+                      <span
+                        className={`absolute top-0.5 w-5 h-5 rounded-full bg-white shadow transition-all ${
+                          selectedUser.access_level === "full"
+                            ? "left-[22px]"
+                            : "left-0.5"
+                        }`}
+                      />
+                    </button>
                   </div>
 
-                  <button
-                    onClick={() => unlockAllWeeks(selectedTrainee.id)}
-                    className="w-full mt-4 py-2 text-xs font-bold text-purple-600 bg-purple-50 rounded-lg hover:bg-purple-100 transition-colors"
-                  >
-                    Unlock All Modules
-                  </button>
+                  {/* Details */}
+                  <p className="text-[10px] font-bold text-muted uppercase tracking-wider mb-3">
+                    Details
+                  </p>
+                  <div className="space-y-2 text-xs">
+                    <div className="flex justify-between">
+                      <span className="text-muted">Payment</span>
+                      <span className="font-semibold text-ink">{selectedUser.payment_status}</span>
+                    </div>
+                    {selectedUser.payment_reference && (
+                      <div className="flex justify-between">
+                        <span className="text-muted">Reference</span>
+                        <span className="font-mono text-ink text-[10px]">
+                          {selectedUser.payment_reference.slice(0, 16)}...
+                        </span>
+                      </div>
+                    )}
+                    {selectedUser.paid_at && (
+                      <div className="flex justify-between">
+                        <span className="text-muted">Paid</span>
+                        <span className="text-ink">
+                          {new Date(selectedUser.paid_at).toLocaleDateString()}
+                        </span>
+                      </div>
+                    )}
+                    {selectedUser.invited_at && (
+                      <div className="flex justify-between">
+                        <span className="text-muted">Invited</span>
+                        <span className="text-ink">
+                          {new Date(selectedUser.invited_at).toLocaleDateString()}
+                        </span>
+                      </div>
+                    )}
+                    <div className="flex justify-between">
+                      <span className="text-muted">Joined</span>
+                      <span className="text-ink">
+                        {new Date(selectedUser.created_at).toLocaleDateString()}
+                      </span>
+                    </div>
+                  </div>
                 </div>
               </div>
             )}
+          </div>
+        )}
+
+        {/* ─── Invite Modal ─── */}
+        {showInvite && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-2xl shadow-xl max-w-md w-full p-6">
+              <div className="flex items-center justify-between mb-5">
+                <h3 className="font-[family-name:var(--font-display)] text-lg font-bold text-ink">
+                  Invite User
+                </h3>
+                <button
+                  onClick={() => setShowInvite(false)}
+                  className="text-muted hover:text-ink transition-colors"
+                >
+                  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <path d="M6 6L14 14M14 6L6 14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                  </svg>
+                </button>
+              </div>
+
+              <p className="text-sm text-muted mb-4">
+                Create an account with full access. The user will receive a
+                temporary password to sign in.
+              </p>
+
+              <form onSubmit={handleInvite} className="space-y-3">
+                <div>
+                  <label className="block text-xs font-semibold text-ink mb-1">
+                    Email Address
+                  </label>
+                  <input
+                    type="email"
+                    required
+                    value={inviteEmail}
+                    onChange={(e) => setInviteEmail(e.target.value)}
+                    className="w-full px-3 py-2 border border-surface-dim rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    placeholder="trainee@example.com"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-ink mb-1">
+                    Full Name (optional)
+                  </label>
+                  <input
+                    type="text"
+                    value={inviteName}
+                    onChange={(e) => setInviteName(e.target.value)}
+                    className="w-full px-3 py-2 border border-surface-dim rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    placeholder="John Doe"
+                  />
+                </div>
+
+                {inviteResult?.error && (
+                  <p className="text-sm text-red-600 bg-red-50 px-3 py-2 rounded-lg">
+                    {inviteResult.error}
+                  </p>
+                )}
+
+                {inviteResult?.success && (
+                  <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+                    <p className="text-sm text-green-700 font-semibold mb-1">
+                      {inviteResult.success}
+                    </p>
+                    {inviteResult.tempPassword && (
+                      <div className="mt-2 p-2 bg-white rounded border border-green-200">
+                        <p className="text-[10px] text-muted uppercase tracking-wider mb-1">
+                          Temporary Password
+                        </p>
+                        <p className="font-mono text-sm text-ink font-bold select-all">
+                          {inviteResult.tempPassword}
+                        </p>
+                        <p className="text-[10px] text-muted mt-1">
+                          Share this with the user so they can sign in.
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                <div className="flex gap-2 pt-2">
+                  <button
+                    type="button"
+                    onClick={() => setShowInvite(false)}
+                    className="flex-1 py-2.5 text-xs font-bold text-muted bg-surface-dim rounded-lg hover:bg-surface-dim/80 transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={inviteLoading}
+                    className="flex-1 py-2.5 text-xs font-bold text-white bg-purple-600 rounded-lg hover:bg-purple-700 disabled:opacity-60 transition-colors"
+                  >
+                    {inviteLoading ? "Inviting..." : "Send Invite"}
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
         )}
 
@@ -404,9 +605,6 @@ export default function AdminPage() {
               <h2 className="font-[family-name:var(--font-display)] text-lg font-bold text-ink">
                 Quiz Management
               </h2>
-              <button className="text-xs font-bold text-white bg-blue-600 px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
-                + Create Quiz
-              </button>
             </div>
 
             <div className="space-y-3">
@@ -481,18 +679,6 @@ export default function AdminPage() {
                             </div>
                           ))}
                         </div>
-
-                        <div className="flex gap-2 mt-4 pt-3 border-t border-surface-dim">
-                          <button className="text-xs font-bold text-blue-600 bg-blue-50 px-4 py-2 rounded-lg hover:bg-blue-100 transition-colors">
-                            Edit Questions
-                          </button>
-                          <button className="text-xs font-bold text-muted bg-surface-dim px-4 py-2 rounded-lg hover:bg-surface-dim/80 transition-colors">
-                            Add Question
-                          </button>
-                          <button className="text-xs font-bold text-red-600 bg-red-50 px-4 py-2 rounded-lg hover:bg-red-100 transition-colors ml-auto">
-                            Delete Quiz
-                          </button>
-                        </div>
                       </div>
                     )}
                   </div>
@@ -509,9 +695,6 @@ export default function AdminPage() {
               <h2 className="font-[family-name:var(--font-display)] text-lg font-bold text-ink">
                 Role Play Scenarios
               </h2>
-              <button className="text-xs font-bold text-white bg-orange-600 px-4 py-2 rounded-lg hover:bg-orange-700 transition-colors">
-                + Create Scenario
-              </button>
             </div>
 
             <div className="space-y-3">
@@ -552,14 +735,6 @@ export default function AdminPage() {
                             {rp.content}
                           </p>
                         </div>
-                        <div className="flex gap-2 mt-4 pt-3 border-t border-surface-dim">
-                          <button className="text-xs font-bold text-orange-600 bg-orange-50 px-4 py-2 rounded-lg hover:bg-orange-100 transition-colors">
-                            Edit Scenario
-                          </button>
-                          <button className="text-xs font-bold text-red-600 bg-red-50 px-4 py-2 rounded-lg hover:bg-red-100 transition-colors ml-auto">
-                            Delete
-                          </button>
-                        </div>
                       </div>
                     )}
                   </div>
@@ -576,9 +751,6 @@ export default function AdminPage() {
               <h2 className="font-[family-name:var(--font-display)] text-lg font-bold text-ink">
                 Downloadable Resources
               </h2>
-              <button className="text-xs font-bold text-white bg-teal-600 px-4 py-2 rounded-lg hover:bg-teal-700 transition-colors">
-                + Upload File
-              </button>
             </div>
 
             <div className="bg-white border border-surface-dim rounded-xl overflow-hidden">
@@ -588,7 +760,6 @@ export default function AdminPage() {
                     <th className="text-left text-[10px] font-bold text-muted uppercase tracking-wider px-5 py-3">File</th>
                     <th className="text-left text-[10px] font-bold text-muted uppercase tracking-wider px-5 py-3">Location</th>
                     <th className="text-left text-[10px] font-bold text-muted uppercase tracking-wider px-5 py-3">Lesson</th>
-                    <th className="text-left text-[10px] font-bold text-muted uppercase tracking-wider px-5 py-3">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-surface-dim">
@@ -610,16 +781,6 @@ export default function AdminPage() {
                       </td>
                       <td className="px-5 py-3">
                         <span className="text-xs text-muted">{dl.lessonTitle}</span>
-                      </td>
-                      <td className="px-5 py-3">
-                        <div className="flex gap-2">
-                          <button className="text-[11px] font-bold text-teal-600 hover:text-teal-700 transition-colors">
-                            Replace
-                          </button>
-                          <button className="text-[11px] font-bold text-red-500 hover:text-red-600 transition-colors">
-                            Remove
-                          </button>
-                        </div>
                       </td>
                     </tr>
                   ))}

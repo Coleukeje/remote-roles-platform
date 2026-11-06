@@ -1,7 +1,19 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
+/**
+ * Paths that must stay reachable without a session cookie.
+ * The Paystack webhook is a server-to-server POST — it carries no cookie,
+ * so redirecting it to /login would silently break every payment.
+ * It authenticates itself with an HMAC signature instead.
+ */
+const PUBLIC_PATHS = ["/api/paystack/webhook"];
+
 export async function updateSession(request: NextRequest) {
+  if (PUBLIC_PATHS.some((p) => request.nextUrl.pathname.startsWith(p))) {
+    return NextResponse.next({ request });
+  }
+
   let supabaseResponse = NextResponse.next({
     request,
   });

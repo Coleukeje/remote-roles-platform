@@ -7,6 +7,7 @@ import { useState, useMemo, useEffect } from "react";
 import { useMobileNav } from "./MobileNav";
 import { createClient } from "@/lib/supabase/client";
 import { signOut } from "@/app/actions/auth";
+import { isDayFree, isAdmin } from "@/lib/access-constants";
 
 /* ─── Tiny icons ─── */
 function ChevronIcon({ open }: { open: boolean }) {
@@ -66,16 +67,34 @@ export default function Sidebar() {
   const [userName, setUserName] = useState("Trainee");
   const [userEmail, setUserEmail] = useState("");
   const [userInitial, setUserInitial] = useState("T");
+  const [hasFullAccess, setHasFullAccess] = useState(true);
+  const [showAdminLink, setShowAdminLink] = useState(false);
 
   useEffect(() => {
     const supabase = createClient();
-    supabase.auth.getUser().then(({ data: { user } }) => {
-      if (user) {
-        const name = user.user_metadata?.full_name || user.email?.split("@")[0] || "Trainee";
-        setUserName(name);
-        setUserEmail(user.email || "");
-        setUserInitial(name.charAt(0).toUpperCase());
+    supabase.auth.getUser().then(async ({ data: { user } }) => {
+      if (!user) return;
+
+      const name =
+        user.user_metadata?.full_name || user.email?.split("@")[0] || "Trainee";
+      setUserName(name);
+      setUserEmail(user.email || "");
+      setUserInitial(name.charAt(0).toUpperCase());
+      const admin = isAdmin(user.email ?? null);
+      setShowAdminLink(admin);
+
+      if (admin) {
+        setHasFullAccess(true);
+        return;
       }
+
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("access_level")
+        .eq("id", user.id)
+        .single();
+
+      setHasFullAccess(profile?.access_level === "full");
     });
   }, []);
 
@@ -88,8 +107,11 @@ export default function Sidebar() {
   });
   const [expandedDays, setExpandedDays] = useState<Record<string, boolean>>({});
 
-  // Mock unlocked state
-  const [unlockedWeeks] = useState<Set<string>>(new Set(["week-1", "week-2", "week-3"]));
+  // Weeks stay browsable so free users can see what full access opens up;
+  // individual days carry the lock. Server-side gating is the real enforcement.
+  function dayLocked(dayId: string) {
+    return !hasFullAccess && !isDayFree(dayId);
+  }
 
   function toggleWeek(weekId: string) {
     setExpandedWeeks((prev) => ({ ...prev, [weekId]: !prev[weekId] }));
@@ -156,7 +178,7 @@ export default function Sidebar() {
       </div>
 
       {/* ─── Quick nav ─── */}
-      <div className="mx-4 mb-3">
+      <div className={`mx-4 mb-3 grid gap-2 ${showAdminLink ? "grid-cols-2" : "grid-cols-1"}`}>
         <Link
           href="/training"
           className={`block text-center text-[10px] font-bold py-2 rounded-lg transition-colors ${
@@ -167,6 +189,18 @@ export default function Sidebar() {
         >
           Dashboard
         </Link>
+        {showAdminLink && (
+          <Link
+            href="/admin"
+            className={`block text-center text-[10px] font-bold py-2 rounded-lg transition-colors ${
+              pathname.startsWith("/admin")
+                ? "bg-purple-600/30 text-purple-300 border border-purple-500/20"
+                : "bg-ink-light/40 text-muted hover:text-purple-300 border border-transparent"
+            }`}
+          >
+            Admin
+          </Link>
+        )}
       </div>
 
       {/* ─── Divider ─── */}
@@ -175,8 +209,8 @@ export default function Sidebar() {
       {/* ─── Navigation ─── */}
       <nav className="flex-1 overflow-y-auto sidebar-scroll px-3 py-2">
         {curriculum.map((week) => {
-          const isLocked = !unlockedWeeks.has(week.id);
-          const weekOpen = expandedWeeks[week.id] && !isLocked;
+          const isLocked = week.days.every((d) => dayLocked(d.id));
+          const weekOpen = expandedWeeks[week.id];
           const isActiveWeek = activeWeekDay?.weekId === week.id;
           const weekLessonCount = week.days.reduce((s, d) => s + d.lessons.length, 0);
           const weekDayCount = week.days.length;
@@ -185,10 +219,10 @@ export default function Sidebar() {
             <div key={week.id} className="mb-1.5">
               {/* Week header */}
               <button
-                onClick={() => !isLocked && toggleWeek(week.id)}
+                onClick={() => toggleWeek(week.id)}
                 className={`w-full flex items-center gap-2.5 px-3 py-3 rounded-xl transition-colors text-left group ${
                   isLocked
-                    ? "opacity-50 cursor-not-allowed"
+                    ? "opacity-70 hover:bg-ink-light/40 border border-transparent"
                     : isActiveWeek
                       ? "bg-purple-700/20 border border-purple-500/15"
                       : "hover:bg-ink-light/40 border border-transparent"
@@ -218,13 +252,12 @@ export default function Sidebar() {
                   </p>
                 </div>
 
-                {isLocked ? (
-                  <LockIcon />
-                ) : (
+                <span className="flex items-center gap-1 flex-shrink-0">
+                  {isLocked && <LockIcon />}
                   <span className="text-muted group-hover:text-purple-300 transition-colors">
                     <ChevronIcon open={weekOpen} />
                   </span>
-                )}
+                </span>
               </button>
 
               {/* Day list */}
@@ -232,7 +265,8 @@ export default function Sidebar() {
                 <div className="ml-3 mt-0.5 space-y-0.5 border-l-2 border-ink-light/30 pl-3">
                   {week.days.map((day) => {
                     const isActiveDay = activeWeekDay?.dayId === day.id;
-                    const dayOpen = expandedDays[day.id] || isActiveDay;
+                    const locked = dayLocked(day.id);
+                    const dayOpen = (expandedDays[day.id] || isActiveDay) && !locked;
                     const lessonCount = day.lessons.length;
 
                     // Get unique lesson type counts for this day
@@ -258,26 +292,34 @@ export default function Sidebar() {
                               className={`flex-shrink-0 w-6 h-6 rounded-md flex items-center justify-center text-[11px] font-bold transition-colors ${
                                 isActiveDay
                                   ? "bg-purple-600 text-white"
-                                  : "bg-ink-light/80 text-purple-200/60"
+                                  : locked
+                                    ? "bg-ink-light/50 text-amber-400/70"
+                                    : "bg-ink-light/80 text-purple-200/60"
                               }`}
                             >
-                              {day.day}
+                              {locked ? <LockIcon /> : day.day}
                             </span>
                             <div className="flex-1 min-w-0">
-                              <span className="text-[12px] font-semibold truncate block">
+                              <span
+                                className={`text-[12px] font-semibold truncate block ${
+                                  locked ? "text-purple-100/40" : ""
+                                }`}
+                              >
                                 {day.title}
                               </span>
                               <span className="text-[10px] text-muted/50 block">
-                                {lessonCount} lessons
+                                {locked ? "Full access only" : `${lessonCount} lessons`}
                               </span>
                             </div>
                           </Link>
-                          <button
-                            onClick={() => toggleDay(day.id)}
-                            className="p-1.5 text-muted hover:text-purple-300 transition-colors rounded"
-                          >
-                            <ChevronIcon open={dayOpen} />
-                          </button>
+                          {!locked && (
+                            <button
+                              onClick={() => toggleDay(day.id)}
+                              className="p-1.5 text-muted hover:text-purple-300 transition-colors rounded"
+                            >
+                              <ChevronIcon open={dayOpen} />
+                            </button>
+                          )}
                         </div>
 
                         {/* Lesson list under day */}

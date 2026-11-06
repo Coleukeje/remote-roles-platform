@@ -2,6 +2,8 @@ import { curriculum } from "@/data/curriculum";
 import { notFound } from "next/navigation";
 import TopBar from "@/components/TopBar";
 import LessonViewer from "./LessonViewer";
+import PaywallGate from "@/components/PaywallGate";
+import { getUserProfile, isContentLocked } from "@/lib/access-control";
 
 export const instant = false;
 
@@ -20,6 +22,11 @@ export default async function DayPage({
 
   const day = week.days.find((d) => d.id === dayId);
   if (!day) notFound();
+
+  // ─── Access control: server-side content gating ───
+  const profile = await getUserProfile();
+  const accessLevel = profile?.access_level ?? "free";
+  const locked = isContentLocked(dayId, accessLevel);
 
   // Navigation
   const dayIndex = week.days.indexOf(day);
@@ -63,6 +70,15 @@ export default async function DayPage({
               <span className="text-[10px] font-bold text-purple-400 uppercase tracking-[0.15em] bg-purple-500/10 px-2.5 py-1 rounded-full">
                 Module {week.week} · Day {day.day}
               </span>
+              {locked && (
+                <span className="text-[10px] font-bold text-amber-400 uppercase tracking-[0.15em] bg-amber-500/10 px-2.5 py-1 rounded-full flex items-center gap-1">
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none">
+                    <rect x="3" y="11" width="18" height="11" rx="2" stroke="currentColor" strokeWidth="2.5" />
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+                  </svg>
+                  Locked
+                </span>
+              )}
             </div>
 
             <h2 className="font-[family-name:var(--font-display)] text-2xl sm:text-3xl font-bold text-white mb-2">
@@ -89,7 +105,7 @@ export default async function DayPage({
             </div>
 
             {/* Objectives */}
-            {day.objectives.length > 0 && (
+            {!locked && day.objectives.length > 0 && (
               <div className="mt-6 p-4 rounded-xl bg-white/5 border border-white/5 max-w-xl">
                 <p className="text-[10px] font-bold text-purple-400 uppercase tracking-[0.12em] mb-2">
                   Learning Objectives
@@ -109,13 +125,17 @@ export default async function DayPage({
           </div>
         </div>
 
-        {/* ─── Lesson list ─── */}
-        <LessonViewer
-          lessons={day.lessons}
-          nextLink={nextLink}
-          prevLink={prevLink}
-          activeLessonId={activeLessonId || day.lessons[0]?.id}
-        />
+        {/* ─── Content or Paywall ─── */}
+        {locked ? (
+          <PaywallGate />
+        ) : (
+          <LessonViewer
+            lessons={day.lessons}
+            nextLink={nextLink}
+            prevLink={prevLink}
+            activeLessonId={activeLessonId || day.lessons[0]?.id}
+          />
+        )}
       </div>
     </>
   );

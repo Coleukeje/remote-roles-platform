@@ -37,8 +37,8 @@ export default function PaywallGate() {
   }
 
   return (
-    <div className="flex-1 overflow-y-auto">
-      <div className="min-h-full flex items-center justify-center p-4 sm:p-8">
+    <div>
+      <div className="flex items-center justify-center p-4 sm:p-8 sm:py-14">
         <div className="max-w-lg w-full text-center">
           {/* Lock icon */}
           <div className="mx-auto w-20 h-20 rounded-2xl bg-gradient-to-br from-purple-500/20 to-purple-600/10 border border-purple-500/20 flex items-center justify-center mb-6">

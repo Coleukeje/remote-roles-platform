@@ -30,7 +30,10 @@ export default function TrainingLayout({
 }) {
   return (
     <MobileNavProvider>
-      <div className="flex h-full">
+      {/* h-dvh + overflow-hidden pins the shell to exactly one viewport, so the
+          only scrollbar on screen is the content column's. Without this the
+          document scrolls too and you get a second, taller scrollbar. */}
+      <div className="flex h-dvh overflow-hidden">
         <MobileOverlay />
         <Suspense fallback={<SidebarFallback />}>
           <Sidebar />

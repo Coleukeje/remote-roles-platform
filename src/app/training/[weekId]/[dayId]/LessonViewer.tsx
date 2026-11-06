@@ -718,7 +718,7 @@ function ContentBlock({ content }: { content: string | RichContentBlock[] }) {
    ═══════════════════════════════════════════════ */
 function HeroImage({ src, alt }: { src: string; alt: string }) {
   return (
-    <div className="relative w-full aspect-[2.4/1] overflow-hidden rounded-xl sm:rounded-2xl bg-surface-dim mb-6 -mt-1">
+    <div className="relative w-full aspect-[2.4/1] lg:aspect-[4/1] max-h-[200px] sm:max-h-[240px] overflow-hidden rounded-xl sm:rounded-2xl bg-surface-dim mb-6 -mt-1">
       <img
         src={src}
         alt={alt}
@@ -784,6 +784,40 @@ export default function LessonViewer({
 
   const progress =
     lessons.length > 0 ? Math.round((completed.size / lessons.length) * 100) : 0;
+
+  // Lesson-level navigation: Next walks through the lessons in this day, then
+  // rolls over to the next day once you're on the last one.
+  const activeIndex = Math.max(
+    0,
+    lessons.findIndex((l) => l.id === expandedLesson),
+  );
+  const prevLesson = lessons[activeIndex - 1];
+  const nextLesson = lessons[activeIndex + 1];
+
+  function goToLesson(id: string) {
+    setExpandedLesson(id);
+    setTimeout(() => {
+      sectionRefs.current[id]?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }, 50);
+  }
+
+  const arrowRight = (
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+      <path d="M5 3L9 7L5 11" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+    </svg>
+  );
+  const arrowLeft = (
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+      <path d="M9 3L5 7L9 11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  );
+  const nextBtnClass =
+    "inline-flex items-center gap-2 bg-purple-600 text-white font-bold text-sm px-6 py-3 rounded-xl hover:bg-purple-700 transition-colors shadow-lg shadow-purple-600/20";
+  const backBtnClass =
+    "inline-flex items-center gap-2 text-sm font-semibold text-muted hover:text-purple-600 transition-colors";
 
   return (
     <div className="px-4 sm:px-6 lg:px-8 py-6">
@@ -1068,37 +1102,39 @@ export default function LessonViewer({
       })()}
 
       {/* ─── Navigation ─── */}
-      <div className="mt-10 flex flex-col sm:flex-row items-center justify-between gap-4">
-        {prevLink ? (
-          <Link
-            href={prevLink}
-            className="inline-flex items-center gap-2 text-sm font-semibold text-muted hover:text-purple-600 transition-colors"
-          >
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-              <path d="M9 3L5 7L9 11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-            </svg>
+      <div className="mt-10 pt-6 border-t border-surface-dim flex items-center justify-between gap-4">
+        {/* Back: previous lesson, else previous day */}
+        {prevLesson ? (
+          <button onClick={() => goToLesson(prevLesson.id)} className={backBtnClass}>
+            {arrowLeft}
+            Back
+          </button>
+        ) : prevLink ? (
+          <Link href={prevLink} className={backBtnClass}>
+            {arrowLeft}
             Previous Day
           </Link>
         ) : (
           <span />
         )}
 
-        {nextLink && progress === 100 && (
-          <Link
-            href={nextLink}
-            className="inline-flex items-center gap-2 bg-purple-600 text-white font-bold text-sm px-6 py-3 rounded-xl hover:bg-purple-700 transition-colors shadow-lg shadow-purple-600/20"
-          >
-            Continue to Next Day
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-              <path d="M5 3L9 7L5 11" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-            </svg>
-          </Link>
-        )}
+        <span className="hidden sm:block text-xs text-muted tabular-nums">
+          Lesson {activeIndex + 1} of {lessons.length}
+        </span>
 
-        {nextLink && progress < 100 && (
-          <span className="text-xs text-muted italic">
-            Complete all lessons to continue
-          </span>
+        {/* Next: next lesson, else next day */}
+        {nextLesson ? (
+          <button onClick={() => goToLesson(nextLesson.id)} className={nextBtnClass}>
+            Next
+            {arrowRight}
+          </button>
+        ) : nextLink ? (
+          <Link href={nextLink} className={nextBtnClass}>
+            Next Day
+            {arrowRight}
+          </Link>
+        ) : (
+          <span className="text-xs text-muted italic">End of training</span>
         )}
       </div>
     </div>

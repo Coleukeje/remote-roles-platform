@@ -82,6 +82,16 @@ async function verifyPayment(reference: string): Promise<VerifyOutcome> {
     .eq("id", user.id);
 
   if (error) {
+    // Log the real Postgres/PostgREST error — without this a failed unlock
+    // is undiagnosable from the UI alone.
+    console.error("Payment unlock failed", {
+      reference,
+      userId: user.id,
+      code: error.code,
+      message: error.message,
+      details: error.details,
+      hint: error.hint,
+    });
     return {
       state: "failed",
       reason:

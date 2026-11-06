@@ -150,10 +150,19 @@ function ImageBlock({
         ? "aspect-[3/1]"
         : "aspect-[16/9]";
 
+  // Cap the rendered height so a full-width 16:9 image doesn't eat most of a
+  // desktop screen. On narrow screens the aspect ratio still governs.
+  const maxHeight =
+    aspect === "square"
+      ? "max-h-[340px]"
+      : aspect === "banner"
+        ? "max-h-[220px]"
+        : "max-h-[400px]";
+
   return (
     <figure className="my-6 -mx-1 sm:mx-0">
       <div
-        className={`relative ${aspectClass} w-full overflow-hidden rounded-xl sm:rounded-2xl bg-surface-dim`}
+        className={`relative ${aspectClass} ${maxHeight} w-full mx-auto overflow-hidden rounded-xl sm:rounded-2xl bg-surface-dim`}
       >
         <img
           src={src}

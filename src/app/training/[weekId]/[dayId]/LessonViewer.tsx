@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import type { Lesson, QuizQuestion, YouTubeVideo, Comment, RichContentBlock } from "@/data/curriculum";
 import Link from "next/link";
 import RichContentRenderer from "@/components/RichContentRenderer";
+import { useLessonProgress } from "@/lib/useLessonProgress";
 
 /* ═══════════════════════════════════════════════
    TYPE STYLING
@@ -744,8 +745,10 @@ export default function LessonViewer({
   prevLink: string | null;
   activeLessonId?: string;
 }) {
-  const [completed, setCompleted] = useState<Set<string>>(new Set());
-  const [confirmed, setConfirmed] = useState<Set<string>>(new Set());
+  // Progress is loaded from and written back to Supabase, so ticking a
+  // lesson survives a refresh and follows the trainee across devices.
+  const { completed, confirmed, toggleComplete, toggleConfirm } =
+    useLessonProgress();
   const [expandedLesson, setExpandedLesson] = useState<string>(
     activeLessonId || lessons[0]?.id || ""
   );
@@ -763,24 +766,6 @@ export default function LessonViewer({
       }, 100);
     }
   }, [activeLessonId]);
-
-  function toggleComplete(lessonId: string) {
-    setCompleted((prev) => {
-      const next = new Set(prev);
-      if (next.has(lessonId)) next.delete(lessonId);
-      else next.add(lessonId);
-      return next;
-    });
-  }
-
-  function toggleConfirm(lessonId: string) {
-    setConfirmed((prev) => {
-      const next = new Set(prev);
-      if (next.has(lessonId)) next.delete(lessonId);
-      else next.add(lessonId);
-      return next;
-    });
-  }
 
   const progress =
     lessons.length > 0 ? Math.round((completed.size / lessons.length) * 100) : 0;

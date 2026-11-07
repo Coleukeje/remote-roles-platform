@@ -69,6 +69,7 @@ export default function Sidebar() {
   const [userInitial, setUserInitial] = useState("T");
   const [hasFullAccess, setHasFullAccess] = useState(true);
   const [showAdminLink, setShowAdminLink] = useState(false);
+  const [completedCount, setCompletedCount] = useState(0);
 
   useEffect(() => {
     const supabase = createClient();
@@ -82,6 +83,15 @@ export default function Sidebar() {
       setUserInitial(name.charAt(0).toUpperCase());
       const admin = isAdmin(user.email ?? null);
       setShowAdminLink(admin);
+
+      // Real completion count for the progress card
+      const { count } = await supabase
+        .from("lesson_progress")
+        .select("lesson_id", { count: "exact", head: true })
+        .eq("user_id", user.id)
+        .eq("completed", true);
+
+      setCompletedCount(count ?? 0);
 
       if (admin) {
         setHasFullAccess(true);
@@ -131,6 +141,9 @@ export default function Sidebar() {
     0,
   );
 
+  const progressPct =
+    totalLessons > 0 ? Math.round((completedCount / totalLessons) * 100) : 0;
+
   return (
     <aside
       className={`
@@ -163,17 +176,25 @@ export default function Sidebar() {
           <span className="text-[10px] font-bold text-purple-300/80 uppercase tracking-[0.15em]">
             Overall Progress
           </span>
-          <span className="text-xs font-bold text-purple-300">0 / {totalLessons}</span>
+          <span className="text-xs font-bold text-purple-300">
+            {completedCount} / {totalLessons}
+          </span>
         </div>
         <div className="w-full h-2 bg-ink rounded-full overflow-hidden">
           <div
             className="h-full bg-gradient-to-r from-purple-500 to-purple-400 rounded-full transition-all duration-700"
-            style={{ width: "0%" }}
+            style={{ width: `${progressPct}%` }}
           />
         </div>
         <div className="flex items-center justify-between mt-2.5">
-          <p className="text-[10px] text-muted">Complete lessons to track progress</p>
-          <span className="text-[10px] font-bold text-purple-400">0%</span>
+          <p className="text-[10px] text-muted">
+            {completedCount === 0
+              ? "Complete lessons to track progress"
+              : completedCount === totalLessons
+                ? "Training complete — well done"
+                : `${totalLessons - completedCount} lessons to go`}
+          </p>
+          <span className="text-[10px] font-bold text-purple-400">{progressPct}%</span>
         </div>
       </div>
 

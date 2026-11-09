@@ -779,6 +779,11 @@ export default function LessonViewer({
   const prevLesson = lessons[activeIndex - 1];
   const nextLesson = lessons[activeIndex + 1];
 
+  const completedCount = lessons.filter((l) => completed.has(l.id)).length;
+  const minutesLeft = lessons
+    .filter((l) => !completed.has(l.id))
+    .reduce((s, l) => s + (parseInt(l.duration) || 0), 0);
+
   function goToLesson(id: string) {
     setExpandedLesson(id);
     setTimeout(() => {
@@ -805,7 +810,11 @@ export default function LessonViewer({
     "inline-flex items-center gap-2 text-sm font-semibold text-muted hover:text-purple-600 transition-colors";
 
   return (
-    <div className="px-4 sm:px-6 lg:px-8 py-6">
+    // Two columns on desktop: the lesson in a readable-width column, and a
+    // sticky rail showing where you are in the day. Below lg it collapses
+    // to a single column and the rail is dropped (the sidebar covers it).
+    <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8 py-6 lg:grid lg:grid-cols-[minmax(0,1fr)_17rem] lg:gap-10 lg:items-start">
+      <div className="min-w-0 max-w-3xl">
       {/* ─── Progress bar ─── */}
       <div className="flex items-center gap-3 mb-8">
         <div className="flex-1 h-2.5 bg-surface-dim rounded-full overflow-hidden">
@@ -1122,6 +1131,92 @@ export default function LessonViewer({
           <span className="text-xs text-muted italic">End of training</span>
         )}
       </div>
+      </div>
+
+      {/* ─── Right rail: where you are in this day ─── */}
+      <aside className="hidden lg:block sticky top-6">
+        <div className="rounded-2xl border border-surface-dim bg-white p-4">
+          <div className="flex items-baseline justify-between mb-3">
+            <p className="text-[10px] font-bold text-muted uppercase tracking-[0.12em]">
+              In this day
+            </p>
+            <span className="text-[10px] font-bold text-purple-600 tabular-nums">
+              {completedCount}/{lessons.length}
+            </span>
+          </div>
+
+          <ol className="space-y-0.5">
+            {lessons.map((l, i) => {
+              const isActive = l.id === expandedLesson;
+              const isDone = completed.has(l.id);
+
+              return (
+                <li key={l.id}>
+                  <button
+                    onClick={() => goToLesson(l.id)}
+                    className={`w-full text-left flex items-start gap-2.5 px-2.5 py-2 rounded-lg transition-colors group ${
+                      isActive
+                        ? "bg-purple-50 border border-purple-200"
+                        : "border border-transparent hover:bg-surface-dim/50"
+                    }`}
+                  >
+                    {/* Status dot */}
+                    <span
+                      className={`mt-0.5 flex-shrink-0 w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-bold ${
+                        isDone
+                          ? "bg-green-500 text-white"
+                          : isActive
+                            ? "bg-purple-600 text-white"
+                            : "bg-surface-dim text-muted"
+                      }`}
+                    >
+                      {isDone ? (
+                        <svg width="9" height="9" viewBox="0 0 12 12" fill="none">
+                          <path
+                            d="M2.5 6L5 8.5L9.5 3.5"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </svg>
+                      ) : (
+                        i + 1
+                      )}
+                    </span>
+
+                    <span className="min-w-0 flex-1">
+                      <span
+                        className={`block text-[12px] leading-snug ${
+                          isActive
+                            ? "font-bold text-purple-900"
+                            : isDone
+                              ? "font-medium text-muted"
+                              : "font-medium text-ink"
+                        }`}
+                      >
+                        {l.title}
+                      </span>
+                      <span className="block text-[10px] text-muted mt-0.5">
+                        {typeConfig[l.type]?.label || l.type} &middot; {l.duration}
+                      </span>
+                    </span>
+                  </button>
+                </li>
+              );
+            })}
+          </ol>
+
+          {/* Time remaining in this day */}
+          {minutesLeft > 0 && (
+            <p className="mt-3 pt-3 border-t border-surface-dim text-[10px] text-muted">
+              About{" "}
+              <span className="font-bold text-ink">{minutesLeft} min</span> left
+              in this day
+            </p>
+          )}
+        </div>
+      </aside>
     </div>
   );
 }

@@ -8,6 +8,7 @@ import { useMobileNav } from "./MobileNav";
 import { createClient } from "@/lib/supabase/client";
 import { signOut } from "@/app/actions/auth";
 import { isDayFree, isAdmin } from "@/lib/access-constants";
+import { useActiveLesson } from "./ActiveLesson";
 
 function ChevronIcon({ open }: { open: boolean }) {
   return (
@@ -54,8 +55,10 @@ function TickIcon() {
 export default function Sidebar() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  // The open lesson lives in ?lesson=, not the path — usePathname drops it.
-  const activeLessonId = searchParams.get("lesson");
+  // Live value from whichever panel was last clicked; the URL param is the
+  // fallback for a fresh page load, before the viewer has published one.
+  const { activeLessonId: liveLessonId } = useActiveLesson();
+  const activeLessonId = liveLessonId ?? searchParams.get("lesson");
   const { isOpen, close } = useMobileNav();
 
   const [userName, setUserName] = useState("Trainee");

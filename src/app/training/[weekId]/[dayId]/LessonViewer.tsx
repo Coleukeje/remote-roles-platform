@@ -5,6 +5,7 @@ import type { Lesson, QuizQuestion, YouTubeVideo, Comment, RichContentBlock } fr
 import Link from "next/link";
 import RichContentRenderer from "@/components/RichContentRenderer";
 import { useLessonProgress } from "@/lib/useLessonProgress";
+import { useActiveLesson } from "@/components/ActiveLesson";
 
 /* ═══════════════════════════════════════════════
    TYPE STYLING
@@ -749,10 +750,17 @@ export default function LessonViewer({
   // lesson survives a refresh and follows the trainee across devices.
   const { completed, confirmed, toggleComplete, toggleConfirm } =
     useLessonProgress();
+  const { setActiveLessonId } = useActiveLesson();
   const [expandedLesson, setExpandedLesson] = useState<string>(
     activeLessonId || lessons[0]?.id || ""
   );
   const sectionRefs = useRef<Record<string, HTMLElement | null>>({});
+
+  // Publish whichever lesson is open — on first paint and on every change —
+  // so the sidebar highlights it even when the page was loaded directly.
+  useEffect(() => {
+    if (expandedLesson) setActiveLessonId(expandedLesson);
+  }, [expandedLesson, setActiveLessonId]);
 
   // Sync with URL changes when clicking sidebar lessons
   useEffect(() => {
@@ -836,6 +844,8 @@ export default function LessonViewer({
 
   function goToLesson(id: string) {
     setExpandedLesson(id);
+    // Tell the sidebar too, so both panels move together.
+    setActiveLessonId(id);
     setTimeout(() => {
       sectionRefs.current[id]?.scrollIntoView({
         behavior: "smooth",

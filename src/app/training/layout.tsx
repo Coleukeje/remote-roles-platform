@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import Sidebar from "@/components/Sidebar";
 import { MobileNavProvider, MobileOverlay } from "@/components/MobileNav";
+import { ActiveLessonProvider } from "@/components/ActiveLesson";
 
 function SidebarFallback() {
   return (
@@ -30,16 +31,20 @@ export default function TrainingLayout({
 }) {
   return (
     <MobileNavProvider>
-      {/* h-dvh + overflow-hidden pins the shell to exactly one viewport, so the
-          only scrollbar on screen is the content column's. Without this the
-          document scrolls too and you get a second, taller scrollbar. */}
-      <div className="flex h-dvh overflow-hidden">
-        <MobileOverlay />
-        <Suspense fallback={<SidebarFallback />}>
-          <Sidebar />
-        </Suspense>
-        <main className="flex-1 flex flex-col overflow-hidden min-w-0">{children}</main>
-      </div>
+      {/* Wraps both panels so the sidebar and the lesson rail stay pointed at
+          the same lesson whichever one you click in. */}
+      <ActiveLessonProvider>
+        {/* h-dvh + overflow-hidden pins the shell to exactly one viewport, so the
+            only scrollbar on screen is the content column's. Without this the
+            document scrolls too and you get a second, taller scrollbar. */}
+        <div className="flex h-dvh overflow-hidden">
+          <MobileOverlay />
+          <Suspense fallback={<SidebarFallback />}>
+            <Sidebar />
+          </Suspense>
+          <main className="flex-1 flex flex-col overflow-hidden min-w-0">{children}</main>
+        </div>
+      </ActiveLessonProvider>
     </MobileNavProvider>
   );
 }

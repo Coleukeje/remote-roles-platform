@@ -863,11 +863,16 @@ export default function LessonViewer({
     // Two columns on desktop: the lesson in a readable-width column, and a
     // sticky rail showing where you are in the day. Below lg it collapses
     // to a single column and the rail is dropped (the sidebar covers it).
+    // Content and rail travel as a pair inside one centred, capped row.
+    // The content column flexes with min-w-0 and the rail is flex-none, so
+    // the group shrinks on narrow screens instead of pushing the rail
+    // off the right edge.
     <div
       ref={rootRef}
-      className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8 py-6 lg:grid lg:grid-cols-[minmax(0,1fr)_17rem] lg:gap-10 lg:items-start"
+      className="px-4 sm:px-6 lg:px-8 py-6"
     >
-      <div className="min-w-0 max-w-3xl">
+      <div className="mx-auto flex max-w-[1040px] gap-8 items-start">
+      <div className="min-w-0 flex-1">
       {/* ─── Progress bar ─── */}
       <div className="flex items-center gap-3 mb-8">
         <div className="flex-1 h-2.5 bg-surface-dim rounded-full overflow-hidden">
@@ -1187,7 +1192,7 @@ export default function LessonViewer({
       </div>
 
       {/* ─── Right rail: where you are in this day ─── */}
-      <aside className="hidden lg:block sticky top-6">
+      <aside className="hidden lg:block w-60 flex-none sticky top-6">
         <div className="rounded-2xl border border-surface-dim bg-white p-4">
           <div className="flex items-baseline justify-between mb-3">
             <p className="text-[10px] font-bold text-muted uppercase tracking-[0.12em]">
@@ -1304,6 +1309,7 @@ export default function LessonViewer({
           )}
         </div>
       </aside>
+      </div>
     </div>
   );
 }

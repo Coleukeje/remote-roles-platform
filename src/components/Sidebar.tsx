@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { curriculum } from "@/data/curriculum";
 import { useState, useMemo, useEffect } from "react";
 import { useMobileNav } from "./MobileNav";
@@ -53,6 +53,9 @@ function TickIcon() {
 
 export default function Sidebar() {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+  // The open lesson lives in ?lesson=, not the path — usePathname drops it.
+  const activeLessonId = searchParams.get("lesson");
   const { isOpen, close } = useMobileNav();
 
   const [userName, setUserName] = useState("Trainee");
@@ -298,11 +301,15 @@ export default function Sidebar() {
 
                           {dayOpen && (
                             <ul className="rr-lessons">
-                              {day.lessons.map((lesson) => {
+                              {day.lessons.map((lesson, li) => {
                                 const done = doneLessons.has(lesson.id);
+                                // With no ?lesson= param the viewer opens the
+                                // first lesson, so mark that one as here too.
                                 const here =
                                   isActiveDay &&
-                                  pathname.includes(lesson.id) === true;
+                                  (activeLessonId
+                                    ? lesson.id === activeLessonId
+                                    : li === 0);
                                 return (
                                   <li
                                     className={`rr-lesson ${done ? "done" : ""} ${
@@ -434,14 +441,18 @@ const rrStyles = `
 
 .rr-lessons{margin:0 0 8px;padding:0;list-style:none}
 .rr-lesson{position:relative}
-.rr-lesson a{display:flex;align-items:flex-start;gap:9px;padding:6px 4px 6px 0;text-decoration:none;border-radius:8px}
+.rr-lesson a{display:flex;align-items:flex-start;gap:9px;padding:6px 8px 6px 6px;margin-left:-6px;
+  text-decoration:none;border-radius:8px;transition:background .15s}
 .rr-lesson a:hover .rr-l-t{color:var(--rr-text)}
-.rr-lnode{position:absolute;left:-22px;top:10px;width:7px;height:7px;border-radius:50%;background:var(--rr-line)}
+.rr-lesson.here a{background:rgba(124,58,237,.16)}
+.rr-lnode{position:absolute;left:-22px;top:10px;width:7px;height:7px;border-radius:50%;background:var(--rr-line);transition:all .15s}
 .rr-lesson.done .rr-lnode{background:var(--rr-done)}
-.rr-lesson.here .rr-lnode{background:var(--rr-violet);box-shadow:0 0 0 3px rgba(168,85,247,.2)}
+.rr-lesson.here .rr-lnode{left:-24px;top:8px;width:11px;height:11px;background:var(--rr-violet);
+  border:2px solid var(--rr-ink);box-shadow:0 0 0 3px rgba(168,85,247,.3)}
 .rr-l-t{flex:1;min-width:0;font-size:11.5px;line-height:1.4;color:var(--rr-text-3)}
-.rr-lesson.here .rr-l-t{color:var(--rr-text);font-weight:700}
+.rr-lesson.here .rr-l-t{color:#fff;font-weight:700}
 .rr-l-d{flex:none;font-size:10px;color:#564C6B;font-variant-numeric:tabular-nums;margin-top:1px}
+.rr-lesson.here .rr-l-d{color:#C4B5FD}
 
 .rr-foot{border-top:1px solid var(--rr-line);padding:12px 16px;display:flex;align-items:center;gap:10px}
 .rr-av{width:32px;height:32px;flex:none;border-radius:50%;background:linear-gradient(135deg,#A855F7,#6D28D9);

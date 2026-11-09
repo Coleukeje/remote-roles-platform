@@ -147,7 +147,7 @@ export default function Sidebar() {
   return (
     <aside
       className={`
-        fixed inset-y-0 left-0 z-50 w-[280px] sm:w-[300px] bg-ink flex flex-col border-r border-ink-light
+        fixed inset-y-0 left-0 z-50 w-[280px] sm:w-[300px] lg:w-[324px] bg-ink flex flex-col border-r border-ink-light
         transform transition-transform duration-300 ease-in-out
         lg:relative lg:translate-x-0 lg:flex-shrink-0
         ${isOpen ? "translate-x-0" : "-translate-x-full"}
@@ -265,10 +265,10 @@ export default function Sidebar() {
                       </span>
                     )}
                   </div>
-                  <p className="text-[13px] font-bold text-white leading-tight truncate">
+                  <p className="text-[13px] font-bold text-white leading-tight">
                     {week.title}
                   </p>
-                  <p className="text-[10px] text-muted/60 truncate mt-0.5">
+                  <p className="text-[10px] text-muted/60 line-clamp-1 mt-0.5">
                     {week.subtitle}
                   </p>
                 </div>
@@ -283,7 +283,7 @@ export default function Sidebar() {
 
               {/* Day list */}
               {weekOpen && (
-                <div className="ml-3 mt-0.5 space-y-0.5 border-l-2 border-ink-light/30 pl-3">
+                <div className="ml-2 mt-0.5 space-y-0.5 border-l-2 border-ink-light/30 pl-2">
                   {week.days.map((day) => {
                     const isActiveDay = activeWeekDay?.dayId === day.id;
                     const locked = dayLocked(day.id);
@@ -303,14 +303,14 @@ export default function Sidebar() {
                           <Link
                             href={`/training/${week.id}/${day.id}`}
                             onClick={close}
-                            className={`flex-1 flex items-center gap-2.5 pl-2 pr-1 py-2 rounded-lg transition-all text-left ${
+                            className={`flex-1 min-w-0 flex items-start gap-2 pl-1.5 pr-1 py-2 rounded-lg transition-all text-left ${
                               isActiveDay
                                 ? "bg-purple-600/25 text-purple-200"
                                 : "text-purple-100/60 hover:text-purple-100 hover:bg-ink-light/30"
                             }`}
                           >
                             <span
-                              className={`flex-shrink-0 w-6 h-6 rounded-md flex items-center justify-center text-[11px] font-bold transition-colors ${
+                              className={`mt-px flex-shrink-0 w-6 h-6 rounded-md flex items-center justify-center text-[11px] font-bold transition-colors ${
                                 isActiveDay
                                   ? "bg-purple-600 text-white"
                                   : locked
@@ -322,7 +322,7 @@ export default function Sidebar() {
                             </span>
                             <div className="flex-1 min-w-0">
                               <span
-                                className={`text-[12px] font-semibold truncate block ${
+                                className={`text-[12px] font-semibold leading-snug line-clamp-2 block ${
                                   locked ? "text-purple-100/40" : ""
                                 }`}
                               >
@@ -345,22 +345,21 @@ export default function Sidebar() {
 
                         {/* Lesson list under day */}
                         {dayOpen && (
-                          <div className="ml-5 pl-3 border-l border-ink-light/30 py-1 space-y-0.5 mb-1">
+                          <div className="ml-3 pl-2 border-l border-ink-light/30 py-1 space-y-0.5 mb-1">
                             {day.lessons.map((lesson) => (
                               <Link
                                 key={lesson.id}
                                 href={`/training/${week.id}/${day.id}?lesson=${lesson.id}`}
                                 onClick={close}
-                                className="flex items-center gap-2 py-1.5 px-2 rounded-md text-[11px] text-muted/80 hover:text-purple-200 hover:bg-ink-light/20 transition-colors cursor-pointer group"
+                                className="flex items-start gap-2 py-1.5 px-1.5 rounded-md text-[11px] text-muted/80 hover:text-purple-200 hover:bg-ink-light/20 transition-colors cursor-pointer group"
                               >
                                 <span
-                                  className={`inline-block w-1.5 h-1.5 rounded-full flex-shrink-0 ${typeColors[lesson.type] || "bg-muted"}`}
+                                  className={`mt-[5px] inline-block w-1.5 h-1.5 rounded-full flex-shrink-0 ${typeColors[lesson.type] || "bg-muted"}`}
                                 />
-                                <span className="truncate flex-1">{lesson.title}</span>
-                                <span className="text-[9px] text-muted/40 flex-shrink-0 tabular-nums hidden group-hover:inline">
-                                  {typeLabels[lesson.type] || lesson.type}
+                                <span className="flex-1 min-w-0 leading-snug line-clamp-2">
+                                  {lesson.title}
                                 </span>
-                                <span className="text-[9px] text-muted/40 flex-shrink-0 tabular-nums group-hover:hidden">
+                                <span className="mt-px text-[9px] text-muted/40 flex-shrink-0 tabular-nums">
                                   {lesson.duration}
                                 </span>
                               </Link>

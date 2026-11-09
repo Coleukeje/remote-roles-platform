@@ -784,6 +784,56 @@ export default function LessonViewer({
     .filter((l) => !completed.has(l.id))
     .reduce((s, l) => s + (parseInt(l.duration) || 0), 0);
 
+  // How far the reader has scrolled through the lesson they're on (0–100).
+  // Drives the fill behind the active row in the right rail, so the rail
+  // shows depth into the lesson, not just which lesson is open.
+  const rootRef = useRef<HTMLDivElement>(null);
+  const [readPct, setReadPct] = useState(0);
+
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+
+    // The page scrolls in a container, not the window — walk up to find it.
+    let el: HTMLElement | null = root.parentElement;
+    while (el && el.scrollHeight <= el.clientHeight) el = el.parentElement;
+    const scroller: HTMLElement | Window = el ?? window;
+
+    let frame = 0;
+    const measure = () => {
+      frame = 0;
+      const section = sectionRefs.current[expandedLesson];
+      if (!section) return;
+
+      const rect = section.getBoundingClientRect();
+      const viewH = window.innerHeight;
+      const scrollable = rect.height - viewH;
+
+      // Short lessons that fit on screen count as fully read once visible.
+      const pct =
+        scrollable <= 0
+          ? rect.bottom <= viewH + 8
+            ? 100
+            : 0
+          : Math.min(100, Math.max(0, (-rect.top / scrollable) * 100));
+
+      setReadPct(pct);
+    };
+
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(measure);
+    };
+
+    measure();
+    scroller.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      if (frame) cancelAnimationFrame(frame);
+      scroller.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, [expandedLesson]);
+
   function goToLesson(id: string) {
     setExpandedLesson(id);
     setTimeout(() => {
@@ -813,7 +863,10 @@ export default function LessonViewer({
     // Two columns on desktop: the lesson in a readable-width column, and a
     // sticky rail showing where you are in the day. Below lg it collapses
     // to a single column and the rail is dropped (the sidebar covers it).
-    <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8 py-6 lg:grid lg:grid-cols-[minmax(0,1fr)_17rem] lg:gap-10 lg:items-start">
+    <div
+      ref={rootRef}
+      className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8 py-6 lg:grid lg:grid-cols-[minmax(0,1fr)_17rem] lg:gap-10 lg:items-start"
+    >
       <div className="min-w-0 max-w-3xl">
       {/* ─── Progress bar ─── */}
       <div className="flex items-center gap-3 mb-8">
@@ -1154,19 +1207,42 @@ export default function LessonViewer({
                 <li key={l.id}>
                   <button
                     onClick={() => goToLesson(l.id)}
-                    className={`w-full text-left flex items-start gap-2.5 px-2.5 py-2 rounded-lg transition-colors group ${
+                    className={`relative w-full overflow-hidden text-left flex items-start gap-2.5 px-2.5 py-2 rounded-lg transition-colors group ${
                       isActive
-                        ? "bg-purple-50 border border-purple-200"
+                        ? "border border-purple-200"
                         : "border border-transparent hover:bg-surface-dim/50"
                     }`}
                   >
+                    {/* Reading fill — tracks how far into this lesson you've
+                        scrolled. Sits behind the row content. */}
+                    {isActive && (
+                      <>
+                        <span
+                          aria-hidden
+                          className="absolute inset-y-0 left-0 bg-gradient-to-r from-purple-100 to-purple-50"
+                          style={{ width: `${readPct}%` }}
+                        />
+                        {/* Leading edge, so the boundary reads as a position */}
+                        <span
+                          aria-hidden
+                          className="absolute inset-y-0 w-px bg-purple-400/70"
+                          style={{ left: `${readPct}%` }}
+                        />
+                        {/* Left accent marks which row is open regardless of fill */}
+                        <span
+                          aria-hidden
+                          className="absolute left-0 inset-y-1 w-[3px] rounded-full bg-purple-600"
+                        />
+                      </>
+                    )}
+
                     {/* Status dot */}
                     <span
-                      className={`mt-0.5 flex-shrink-0 w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-bold ${
+                      className={`relative z-10 mt-0.5 flex-shrink-0 w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-bold ${
                         isDone
                           ? "bg-green-500 text-white"
                           : isActive
-                            ? "bg-purple-600 text-white"
+                            ? "bg-purple-600 text-white ring-4 ring-purple-600/15"
                             : "bg-surface-dim text-muted"
                       }`}
                     >
@@ -1185,7 +1261,7 @@ export default function LessonViewer({
                       )}
                     </span>
 
-                    <span className="min-w-0 flex-1">
+                    <span className="relative z-10 min-w-0 flex-1">
                       <span
                         className={`block text-[12px] leading-snug ${
                           isActive
@@ -1198,7 +1274,18 @@ export default function LessonViewer({
                         {l.title}
                       </span>
                       <span className="block text-[10px] text-muted mt-0.5">
-                        {typeConfig[l.type]?.label || l.type} &middot; {l.duration}
+                        {isActive ? (
+                          <>
+                            {typeConfig[l.type]?.label || l.type} &middot;{" "}
+                            <span className="font-bold text-purple-700 tabular-nums">
+                              {Math.round(readPct)}% read
+                            </span>
+                          </>
+                        ) : (
+                          <>
+                            {typeConfig[l.type]?.label || l.type} &middot; {l.duration}
+                          </>
+                        )}
                       </span>
                     </span>
                   </button>

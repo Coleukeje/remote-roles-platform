@@ -9,67 +9,58 @@ import { createClient } from "@/lib/supabase/client";
 import { signOut } from "@/app/actions/auth";
 import { isDayFree, isAdmin } from "@/lib/access-constants";
 
-/* ─── Tiny icons ─── */
 function ChevronIcon({ open }: { open: boolean }) {
   return (
     <svg
       width="14"
       height="14"
       viewBox="0 0 14 14"
-      className={`transition-transform duration-200 ${open ? "rotate-90" : ""}`}
       fill="none"
+      className={`rr-chev ${open ? "rr-chev-open" : ""}`}
     >
-      <path d="M5 3L9 7L5 11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+      <path d="M3.5 5.5L7 9l3.5-3.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
     </svg>
   );
 }
 
 function LockIcon() {
   return (
-    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" className="opacity-50">
+    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style={{ opacity: 0.55 }}>
       <rect x="2.5" y="5" width="7" height="5" rx="1" stroke="currentColor" strokeWidth="1" />
-      <path d="M4 5V3.5C4 2.4 4.9 1.5 6 1.5V1.5C7.1 1.5 8 2.4 8 3.5V5" stroke="currentColor" strokeWidth="1" strokeLinecap="round" />
+      <path
+        d="M4 5V3.5C4 2.4 4.9 1.5 6 1.5C7.1 1.5 8 2.4 8 3.5V5"
+        stroke="currentColor"
+        strokeWidth="1"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }
 
-const typeColors: Record<string, string> = {
-  video: "bg-red-500",
-  slides: "bg-purple-500",
-  reading: "bg-amber-500",
-  exercise: "bg-green-500",
-  quiz: "bg-blue-500",
-  roleplay: "bg-orange-500",
-  download: "bg-teal-500",
-  youtube: "bg-red-600",
-  confirmation: "bg-indigo-500",
-  "video-upload": "bg-pink-500",
-};
-
-const typeLabels: Record<string, string> = {
-  video: "Video",
-  slides: "Slides",
-  reading: "Reading",
-  exercise: "Exercise",
-  quiz: "Quiz",
-  roleplay: "Role Play",
-  download: "Download",
-  youtube: "YouTube",
-  confirmation: "Confirmation",
-  "video-upload": "Video Upload",
-};
+function TickIcon() {
+  return (
+    <svg viewBox="0 0 12 12" fill="none">
+      <path
+        d="M2.5 6L5 8.5L9.5 3.5"
+        stroke="currentColor"
+        strokeWidth="2.2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
 
 export default function Sidebar() {
   const pathname = usePathname();
   const { isOpen, close } = useMobileNav();
 
-  // Fetch logged-in user info
   const [userName, setUserName] = useState("Trainee");
   const [userEmail, setUserEmail] = useState("");
   const [userInitial, setUserInitial] = useState("T");
   const [hasFullAccess, setHasFullAccess] = useState(true);
   const [showAdminLink, setShowAdminLink] = useState(false);
-  const [completedCount, setCompletedCount] = useState(0);
+  const [doneLessons, setDoneLessons] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     const supabase = createClient();
@@ -81,17 +72,18 @@ export default function Sidebar() {
       setUserName(name);
       setUserEmail(user.email || "");
       setUserInitial(name.charAt(0).toUpperCase());
+
       const admin = isAdmin(user.email ?? null);
       setShowAdminLink(admin);
 
-      // Real completion count for the progress card
-      const { count } = await supabase
+      // Which lessons are finished — drives every tick and the spine fill.
+      const { data: rows } = await supabase
         .from("lesson_progress")
-        .select("lesson_id", { count: "exact", head: true })
+        .select("lesson_id")
         .eq("user_id", user.id)
         .eq("completed", true);
 
-      setCompletedCount(count ?? 0);
+      if (rows) setDoneLessons(new Set(rows.map((r) => r.lesson_id)));
 
       if (admin) {
         setHasFullAccess(true);
@@ -111,24 +103,21 @@ export default function Sidebar() {
   const [expandedWeeks, setExpandedWeeks] = useState<Record<string, boolean>>(() => {
     const initial: Record<string, boolean> = {};
     curriculum.forEach((w) => {
-      initial[w.id] = w.week <= 2;
+      initial[w.id] = w.week === 1;
     });
     return initial;
   });
   const [expandedDays, setExpandedDays] = useState<Record<string, boolean>>({});
 
-  // Weeks stay browsable so free users can see what full access opens up;
-  // individual days carry the lock. Server-side gating is the real enforcement.
   function dayLocked(dayId: string) {
     return !hasFullAccess && !isDayFree(dayId);
   }
 
   function toggleWeek(weekId: string) {
-    setExpandedWeeks((prev) => ({ ...prev, [weekId]: !prev[weekId] }));
+    setExpandedWeeks((p) => ({ ...p, [weekId]: !p[weekId] }));
   }
-
   function toggleDay(dayId: string) {
-    setExpandedDays((prev) => ({ ...prev, [dayId]: !prev[dayId] }));
+    setExpandedDays((p) => ({ ...p, [dayId]: !p[dayId] }));
   }
 
   const activeWeekDay = useMemo(() => {
@@ -136,282 +125,330 @@ export default function Sidebar() {
     return match ? { weekId: match[1], dayId: match[2] } : null;
   }, [pathname]);
 
-  const totalLessons = curriculum.reduce(
-    (s, w) => s + w.days.reduce((sd, d) => sd + d.lessons.length, 0),
-    0,
+  const allLessons = useMemo(
+    () => curriculum.flatMap((w) => w.days.flatMap((d) => d.lessons)),
+    [],
   );
-
+  const totalLessons = allLessons.length;
+  const completedCount = allLessons.filter((l) => doneLessons.has(l.id)).length;
   const progressPct =
     totalLessons > 0 ? Math.round((completedCount / totalLessons) * 100) : 0;
 
+  const minutesLeft = allLessons
+    .filter((l) => !doneLessons.has(l.id))
+    .reduce((s, l) => s + (parseInt(l.duration) || 0), 0);
+  const hoursLeft = Math.round(minutesLeft / 60);
+
   return (
-    <aside
-      className={`
-        fixed inset-y-0 left-0 z-50 w-[280px] sm:w-[300px] lg:w-[324px] bg-ink flex flex-col border-r border-ink-light
-        transform transition-transform duration-300 ease-in-out
-        lg:relative lg:translate-x-0 lg:flex-shrink-0
-        ${isOpen ? "translate-x-0" : "-translate-x-full"}
-      `}
-    >
-      {/* ─── Logo ─── */}
-      <div className="px-5 pt-5 pb-4">
-        <Link href="/training" className="flex items-center gap-3 group">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-purple-700 flex items-center justify-center shadow-lg shadow-purple-900/30">
-            <span className="text-white font-[family-name:var(--font-display)] text-sm font-bold tracking-tight">
-              RR
+    <>
+      <style>{rrStyles}</style>
+      <aside
+        className={`
+          rr-rail fixed inset-y-0 left-0 z-50 w-[280px] sm:w-[300px] lg:w-[324px]
+          transform transition-transform duration-300 ease-in-out
+          lg:relative lg:translate-x-0 lg:flex-shrink-0
+          ${isOpen ? "translate-x-0" : "-translate-x-full"}
+        `}
+      >
+        {/* ─── Brand ─── */}
+        <Link href="/training" className="rr-brand" onClick={close}>
+          <span className="rr-mark">RR</span>
+          <span>
+            <b>Remote Roles</b>
+            <i>Training Academy</i>
+          </span>
+        </Link>
+
+        {/* ─── Progress ─── */}
+        <div className="rr-prog">
+          <div className="rr-prog-top">
+            <span className="rr-prog-num">
+              {completedCount}
+              <span>/{totalLessons}</span>
             </span>
+            <span className="rr-prog-pct">{progressPct}%</span>
           </div>
-          <div>
-            <p className="font-[family-name:var(--font-display)] font-bold text-[15px] text-white leading-tight">
-              Remote Roles
-            </p>
-            <p className="text-[11px] text-purple-300/70 leading-tight">Training Academy</p>
+          <div className="rr-bar">
+            <i style={{ width: `${progressPct}%` }} />
           </div>
-        </Link>
-      </div>
-
-      {/* ─── Progress card ─── */}
-      <div className="mx-4 mb-3 rounded-xl bg-gradient-to-br from-purple-900/40 to-ink-light/60 p-4 border border-purple-500/10">
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-[10px] font-bold text-purple-300/80 uppercase tracking-[0.15em]">
-            Overall Progress
-          </span>
-          <span className="text-xs font-bold text-purple-300">
-            {completedCount} / {totalLessons}
-          </span>
-        </div>
-        <div className="w-full h-2 bg-ink rounded-full overflow-hidden">
-          <div
-            className="h-full bg-gradient-to-r from-purple-500 to-purple-400 rounded-full transition-all duration-700"
-            style={{ width: `${progressPct}%` }}
-          />
-        </div>
-        <div className="flex items-center justify-between mt-2.5">
-          <p className="text-[10px] text-muted">
+          <p className="rr-prog-sub">
             {completedCount === 0
-              ? "Complete lessons to track progress"
+              ? "Start anywhere — your progress saves itself"
               : completedCount === totalLessons
-                ? "Training complete — well done"
-                : `${totalLessons - completedCount} lessons to go`}
+                ? "Every lesson finished. Well done."
+                : `${totalLessons - completedCount} lessons to go${
+                    hoursLeft > 0 ? ` · about ${hoursLeft}h left` : ""
+                  }`}
           </p>
-          <span className="text-[10px] font-bold text-purple-400">{progressPct}%</span>
         </div>
-      </div>
 
-      {/* ─── Quick nav ─── */}
-      <div className={`mx-4 mb-3 grid gap-2 ${showAdminLink ? "grid-cols-2" : "grid-cols-1"}`}>
-        <Link
-          href="/training"
-          className={`block text-center text-[10px] font-bold py-2 rounded-lg transition-colors ${
-            pathname === "/training"
-              ? "bg-purple-600/30 text-purple-300 border border-purple-500/20"
-              : "bg-ink-light/40 text-muted hover:text-purple-300 border border-transparent"
-          }`}
-        >
-          Dashboard
-        </Link>
-        {showAdminLink && (
+        {/* ─── Quick nav ─── */}
+        <div className={`rr-quick ${showAdminLink ? "rr-quick-2" : ""}`}>
           <Link
-            href="/admin"
-            className={`block text-center text-[10px] font-bold py-2 rounded-lg transition-colors ${
-              pathname.startsWith("/admin")
-                ? "bg-purple-600/30 text-purple-300 border border-purple-500/20"
-                : "bg-ink-light/40 text-muted hover:text-purple-300 border border-transparent"
-            }`}
+            href="/training"
+            onClick={close}
+            className={pathname === "/training" ? "on" : ""}
           >
-            Admin
+            Dashboard
           </Link>
-        )}
-      </div>
+          {showAdminLink && (
+            <Link
+              href="/admin"
+              onClick={close}
+              className={pathname.startsWith("/admin") ? "on" : ""}
+            >
+              Admin
+            </Link>
+          )}
+        </div>
 
-      {/* ─── Divider ─── */}
-      <div className="h-px bg-ink-light/60 mx-4 mb-1" />
+        {/* ─── Curriculum ─── */}
+        <nav className="rr-nav">
+          {curriculum.map((week) => {
+            const weekOpen = !!expandedWeeks[week.id];
+            const weekLessons = week.days.flatMap((d) => d.lessons);
+            const weekDone = weekLessons.filter((l) => doneLessons.has(l.id)).length;
+            const weekLocked = week.days.every((d) => dayLocked(d.id));
+            const spinePct =
+              weekLessons.length > 0
+                ? Math.round((weekDone / weekLessons.length) * 100)
+                : 0;
 
-      {/* ─── Navigation ─── */}
-      <nav className="flex-1 overflow-y-auto sidebar-scroll px-3 py-2">
-        {curriculum.map((week) => {
-          const isLocked = week.days.every((d) => dayLocked(d.id));
-          const weekOpen = expandedWeeks[week.id];
-          const isActiveWeek = activeWeekDay?.weekId === week.id;
-          const weekLessonCount = week.days.reduce((s, d) => s + d.lessons.length, 0);
-          const weekDayCount = week.days.length;
-
-          return (
-            <div key={week.id} className="mb-1.5">
-              {/* Week header */}
-              <button
-                onClick={() => toggleWeek(week.id)}
-                className={`w-full flex items-center gap-2.5 px-3 py-3 rounded-xl transition-colors text-left group ${
-                  isLocked
-                    ? "opacity-70 hover:bg-ink-light/40 border border-transparent"
-                    : isActiveWeek
-                      ? "bg-purple-700/20 border border-purple-500/15"
-                      : "hover:bg-ink-light/40 border border-transparent"
-                }`}
-              >
-                {/* Week icon */}
-                <div className="w-9 h-9 rounded-lg bg-ink-light/80 flex items-center justify-center flex-shrink-0">
-                  <span className="text-lg">{week.icon}</span>
-                </div>
-
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-[9px] font-bold text-purple-400 uppercase tracking-[0.14em]">
-                      Module {week.week}
-                    </span>
-                    {!isLocked && (
-                      <span className="text-[9px] text-muted/50">
-                        {weekDayCount} days &middot; {weekLessonCount} lessons
-                      </span>
-                    )}
-                  </div>
-                  <p className="text-[13px] font-bold text-white leading-tight">
-                    {week.title}
-                  </p>
-                  <p className="text-[10px] text-muted/60 line-clamp-1 mt-0.5">
-                    {week.subtitle}
-                  </p>
-                </div>
-
-                <span className="flex items-center gap-1 flex-shrink-0">
-                  {isLocked && <LockIcon />}
-                  <span className="text-muted group-hover:text-purple-300 transition-colors">
-                    <ChevronIcon open={weekOpen} />
+            return (
+              <div className="rr-mod" key={week.id}>
+                <button
+                  className="rr-mod-head"
+                  aria-expanded={weekOpen}
+                  onClick={() => toggleWeek(week.id)}
+                >
+                  <span className="rr-mod-n">{week.week}</span>
+                  <span className="rr-mod-t">
+                    <b>{week.title}</b>
+                    <i>
+                      {week.days.length} days · {weekLessons.length} lessons
+                    </i>
                   </span>
-                </span>
-              </button>
+                  {weekLocked && <LockIcon />}
+                  <ChevronIcon open={weekOpen} />
+                </button>
 
-              {/* Day list */}
-              {weekOpen && (
-                <div className="ml-2 mt-0.5 space-y-0.5 border-l-2 border-ink-light/30 pl-2">
-                  {week.days.map((day) => {
-                    const isActiveDay = activeWeekDay?.dayId === day.id;
-                    const locked = dayLocked(day.id);
-                    const dayOpen = (expandedDays[day.id] || isActiveDay) && !locked;
-                    const lessonCount = day.lessons.length;
+                {weekOpen && (
+                  <div
+                    className="rr-tree"
+                    style={
+                      {
+                        "--rr-done": `${spinePct}%`,
+                      } as React.CSSProperties
+                    }
+                  >
+                    {week.days.map((day) => {
+                      const locked = dayLocked(day.id);
+                      const isActiveDay = activeWeekDay?.dayId === day.id;
+                      const dayOpen =
+                        (expandedDays[day.id] || isActiveDay) && !locked;
+                      const dayDone = day.lessons.filter((l) =>
+                        doneLessons.has(l.id),
+                      ).length;
+                      const allDone =
+                        dayDone === day.lessons.length && day.lessons.length > 0;
+                      const dayMins = day.lessons.reduce(
+                        (s, l) => s + (parseInt(l.duration) || 0),
+                        0,
+                      );
 
-                    // Get unique lesson type counts for this day
-                    const typeCounts: Record<string, number> = {};
-                    day.lessons.forEach((l) => {
-                      typeCounts[l.type] = (typeCounts[l.type] || 0) + 1;
-                    });
-
-                    return (
-                      <div key={day.id}>
-                        {/* Day row */}
-                        <div className="flex items-center">
-                          <Link
-                            href={`/training/${week.id}/${day.id}`}
-                            onClick={close}
-                            className={`flex-1 min-w-0 flex items-start gap-2 pl-1.5 pr-1 py-2 rounded-lg transition-all text-left ${
-                              isActiveDay
-                                ? "bg-purple-600/25 text-purple-200"
-                                : "text-purple-100/60 hover:text-purple-100 hover:bg-ink-light/30"
-                            }`}
-                          >
-                            <span
-                              className={`mt-px flex-shrink-0 w-6 h-6 rounded-md flex items-center justify-center text-[11px] font-bold transition-colors ${
-                                isActiveDay
-                                  ? "bg-purple-600 text-white"
-                                  : locked
-                                    ? "bg-ink-light/50 text-amber-400/70"
-                                    : "bg-ink-light/80 text-purple-200/60"
-                              }`}
+                      return (
+                        <div
+                          className={`rr-day ${isActiveDay ? "current" : ""}`}
+                          key={day.id}
+                        >
+                          <div className="rr-day-line">
+                            <Link
+                              href={`/training/${week.id}/${day.id}`}
+                              onClick={close}
+                              className="rr-day-row"
                             >
-                              {locked ? <LockIcon /> : day.day}
-                            </span>
-                            <div className="flex-1 min-w-0">
                               <span
-                                className={`text-[12px] font-semibold leading-snug line-clamp-2 block ${
-                                  locked ? "text-purple-100/40" : ""
-                                }`}
+                                className={`rr-node ${
+                                  allDone ? "done" : isActiveDay ? "here" : ""
+                                } ${locked ? "locked" : ""}`}
                               >
-                                {day.title}
+                                {allDone && <TickIcon />}
                               </span>
-                              <span className="text-[10px] text-muted/50 block">
-                                {locked ? "Full access only" : `${lessonCount} lessons`}
+                              <span className="rr-day-t">
+                                <b>{day.title}</b>
+                                <i className={isActiveDay ? "on" : ""}>
+                                  {locked
+                                    ? "Full access only"
+                                    : dayDone > 0
+                                      ? `${dayDone} of ${day.lessons.length} done`
+                                      : `${day.lessons.length} lessons · ${dayMins}m`}
+                                </i>
                               </span>
-                            </div>
-                          </Link>
-                          {!locked && (
-                            <button
-                              onClick={() => toggleDay(day.id)}
-                              className="p-1.5 text-muted hover:text-purple-300 transition-colors rounded"
-                            >
-                              <ChevronIcon open={dayOpen} />
-                            </button>
+                            </Link>
+                            {!locked && (
+                              <button
+                                className="rr-day-toggle"
+                                onClick={() => toggleDay(day.id)}
+                                aria-label={dayOpen ? "Hide lessons" : "Show lessons"}
+                              >
+                                <ChevronIcon open={dayOpen} />
+                              </button>
+                            )}
+                          </div>
+
+                          {dayOpen && (
+                            <ul className="rr-lessons">
+                              {day.lessons.map((lesson) => {
+                                const done = doneLessons.has(lesson.id);
+                                const here =
+                                  isActiveDay &&
+                                  pathname.includes(lesson.id) === true;
+                                return (
+                                  <li
+                                    className={`rr-lesson ${done ? "done" : ""} ${
+                                      here ? "here" : ""
+                                    }`}
+                                    key={lesson.id}
+                                  >
+                                    <Link
+                                      href={`/training/${week.id}/${day.id}?lesson=${lesson.id}`}
+                                      onClick={close}
+                                    >
+                                      <span className="rr-lnode" />
+                                      <span className="rr-l-t">{lesson.title}</span>
+                                      <span className="rr-l-d">{lesson.duration}</span>
+                                    </Link>
+                                  </li>
+                                );
+                              })}
+                            </ul>
                           )}
                         </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </nav>
 
-                        {/* Lesson list under day */}
-                        {dayOpen && (
-                          <div className="ml-3 pl-2 border-l border-ink-light/30 py-1 space-y-0.5 mb-1">
-                            {day.lessons.map((lesson) => (
-                              <Link
-                                key={lesson.id}
-                                href={`/training/${week.id}/${day.id}?lesson=${lesson.id}`}
-                                onClick={close}
-                                className="flex items-start gap-2 py-1.5 px-1.5 rounded-md text-[11px] text-muted/80 hover:text-purple-200 hover:bg-ink-light/20 transition-colors cursor-pointer group"
-                              >
-                                <span
-                                  className={`mt-[5px] inline-block w-1.5 h-1.5 rounded-full flex-shrink-0 ${typeColors[lesson.type] || "bg-muted"}`}
-                                />
-                                <span className="flex-1 min-w-0 leading-snug line-clamp-2">
-                                  {lesson.title}
-                                </span>
-                                <span className="mt-px text-[9px] text-muted/40 flex-shrink-0 tabular-nums">
-                                  {lesson.duration}
-                                </span>
-                              </Link>
-                            ))}
-
-                            {/* Day type summary */}
-                            <div className="flex flex-wrap gap-1 pt-1.5 mt-1 border-t border-ink-light/20">
-                              {Object.entries(typeCounts).map(([type, count]) => (
-                                <span
-                                  key={type}
-                                  className="inline-flex items-center gap-1 text-[9px] text-muted/50 bg-ink-light/30 px-1.5 py-0.5 rounded"
-                                >
-                                  <span className={`w-1 h-1 rounded-full ${typeColors[type] || "bg-muted"}`} />
-                                  {count} {typeLabels[type] || type}
-                                </span>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
-          );
-        })}
-      </nav>
-
-      {/* ─── User footer ─── */}
-      <div className="px-4 py-3 border-t border-ink-light/60">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-purple-700 flex items-center justify-center ring-2 ring-purple-500/20">
-            <span className="text-[11px] font-bold text-white">{userInitial}</span>
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-[13px] font-semibold text-white truncate">{userName}</p>
-            <p className="text-[10px] text-muted truncate">{userEmail}</p>
-          </div>
+        {/* ─── Footer ─── */}
+        <div className="rr-foot">
+          <span className="rr-av">{userInitial}</span>
+          <span className="rr-foot-t">
+            <b>{userName}</b>
+            <i>{userEmail}</i>
+          </span>
           <form action={signOut}>
-            <button
-              type="submit"
-              title="Sign out"
-              className="p-1.5 text-muted hover:text-red-400 transition-colors rounded"
-            >
+            <button type="submit" title="Sign out" className="rr-out">
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <path d="M6 2H4a2 2 0 00-2 2v8a2 2 0 002 2h2M10.5 11.5L14 8l-3.5-3.5M14 8H6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                <path
+                  d="M6 2H4a2 2 0 00-2 2v8a2 2 0 002 2h2M10.5 11.5L14 8l-3.5-3.5M14 8H6"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
               </svg>
             </button>
           </form>
         </div>
-      </div>
-    </aside>
+      </aside>
+    </>
   );
 }
+
+/* Carried over from the approved mock so the live rail matches it exactly
+   rather than drifting through a re-interpretation in utility classes. */
+const rrStyles = `
+.rr-rail{
+  --rr-ink:#130F1C;--rr-ink-2:#1B1528;--rr-ink-3:#241C35;--rr-line:#2E2442;
+  --rr-text:#F3EFFA;--rr-text-2:#A396BC;--rr-text-3:#6F6389;
+  --rr-violet:#A855F7;--rr-violet-dim:#7C3AED;--rr-done:#34D399;
+  background:var(--rr-ink);border-right:1px solid var(--rr-line);
+  display:flex;flex-direction:column;
+}
+.rr-brand{display:flex;align-items:center;gap:10px;padding:16px 18px 14px;text-decoration:none}
+.rr-mark{width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,#A855F7,#6D28D9);
+  display:grid;place-items:center;font-family:var(--font-display),sans-serif;font-weight:700;font-size:12px;color:#fff;flex:none}
+.rr-brand b{display:block;font-family:var(--font-display),sans-serif;font-size:14px;font-weight:700;color:var(--rr-text);line-height:1.1}
+.rr-brand i{display:block;font-style:normal;font-size:11px;color:var(--rr-text-3);margin-top:1px}
+
+.rr-prog{margin:0 14px 12px;padding:14px;border-radius:14px;background:var(--rr-ink-2);border:1px solid var(--rr-line)}
+.rr-prog-top{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:9px}
+.rr-prog-num{font-family:var(--font-display),sans-serif;font-size:22px;font-weight:700;color:var(--rr-text);letter-spacing:-.02em}
+.rr-prog-num span{font-size:13px;color:var(--rr-text-3);font-weight:600}
+.rr-prog-pct{font-family:var(--font-display),sans-serif;font-size:13px;font-weight:700;color:var(--rr-violet)}
+.rr-bar{height:5px;border-radius:99px;background:#2A2040;overflow:hidden}
+.rr-bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#7C3AED,#A855F7);transition:width .7s ease}
+.rr-prog-sub{font-size:11px;color:var(--rr-text-3);margin-top:8px;line-height:1.4}
+
+.rr-quick{display:grid;grid-template-columns:1fr;gap:8px;margin:0 14px 12px}
+.rr-quick-2{grid-template-columns:1fr 1fr}
+.rr-quick a{text-align:center;font-size:11px;font-weight:700;padding:8px 0;border-radius:9px;
+  background:var(--rr-ink-2);color:var(--rr-text-3);text-decoration:none;border:1px solid transparent;transition:color .15s,background .15s}
+.rr-quick a:hover{color:var(--rr-text-2)}
+.rr-quick a.on{background:rgba(124,58,237,.22);color:#D8B4FE;border-color:rgba(168,85,247,.25)}
+
+.rr-nav{flex:1;overflow-y:auto;padding:0 14px 20px}
+.rr-nav::-webkit-scrollbar{width:8px}
+.rr-nav::-webkit-scrollbar-thumb{background:#2A2040;border-radius:9px}
+
+.rr-mod{margin-bottom:6px}
+.rr-mod-head{width:100%;display:flex;align-items:center;gap:10px;padding:11px 10px;border-radius:11px;
+  background:none;border:0;cursor:pointer;text-align:left;color:var(--rr-text-3)}
+.rr-mod-head:hover{background:var(--rr-ink-2)}
+.rr-mod-head[aria-expanded="true"]{background:var(--rr-ink-2)}
+.rr-mod-n{width:22px;height:22px;flex:none;border-radius:7px;background:var(--rr-ink-3);color:var(--rr-text-2);
+  font-family:var(--font-display),sans-serif;font-weight:700;font-size:11px;display:grid;place-items:center}
+.rr-mod-head[aria-expanded="true"] .rr-mod-n{background:var(--rr-violet-dim);color:#fff}
+.rr-mod-t{flex:1;min-width:0}
+.rr-mod-t b{display:block;font-family:var(--font-display),sans-serif;font-size:13.5px;font-weight:700;color:var(--rr-text);line-height:1.25}
+.rr-mod-t i{display:block;font-style:normal;font-size:11px;color:var(--rr-text-3);margin-top:2px}
+.rr-chev{flex:none;transition:transform .18s}
+.rr-chev-open{transform:rotate(180deg)}
+
+.rr-tree{position:relative;margin:2px 0 8px 21px;padding-left:18px}
+.rr-tree::before{content:"";position:absolute;left:0;top:4px;bottom:10px;width:2px;border-radius:2px;
+  background:linear-gradient(180deg,var(--rr-violet-dim) 0%,var(--rr-violet-dim) var(--rr-done,0%),var(--rr-line) var(--rr-done,0%))}
+
+.rr-day{position:relative}
+.rr-day-line{display:flex;align-items:flex-start}
+.rr-day-row{flex:1;min-width:0;display:flex;align-items:flex-start;gap:9px;padding:8px 4px 8px 0;
+  border-radius:10px;text-decoration:none}
+.rr-day-row:hover .rr-day-t b{color:var(--rr-text)}
+.rr-node{position:absolute;left:-25px;top:11px;width:13px;height:13px;border-radius:50%;
+  background:var(--rr-ink);border:2px solid var(--rr-line);display:grid;place-items:center;color:#0B0810}
+.rr-node svg{width:8px;height:8px}
+.rr-node.done{background:var(--rr-done);border-color:var(--rr-done)}
+.rr-node.here{border-color:var(--rr-violet);background:var(--rr-violet);box-shadow:0 0 0 4px rgba(168,85,247,.18)}
+.rr-node.locked{border-color:#3A2F4F;background:var(--rr-ink)}
+.rr-day-t{flex:1;min-width:0}
+.rr-day-t b{display:block;font-size:12.5px;font-weight:700;color:var(--rr-text-2);line-height:1.35}
+.rr-day.current .rr-day-t b{color:var(--rr-text)}
+.rr-day-t i{display:block;font-style:normal;font-size:10.5px;color:var(--rr-text-3);margin-top:3px}
+.rr-day-t i.on{color:var(--rr-violet)}
+.rr-day-toggle{flex:none;background:none;border:0;cursor:pointer;color:var(--rr-text-3);padding:9px 4px;border-radius:8px}
+.rr-day-toggle:hover{color:var(--rr-text-2)}
+
+.rr-lessons{margin:0 0 8px;padding:0;list-style:none}
+.rr-lesson{position:relative}
+.rr-lesson a{display:flex;align-items:flex-start;gap:9px;padding:6px 4px 6px 0;text-decoration:none;border-radius:8px}
+.rr-lesson a:hover .rr-l-t{color:var(--rr-text)}
+.rr-lnode{position:absolute;left:-22px;top:10px;width:7px;height:7px;border-radius:50%;background:var(--rr-line)}
+.rr-lesson.done .rr-lnode{background:var(--rr-done)}
+.rr-lesson.here .rr-lnode{background:var(--rr-violet);box-shadow:0 0 0 3px rgba(168,85,247,.2)}
+.rr-l-t{flex:1;min-width:0;font-size:11.5px;line-height:1.4;color:var(--rr-text-3)}
+.rr-lesson.here .rr-l-t{color:var(--rr-text);font-weight:700}
+.rr-l-d{flex:none;font-size:10px;color:#564C6B;font-variant-numeric:tabular-nums;margin-top:1px}
+
+.rr-foot{border-top:1px solid var(--rr-line);padding:12px 16px;display:flex;align-items:center;gap:10px}
+.rr-av{width:32px;height:32px;flex:none;border-radius:50%;background:linear-gradient(135deg,#A855F7,#6D28D9);
+  display:grid;place-items:center;color:#fff;font-weight:700;font-size:12px;font-family:var(--font-display),sans-serif}
+.rr-foot-t{flex:1;min-width:0}
+.rr-foot-t b{display:block;font-size:12.5px;color:var(--rr-text);font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rr-foot-t i{display:block;font-style:normal;font-size:10.5px;color:var(--rr-text-3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rr-out{background:none;border:0;cursor:pointer;color:var(--rr-text-3);padding:6px;border-radius:8px}
+.rr-out:hover{color:#F87171}
+`;

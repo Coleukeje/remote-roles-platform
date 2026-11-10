@@ -31,37 +31,42 @@ export async function POST(request: NextRequest) {
       .eq("email", email.toLowerCase())
       .limit(1);
 
+    const origin = new URL(request.url).origin;
+
     if (existingProfiles && existingProfiles.length > 0) {
       const existing = existingProfiles[0];
 
-      if (existing.access_level === "full") {
-        return Response.json(
-          { error: "User already has full access" },
-          { status: 400 },
-        );
+      if (existing.access_level !== "full") {
+        await admin
+          .from("profiles")
+          .update({
+            access_level: "full",
+            invited_by: user.id,
+            invited_at: new Date().toISOString(),
+          })
+          .eq("id", existing.id);
       }
 
-      // Upgrade existing user
-      await admin
-        .from("profiles")
-        .update({
-          access_level: "full",
-          invited_by: user.id,
-          invited_at: new Date().toISOString(),
-        })
-        .eq("id", existing.id);
+      // Send them a fresh link either way. Invite links expire, so someone
+      // who was invited but never opened it in time would otherwise be
+      // stuck: the account exists, so re-inviting fails, and they have no
+      // password to sign in with.
+      const { error: linkError } = await supabase.auth.resetPasswordForEmail(
+        email.toLowerCase(),
+        { redirectTo: `${origin}/auth/callback?next=/reset-password` },
+      );
 
       return Response.json({
         success: true,
-        message: "Existing user upgraded to full access",
+        message: linkError
+          ? `${email} now has full access, but the email failed to send: ${linkError.message}`
+          : `${email} already had an account. Granted full access and sent a fresh link to set a password.`,
       });
     }
 
     // Send a real invite email. Supabase creates the account, emails a
     // one-time link, and the invitee chooses their own password on arrival —
     // so no temporary password has to be generated here and relayed by hand.
-    const origin = new URL(request.url).origin;
-
     const { data: newUser, error: createError } =
       await admin.auth.admin.inviteUserByEmail(email.toLowerCase(), {
         redirectTo: `${origin}/auth/callback?next=/reset-password`,

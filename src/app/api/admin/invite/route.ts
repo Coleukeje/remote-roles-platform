@@ -57,18 +57,15 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    // Create new user via Supabase admin API
-    const tempPassword =
-      crypto.randomUUID().slice(0, 8) + "Aa1!"; // Meets typical password requirements
+    // Send a real invite email. Supabase creates the account, emails a
+    // one-time link, and the invitee chooses their own password on arrival —
+    // so no temporary password has to be generated here and relayed by hand.
+    const origin = new URL(request.url).origin;
 
     const { data: newUser, error: createError } =
-      await admin.auth.admin.createUser({
-        email: email.toLowerCase(),
-        password: tempPassword,
-        email_confirm: true, // Auto-confirm
-        user_metadata: {
-          full_name: name || "",
-        },
+      await admin.auth.admin.inviteUserByEmail(email.toLowerCase(), {
+        redirectTo: `${origin}/auth/callback?next=/reset-password`,
+        data: { full_name: name || "" },
       });
 
     if (createError) {
@@ -97,8 +94,7 @@ export async function POST(request: NextRequest) {
 
     return Response.json({
       success: true,
-      message: `Invited ${email} with full access`,
-      tempPassword, // Admin can share this with the invitee
+      message: `Invite sent to ${email}. They'll choose their own password from the email.`,
     });
   } catch (error) {
     console.error("Invite error:", error);

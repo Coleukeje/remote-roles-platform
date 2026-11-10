@@ -30,10 +30,16 @@ export async function signup(formData: FormData) {
   const password = formData.get("password") as string;
   const name = formData.get("name") as string;
 
+  const headersList = await headers();
+  const origin = headersList.get("origin");
+
   const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
     email,
     password,
     options: {
+      // Without this, a confirmation email points at Supabase's own default
+      // site URL rather than back here, so the link appears to do nothing.
+      emailRedirectTo: `${origin}/auth/callback?next=/training`,
       data: {
         full_name: name,
       },
@@ -63,8 +69,12 @@ export async function signup(formData: FormData) {
     redirect("/training");
   }
 
-  // Fallback: account created but couldn't auto-login
-  return { success: "Account created! You can now sign in." };
+  // Confirmation is switched on: the account exists but can't sign in until
+  // the emailed link is opened.
+  return {
+    success:
+      "Account created. Check your email for a confirmation link, then sign in.",
+  };
 }
 
 export async function signOut() {
@@ -110,5 +120,10 @@ export async function resetPassword(formData: FormData) {
     return { error: error.message };
   }
 
-  return { success: "Check your email for a password reset link." };
+  // Deliberately the same message whether or not the address exists, so this
+  // form can't be used to find out who has an account.
+  return {
+    success:
+      "If that address has an account, a reset link is on its way. The link works once and expires in an hour.",
+  };
 }

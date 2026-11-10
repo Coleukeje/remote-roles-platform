@@ -104,7 +104,7 @@ export default function AdminPage() {
   const [inviteEmail, setInviteEmail] = useState("");
   const [inviteName, setInviteName] = useState("");
   const [inviteLoading, setInviteLoading] = useState(false);
-  const [inviteResult, setInviteResult] = useState<{ success?: string; error?: string; tempPassword?: string } | null>(null);
+  const [inviteResult, setInviteResult] = useState<{ success?: string; error?: string } | null>(null);
 
   const quizzes = getAllQuizzes();
   const roleplays = getAllRolePlays();
@@ -168,10 +168,7 @@ export default function AdminPage() {
       if (!res.ok) {
         setInviteResult({ error: data.error });
       } else {
-        setInviteResult({
-          success: data.message,
-          tempPassword: data.tempPassword,
-        });
+        setInviteResult({ success: data.message });
         setInviteEmail("");
         setInviteName("");
         fetchUsers(); // Refresh user list
@@ -519,8 +516,8 @@ export default function AdminPage() {
               </div>
 
               <p className="text-sm text-muted mb-4">
-                Create an account with full access. The user will receive a
-                temporary password to sign in.
+                Sends an invite email with full access. They choose their own
+                password when they open it — nothing for you to pass on.
               </p>
 
               <form onSubmit={handleInvite} className="space-y-3">
@@ -558,22 +555,9 @@ export default function AdminPage() {
 
                 {inviteResult?.success && (
                   <div className="bg-green-50 border border-green-200 rounded-lg p-3">
-                    <p className="text-sm text-green-700 font-semibold mb-1">
+                    <p className="text-sm text-green-700 font-semibold">
                       {inviteResult.success}
                     </p>
-                    {inviteResult.tempPassword && (
-                      <div className="mt-2 p-2 bg-white rounded border border-green-200">
-                        <p className="text-[10px] text-muted uppercase tracking-wider mb-1">
-                          Temporary Password
-                        </p>
-                        <p className="font-mono text-sm text-ink font-bold select-all">
-                          {inviteResult.tempPassword}
-                        </p>
-                        <p className="text-[10px] text-muted mt-1">
-                          Share this with the user so they can sign in.
-                        </p>
-                      </div>
-                    )}
                   </div>
                 )}
 

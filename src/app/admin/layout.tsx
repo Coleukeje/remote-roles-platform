@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { connection } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { isAdmin } from "@/lib/access-control";
 
@@ -9,6 +10,9 @@ export default async function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
+  // The admin check reads the session, which is request-time work.
+  await connection();
+
   const supabase = await createClient();
   const {
     data: { user },

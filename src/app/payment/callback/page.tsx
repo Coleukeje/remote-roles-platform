@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { connection } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { PAYMENT_AMOUNT_KOBO } from "@/lib/access-constants";
@@ -12,6 +13,10 @@ type VerifyOutcome =
   | { state: "failed"; reason: string };
 
 async function verifyPayment(reference: string): Promise<VerifyOutcome> {
+  // Verifying a payment reads the session and stamps paid_at from the clock —
+  // both request-time, neither prerenderable.
+  await connection();
+
   const supabase = await createClient();
   const {
     data: { user },

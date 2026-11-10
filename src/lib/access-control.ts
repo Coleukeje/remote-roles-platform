@@ -1,3 +1,4 @@
+import { connection } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { isAdmin as checkAdmin } from "@/lib/access-constants";
 import type { UserProfile } from "@/lib/access-constants";
@@ -17,6 +18,11 @@ export {
  * Returns null if not authenticated.
  */
 export async function getUserProfile(): Promise<UserProfile | null> {
+  // Reading the session is request-time work: the Supabase client checks the
+  // token's expiry against the clock, which Next treats as an unstable value
+  // and refuses to prerender. This marks everything below as per-request.
+  await connection();
+
   const supabase = await createClient();
 
   const {

@@ -468,6 +468,57 @@ function VideoCard({
   );
 }
 
+/**
+ * Download card.
+ *
+ * Replaces a bare "Download: top-10-objections-cheatsheet.pdf" text link
+ * buried under the lesson body. A file the lesson expects you to work from
+ * shouldn't be something you discover after scrolling past everything, and
+ * a raw filename is not a document title.
+ */
+function DownloadCard({ file, note }: { file: string; note?: string }) {
+  const ext = (file.split(".").pop() || "file").toUpperCase();
+  const label = file
+    .replace(/\.[^.]+$/, "")
+    .replace(/[-_]+/g, " ")
+    .replace(/\b\w/g, (c) => c.toUpperCase());
+
+  return (
+    <div className="mb-6 rounded-2xl border border-teal-200 bg-gradient-to-br from-teal-50 to-white p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center gap-4">
+      <div className="w-12 h-12 flex-shrink-0 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+          <path d="M14 2v6h6" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+        </svg>
+      </div>
+
+      <div className="min-w-0 flex-1">
+        <div className="flex items-center gap-2 flex-wrap">
+          <p className="text-sm font-bold text-ink leading-snug">{label}</p>
+          <span className="text-[10px] font-bold text-teal-700 bg-teal-100 px-1.5 py-0.5 rounded">
+            {ext}
+          </span>
+        </div>
+        <p className="text-xs text-muted mt-0.5 leading-relaxed">
+          {note ?? "Open this alongside the lesson — you'll be working from it."}
+        </p>
+      </div>
+
+      <a
+        href={`/downloads/${file}`}
+        download
+        className="flex-shrink-0 inline-flex items-center justify-center gap-2 bg-teal-600 hover:bg-teal-700 text-white font-bold text-sm px-5 py-2.5 rounded-xl transition-colors shadow-sm"
+      >
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
+          <path d="M8 2V10M8 10L4.5 6.5M8 10L11.5 6.5" stroke="white" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M3 12V13C3 13.6 3.4 14 4 14H12C12.6 14 13 13.6 13 13V12" stroke="white" strokeWidth="1.6" strokeLinecap="round" />
+        </svg>
+        Download
+      </a>
+    </div>
+  );
+}
+
 function YouTubeSection({ videos }: { videos: YouTubeVideo[] }) {
   return (
     <div className="space-y-4">
@@ -1069,6 +1120,13 @@ export default function LessonViewer({
                   </div>
                 )}
 
+                {/* Attached file — sits above the body so it's found before
+                    the reading, not after it. Download-type lessons have
+                    their own full-width treatment further down. */}
+                {lesson.type !== "download" && lesson.downloadFile && (
+                  <DownloadCard file={lesson.downloadFile} />
+                )}
+
                 {/* ─── TYPE: Download ─── */}
                 {lesson.type === "download" && lesson.downloadFile && (
                   <div className="rounded-xl bg-gradient-to-br from-teal-50 to-teal-100/50 border-2 border-teal-200 p-5 sm:p-6 flex flex-col items-center justify-center">
@@ -1090,7 +1148,7 @@ export default function LessonViewer({
                         <path d="M8 2V10M8 10L4.5 6.5M8 10L11.5 6.5" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                         <path d="M3 12V13C3 13.6 3.4 14 4 14H12C12.6 14 13 13.6 13 13V12" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
                       </svg>
-                      Download {lesson.downloadFile}
+                      Download {(lesson.downloadFile.split(".").pop() || "file").toUpperCase()}
                     </a>
                     {lesson.content && (
                       <div className="mt-5 pt-5 border-t border-teal-200 w-full">
@@ -1190,23 +1248,6 @@ export default function LessonViewer({
                       confirmed={isConfirmed}
                       onToggle={() => toggleConfirm(lesson.id)}
                     />
-                  </div>
-                )}
-
-                {/* Download link for non-download types */}
-                {lesson.type !== "download" && lesson.downloadFile && (
-                  <div className="mt-5 pt-4 border-t border-surface-dim">
-                    <a
-                      href={`/downloads/${lesson.downloadFile}`}
-                      download
-                      className="inline-flex items-center gap-2 text-sm font-semibold text-teal-600 hover:text-teal-700 transition-colors"
-                    >
-                      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                        <path d="M7 2V9M7 9L4 6M7 9L10 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                        <path d="M3 11V12C3 12.4 3.3 12.7 3.7 12.7H10.3C10.7 12.7 11 12.4 11 12V11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                      </svg>
-                      Download: {lesson.downloadFile}
-                    </a>
                   </div>
                 )}
 

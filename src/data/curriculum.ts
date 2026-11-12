@@ -517,26 +517,29 @@ export const curriculum: Week[] = [
             heroImage: "https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=1200&h=600&fit=crop&q=80",
             content: [
               { type: "heading", level: 1, text: "Your Call Script" },
-              { type: "paragraph", text: "This is the call script you'll be working with throughout the training program. It's been proven across thousands of calls and refined by top performers." },
-              { type: "callout", style: "key-takeaway", content: "The script is a GPS — it tells you where to go, but how you get there is up to you. Don't memorize it word-for-word. Learn the structure and flow." },
-              { type: "heading", level: 2, text: "How to Use This Script" },
-              { type: "steps", items: [
-                { title: "Download & Print", description: "Keep it visible during every practice call. Having it in front of you builds confidence." },
-                { title: "Read It Out Loud", description: "Read it at least 10 times before your first live session. Your mouth needs muscle memory." },
-                { title: "Learn the Structure", description: "Don't memorize word-for-word — understand the flow: Opening → Purpose → Qualify → Close." },
-                { title: "Review with Trainer", description: "Your trainer will walk through each section in the live meeting." }
+              { type: "paragraph", text: "Two pages. Maybe four hundred words. You will read it several hundred times before it starts sounding like you, and that is the point — the script isn't there to be clever, it's there to stop you thinking about what comes next while someone is talking to you." },
+              { type: "callout", style: "key-takeaway", content: "Treat it as a map, not a cage. You need to know every turn by heart so that when the conversation leaves the road — and it will — you know exactly where to rejoin it." },
+              { type: "divider" },
+              { type: "heading", level: 2, text: "Five things to look for when you open it" },
+              { type: "paragraph", text: "Read it once for the words. Then read it again hunting for these, because each one is a decision somebody made for a reason, and the reason is written underneath:" },
+              { type: "columns", columns: [
+                { title: "The street, not the address", content: "The opening names one thing about the property and deliberately leaves out another. Work out which, and why.", icon: "📍" },
+                { title: "Two pauses", content: "There are exactly two marked places where you stop talking. Both come before you've said anything persuasive.", icon: "⏸️" },
+                { title: "The question that counts", content: "Five qualifying questions. Only one of them tells you whether this is a real lead. The script says which.", icon: "🎯" }
+              ] },
+              { type: "columns", columns: [
+                { title: "The silence at the close", content: "The last question has an instruction attached to it that most callers cannot bring themselves to follow.", icon: "🤐" },
+                { title: "What isn't in it", content: "Three words appear nowhere in this script on purpose. Once you notice, you'll hear them everywhere in your own calls.", icon: "🚫" }
               ] },
               { type: "divider" },
-              { type: "heading", level: 2, text: "What the Script Covers" },
-              { type: "columns", columns: [
-                { title: "Opening", content: "How to introduce yourself with confidence", icon: "👋" },
-                { title: "Purpose", content: "Why you're calling — straight to business", icon: "🎯" },
-                { title: "Qualifying", content: "Questions to ask the prospect", icon: "❓" }
+              { type: "heading", level: 2, text: "How to work with it this week" },
+              { type: "steps", items: [
+                { title: "Read it out loud, ten times", description: "Not in your head. Out loud, on your feet. Your mouth needs the muscle memory, and you'll hear the awkward joins on the fourth or fifth pass." },
+                { title: "Record yourself once", description: "Play it back. Almost everyone discovers they speed up through the opening — the exact place where slowing down matters most." },
+                { title: "Learn the skeleton, not the sentences", description: "Opening, the no branch, five questions, handoff. If you can recite the four stages, you can rebuild the words under pressure." },
+                { title: "Bring your questions to the live session", description: "Your trainer walks the script line by line. Arrive having already found the parts that feel unnatural in your mouth." }
               ] },
-              { type: "columns", columns: [
-                { title: "Objection Handling", content: "Key responses built into the flow", icon: "🛡️" },
-                { title: "Close", content: "Setting the appointment or callback", icon: "✅" }
-              ] }
+              { type: "highlight-box", title: "One warning", content: "Reading the script is not the same as knowing it, and knowing it is not the same as being able to use it while a stranger is being short with you. The gap between those three is what the role plays are for.", color: "purple" }
             ] as RichContentBlock[],
             downloadFile: "cold-call-script.pdf",
           },
@@ -673,43 +676,37 @@ export const curriculum: Week[] = [
           },
           {
             id: "w1d3-top10",
-            title: "Top 10 Objections & Word-for-Word Responses",
-            duration: "28 min",
+            title: "When They Push Back",
+            duration: "20 min",
             type: "slides",
-            description: "The most common objections you'll face and exactly how to respond to each one.",
+            description: "The seven things homeowners actually say to end a call, and the three-move shape that answers all of them.",
             heroImage: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200&h=600&fit=crop&q=80",
             content: [
-              { type: "heading", level: 1, text: "Top 10 Objections & Responses" },
-              { type: "paragraph", text: "These are the most common objections you'll face on cold calls. Each response follows the Acknowledge → Redirect → Provide Value framework. Study them, practice them, own them." },
-              { type: "callout", style: "key-takeaway", content: "These responses are proven across thousands of calls. Don't change the structure — but make the words your own." },
+              { type: "heading", level: 1, text: "When They Push Back" },
+              { type: "paragraph", text: "Almost every call you make will contain a moment where the homeowner tries to end it. That moment is not the call going wrong. It is the call starting. Everything before it was formality." },
+              { type: "paragraph", text: "There are only about seven things people actually say, and they say them in roughly the same words every time. Once you can recognise which one you're hearing, you stop improvising and start working." },
               { type: "divider" },
-              { type: "stats", items: [
-                { value: "10", label: "Core Objections", icon: "🛡️" },
-                { value: "3", label: "Step Framework", icon: "📋" },
-                { value: "1000+", label: "Calls Tested", icon: "📞" }
+              { type: "heading", level: 2, text: "The shape of every answer" },
+              { type: "paragraph", text: "Three moves, always in this order. Acknowledge what they said so they stop defending it. Give them one reason to stay on the line. Then ask your next question in the same breath — before the silence invites them to hang up." },
+              { type: "callout", style: "key-takeaway", title: "The third move is the one people skip", content: "Most new callers do the first two well and then stop talking, which hands the call back to the homeowner at the exact moment they were looking for an exit. Your answer should never end on a full stop. It should end on a question." },
+              { type: "divider" },
+              { type: "heading", level: 2, text: "One worked example" },
+              { type: "paragraph", text: "The most common objection in the business is also the easiest. Here it is in full, so you can see the three moves working together:" },
+              { type: "quote", text: "Understood, and I'm not going to push. Most people say that first time round. The only reason I keep going is the timeline — we close up to six months out, so you'd take the offer now and pick the date later. No obligation either way. Two quick things about the house and I'll know whether it's even worth a number. How many beds?" },
+              { type: "paragraph", text: "Read it again and find the seams. Acknowledge, reason, question — and it lands on \"how many beds\", so the homeowner's next instinct is to answer rather than to end the call." },
+              { type: "divider" },
+              { type: "heading", level: 2, text: "The six still ahead of you" },
+              { type: "paragraph", text: "You'll meet all of these before your first week is out. Each one has a response already written for you, tested on real calls, in the cheat sheet below:" },
+              { type: "columns", columns: [
+                { title: "\"How did you get my number?\"", content: "Sounds hostile. Usually isn't. There is an honest answer that keeps the call alive.", icon: "📇" },
+                { title: "\"You've got the wrong person\"", content: "Sometimes true, sometimes a brush-off. One question tells you which.", icon: "🔀" },
+                { title: "\"Is this a scam?\"", content: "The people who ask this are still listening. That matters more than it sounds.", icon: "🛡️" },
+                { title: "\"What's your offer?\"", content: "The trap question. Answer it with a number and you've lost control of the call.", icon: "💬" },
+                { title: "\"I need to think about it\"", content: "Almost never a no. It's one unanswered question wearing a coat.", icon: "🤔" },
+                { title: "\"Take me off your list\"", content: "The only one with a legal answer rather than a sales answer. Get this wrong and it costs the company.", icon: "⛔" }
               ] },
-              { type: "divider" },
-              { type: "heading", level: 2, text: "1. \"I'm not interested\"" },
-              { type: "quote", text: "I completely understand. Most people I talk to aren't at first. Just out of curiosity, if you could get a fair cash offer with no repairs, no agents, and close on your timeline — would that be something worth at least hearing about?" },
-              { type: "heading", level: 2, text: "2. \"I'm not selling\"" },
-              { type: "quote", text: "Totally get it. I'm not here to pressure you. Just curious — is there any price where it would make sense?" },
-              { type: "heading", level: 2, text: "3. \"How did you get my number?\"" },
-              { type: "quote", text: "Great question. Your property came up in our system as a potential match. We work with homeowners in your area. Just wanted to see if you'd ever consider an offer." },
-              { type: "heading", level: 2, text: "4. \"I already have a realtor\"" },
-              { type: "quote", text: "That's great! Realtors do excellent work. Our process is different though — no commissions, no repairs, and we can close in as little as 2 weeks. If speed and convenience matter, it might be worth comparing." },
-              { type: "heading", level: 2, text: "5. \"What's your offer?\"" },
-              { type: "quote", text: "That's exactly what I'd like to figure out. I need to ask a few questions about the property to give you a fair number. Can I ask you a couple quick things?" },
-              { type: "heading", level: 2, text: "6. \"I need to think about it\"" },
-              { type: "quote", text: "Absolutely, take your time. What specifically would you like to think about? I might be able to answer that right now." },
-              { type: "heading", level: 2, text: "7. \"The house isn't worth much\"" },
-              { type: "quote", text: "That's actually who we work best with. We buy properties in any condition — no repairs needed. Can I ask about the current state of the property?" },
-              { type: "heading", level: 2, text: "8. \"I already got an offer from someone else\"" },
-              { type: "quote", text: "That's great — it's always good to have options. We'd love to give you a competing offer so you can compare. No obligation." },
-              { type: "heading", level: 2, text: "9. \"Call me back later\" / \"Send me something\"" },
-              { type: "quote", text: "Absolutely. What day and time works best for you? I'll put it on my calendar right now." },
-              { type: "callout", style: "pro-tip", content: "For \"send me something\": \"I'd be happy to. What email should I send it to? And just so I send the right information — can I ask a couple quick questions about the property?\"" },
-              { type: "heading", level: 2, text: "10. \"Take me off your list\"" },
-              { type: "quote", text: "I'll make that note right now. Before I go — just curious, is there any situation where you'd consider selling? Even years from now?" }
+              { type: "callout", style: "pro-tip", title: "Before the role play", content: "Download the cheat sheet and read it once end to end. Then read only the objection headings and try to produce each response from memory. The gap between what you remember and what's written is exactly what the role play will expose — better to find it now." },
+              { type: "highlight-box", title: "One line to carry into every call", content: "Never ask permission to ask. No \"do you mind if\", no \"is now a good time\", no \"could I ask you a couple of quick things\". Each of those hands the homeowner a clean exit, and a good number of them will take it. Just ask the question.", color: "purple" }
             ] as RichContentBlock[],
             downloadFile: "top-10-objections-cheatsheet.pdf",
           },

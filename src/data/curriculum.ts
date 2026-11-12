@@ -415,27 +415,26 @@ export const curriculum: Week[] = [
               { type: "paragraph", text: "These additional resources will give you a broader perspective on telemarketing and cold calling. Watch them on your own time to reinforce what you've learned in the live sessions." },
               { type: "callout", style: "pro-tip", content: "Take notes while watching these videos. The best telemarketers are always studying their craft — absorbing new techniques, refining their approach, and learning from the pros." },
               { type: "columns", columns: [
-                { title: "Types & Best Practices", content: "Overview of telemarketing approaches used across industries", icon: "📚" },
-                { title: "Cold Calling Mindset", content: "How to prepare mentally and execute with confidence", icon: "🧠" },
-                { title: "Opening Mastery", content: "Nail the first 30 seconds — the make-or-break moment", icon: "⚡" },
-                { title: "Vocal Delivery", content: "Professional phone skills that set you apart", icon: "🎙️" }
+                { title: "Know the Work", content: "What telemarketing actually is, and where it fits in a sales team", icon: "📚" },
+                { title: "Make the Call", content: "A step-by-step method for booking meetings from a cold list", icon: "📞" },
+                { title: "Open Strong", content: "The first 30 seconds decide whether the rest of the call happens", icon: "⚡" }
               ] }
             ] as RichContentBlock[],
             videos: [
               {
-                title: "What is Telemarketing? Types and Best Practices",
-                url: "https://www.youtube.com/watch?v=eBGIQ7ZuuiU",
-                description: "A comprehensive overview of telemarketing — what it is, the different types, and industry best practices.",
+                title: "What is Telemarketing?",
+                url: "https://www.youtube.com/watch?v=BTpvm3Oq1mM",
+                description: "Start here. What telemarketing is, the forms it takes, and how the role fits alongside the rest of a sales team.",
               },
               {
-                title: "Cold Calling Tips: How to Cold Call Like a Pro",
-                url: "https://www.youtube.com/watch?v=2xLJe_BKYYE",
-                description: "Practical cold calling tips for beginners — mindset, preparation, and execution.",
+                title: "Cold Calling For Beginners: A Step-by-Step Guide To Book Sales Meetings",
+                url: "https://www.youtube.com/watch?v=4OweikRF7bg",
+                description: "The full sequence of a cold call, from opening line to booked meeting — the shape of the calls you'll be making.",
               },
               {
-                title: "The Art of Cold Calling — First 30 Seconds",
-                url: "https://www.youtube.com/watch?v=k9MxPRxnmJQ",
-                description: "How to nail the opening of your call — the most critical part of any cold call.",
+                title: "Nailing the First 30 Seconds of a Cold Call",
+                url: "https://www.youtube.com/watch?v=EKr0bYFsNrU",
+                description: "Most calls are won or lost before you finish your second sentence. This breaks down exactly what to say in that window.",
               },
             ],
           },

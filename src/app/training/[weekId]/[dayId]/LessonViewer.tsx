@@ -345,52 +345,135 @@ function QuizBlock({ questions }: { questions: QuizQuestion[] }) {
 /* ═══════════════════════════════════════════════
    YOUTUBE EMBED COMPONENT
    ═══════════════════════════════════════════════ */
-function YouTubeSection({ videos }: { videos: YouTubeVideo[] }) {
-  function getVideoId(url: string) {
-    const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([^&?#]+)/);
-    return match ? match[1] : null;
+function getVideoId(url: string) {
+  const match = url.match(
+    /(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([^&?#]+)/,
+  );
+  return match ? match[1] : null;
+}
+
+/**
+ * Click-to-load video card.
+ *
+ * The previous version mounted a real YouTube iframe for every video as soon
+ * as the lesson opened — three players loading several hundred KB each, and
+ * YouTube receiving a view of every trainee who opened the page whether or
+ * not they pressed play. This shows YouTube's own thumbnail instead and only
+ * swaps in the player on click, which is both markedly faster and quieter.
+ */
+function VideoCard({
+  video,
+  index,
+  total,
+}: {
+  video: YouTubeVideo;
+  index: number;
+  total: number;
+}) {
+  const [playing, setPlaying] = useState(false);
+  const [thumbFailed, setThumbFailed] = useState(false);
+  const videoId = getVideoId(video.url);
+
+  if (!videoId) {
+    return (
+      <div className="rounded-2xl border border-surface-dim bg-white p-4">
+        <p className="text-sm font-bold text-ink">{video.title}</p>
+        {video.description && (
+          <p className="text-xs text-muted mt-1 leading-relaxed">{video.description}</p>
+        )}
+        <a
+          href={video.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1.5 mt-2 text-xs font-semibold text-red-600 hover:text-red-700"
+        >
+          Watch on YouTube
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+            <path d="M3 9L9 3M9 3H4M9 3V8" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </a>
+      </div>
+    );
   }
 
+  // maxres doesn't exist for every upload; hq always does.
+  const thumb = thumbFailed
+    ? `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`
+    : `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`;
+
+  return (
+    <div className="group rounded-2xl border border-surface-dim bg-white overflow-hidden transition-shadow hover:shadow-lg">
+      <div className="relative w-full bg-ink" style={{ paddingBottom: "56.25%" }}>
+        {playing ? (
+          <iframe
+            className="absolute inset-0 w-full h-full"
+            src={`https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1`}
+            title={video.title}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
+        ) : (
+          <button
+            onClick={() => setPlaying(true)}
+            aria-label={`Play: ${video.title}`}
+            className="absolute inset-0 w-full h-full cursor-pointer"
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={thumb}
+              alt=""
+              onError={() => setThumbFailed(true)}
+              className="absolute inset-0 w-full h-full object-cover"
+              loading="lazy"
+            />
+            <span className="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/10 to-ink/20 transition-opacity group-hover:from-ink/70" />
+
+            {/* Step number — these are meant to be watched in order */}
+            <span className="absolute top-3 left-3 flex items-center gap-1.5 rounded-full bg-black/55 backdrop-blur-sm px-2.5 py-1 text-[10px] font-bold text-white tracking-wide">
+              {index + 1} of {total}
+            </span>
+
+            <span className="absolute inset-0 flex items-center justify-center">
+              <span className="flex items-center justify-center w-16 h-11 rounded-xl bg-red-600 shadow-lg transition-transform duration-200 group-hover:scale-110">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                  <path d="M8 5.5v13l11-6.5z" />
+                </svg>
+              </span>
+            </span>
+
+            <span className="absolute bottom-3 left-3 right-3 text-left text-[13px] font-bold text-white leading-snug line-clamp-2">
+              {video.title}
+            </span>
+          </button>
+        )}
+      </div>
+
+      <div className="p-4">
+        {video.description && (
+          <p className="text-xs text-muted leading-relaxed">{video.description}</p>
+        )}
+        <a
+          href={video.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1.5 mt-2.5 text-[11px] font-semibold text-muted hover:text-red-600 transition-colors"
+        >
+          Open on YouTube
+          <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
+            <path d="M3 9L9 3M9 3H4M9 3V8" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </a>
+      </div>
+    </div>
+  );
+}
+
+function YouTubeSection({ videos }: { videos: YouTubeVideo[] }) {
   return (
     <div className="space-y-4">
-      {videos.map((video, i) => {
-        const videoId = getVideoId(video.url);
-        return (
-          <div key={i} className="rounded-xl border border-red-200 bg-white overflow-hidden">
-            {videoId && (
-              <div className="relative w-full" style={{ paddingBottom: "56.25%" }}>
-                <iframe
-                  className="absolute inset-0 w-full h-full"
-                  src={`https://www.youtube-nocookie.com/embed/${videoId}`}
-                  title={video.title}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  loading="lazy"
-                />
-              </div>
-            )}
-            <div className="p-4">
-              <p className="text-sm font-bold text-ink">{video.title}</p>
-              {video.description && (
-                <p className="text-xs text-muted mt-1 leading-relaxed">{video.description}</p>
-              )}
-              {!videoId && (
-                <a
-                  href={video.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 mt-2 text-xs font-semibold text-red-600 hover:text-red-700 transition-colors"
-                >
-                  Watch on YouTube
-                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                    <path d="M3 9L9 3M9 3H4M9 3V8" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </a>
-              )}
-            </div>
-          </div>
-        );
-      })}
+      {videos.map((video, i) => (
+        <VideoCard key={video.url} video={video} index={i} total={videos.length} />
+      ))}
     </div>
   );
 }

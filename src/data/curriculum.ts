@@ -751,37 +751,6 @@ export const curriculum: Week[] = [
             confirmationText: "I confirm that I have participated in the live objection handling role play session with the team.",
           },
           {
-            id: "w1d3-rapport-intro",
-            title: "Introduction to Rapport Building",
-            duration: "15 min",
-            type: "slides",
-            description: "Your first look at rapport building — connecting with people on the phone quickly and authentically.",
-            heroImage: "https://images.unsplash.com/photo-1521791136064-7986c2920216?w=1200&h=600&fit=crop&q=80",
-            content: [
-              { type: "heading", level: 1, text: "Introduction to Rapport Building" },
-              { type: "paragraph", text: "Rapport is the foundation of every successful call. People buy from people they like and trust — and you have about 30 seconds to establish that over the phone." },
-              { type: "callout", style: "definition", content: "Rapport is a sense of connection and trust between two people. On a phone call, you build it through your voice, your words, and your attention." },
-              { type: "divider" },
-              { type: "heading", level: 2, text: "Quick Rapport Techniques" },
-              { type: "columns", columns: [
-                { title: "Match Their Energy", content: "If they're calm, be calm. If they're quick and upbeat, pick up your pace.", icon: "🔄" },
-                { title: "Use Their Name", content: "Say their name 2-3 times naturally. People love hearing their own name.", icon: "👤" },
-                { title: "Find Common Ground", content: "Location, weather, shared experience. A quick connection goes a long way.", icon: "🤝" },
-                { title: "Be Genuine", content: "People can sense fake friendliness. Actually care about what they're saying.", icon: "💯" }
-              ] },
-              { type: "divider" },
-              { type: "heading", level: 2, text: "What Breaks Rapport" },
-              { type: "list", style: "bullet", items: [
-                "Talking too fast",
-                "Not listening to their answers",
-                "Being overly aggressive or pushy",
-                "Sounding scripted and robotic",
-                "Interrupting them mid-sentence"
-              ] },
-              { type: "callout", style: "pro-tip", content: "We'll go deeper into rapport building in Day 5. For now, start paying attention to how you connect with people on the phone." }
-            ] as RichContentBlock[],
-          },
-          {
             id: "w1d3-quiz",
             title: "Objection Handling Quiz",
             duration: "10 min",
@@ -1085,24 +1054,35 @@ export const curriculum: Week[] = [
           },
           {
             id: "w1d5-rapport-topics",
-            title: "Rapport Building Topics & Scenarios",
+            title: "Who You're Actually Talking To",
             duration: "15 min",
             type: "reading",
-            description: "Specific topics and scenarios you can use to build rapport on different types of calls.",
+            description: "Five kinds of homeowner, five different calls — and how to tell which one you're on within thirty seconds.",
             content: [
-              { type: "heading", level: 1, text: "Rapport Building by Scenario" },
-              { type: "paragraph", text: "Different prospects need different approaches. Here are specific rapport-building techniques for the most common call scenarios you'll encounter." },
+              { type: "heading", level: 1, text: "Who You're Actually Talking To" },
+              { type: "paragraph", text: "The script doesn't change. The way you carry it does. Five kinds of homeowner come up again and again, and each one needs something different from you in the first thirty seconds." },
+              { type: "paragraph", text: "Get the read right and the rest of the call is easy. Get it wrong — bright and brisk with someone who has just lost a parent, or slow and warm with someone who is late for something — and no amount of good scripting recovers it." },
+              { type: "callout", style: "key-takeaway", title: "Rapport is not small talk", content: "It is proving you were listening. Every technique in the guide is a different way of demonstrating that, which is why none of them work if you aren't." },
               { type: "divider" },
-              { type: "heading", level: 2, text: "Scenario 1: Older / Retired Homeowner" },
-              { type: "highlight-box", title: "Approach: Patient & Respectful", content: "Talk about the neighborhood. Reference property history. Be patient, speak clearly, don't rush. \"That's a great area. How long have you been there?\"", color: "blue" },
-              { type: "heading", level: 2, text: "Scenario 2: Young / Busy Homeowner" },
-              { type: "highlight-box", title: "Approach: Direct & Efficient", content: "Keep it concise. Reference convenience: \"No showings, no open houses, no repairs.\" Match their energy — be direct and efficient.", color: "green" },
-              { type: "heading", level: 2, text: "Scenario 3: Inherited Property" },
-              { type: "highlight-box", title: "Approach: Empathetic & Supportive", content: "Show empathy: \"I'm sorry for your loss. Dealing with a property on top of everything else can be a lot.\" Position yourself as a solution. Don't be pushy.", color: "purple" },
-              { type: "heading", level: 2, text: "Scenario 4: Landlord" },
-              { type: "highlight-box", title: "Approach: Professional & Knowledgeable", content: "Speak their language: \"How are the tenants? Is it cash-flowing well?\" Understand their motivation. Respect their knowledge — they know real estate.", color: "amber" },
-              { type: "heading", level: 2, text: "Scenario 5: Skeptical Homeowner" },
-              { type: "highlight-box", title: "Approach: Transparent & Confident", content: "Use the accusation audit: \"You're probably thinking this is one of those scam calls...\" Be transparent about your process. Offer references if needed.", color: "red" }
+              { type: "heading", level: 2, text: "The five you'll meet" },
+              { type: "columns", columns: [
+                { title: "The retired homeowner", content: "Has watched the neighbourhood change for thirty years. Rushing this call reads as disrespect.", icon: "🏡" },
+                { title: "The busy homeowner", content: "Warmth reads as wasting their time here. Brevity is the rapport.", icon: "⏱️" },
+                { title: "The inherited property", content: "The hardest call on the list. One sentence, then stop talking.", icon: "🕊️" }
+              ] },
+              { type: "columns", columns: [
+                { title: "The landlord", content: "Has done more deals than you have. Talk down to them once and they're gone.", icon: "🔑" },
+                { title: "The skeptic", content: "Still on the phone, which matters more than it sounds. There's a move that disarms this faster than any reassurance.", icon: "🛡️" }
+              ] },
+              { type: "callout", style: "pro-tip", title: "Before the mock calls", content: "The guide has the approach, the opening line and the reasoning for each of the five. Read it once through, then have someone call out a scenario at random and say your first two sentences out loud. That's exactly what the session will ask of you." },
+              { type: "divider" },
+              { type: "heading", level: 2, text: "What happens in today's session" },
+              { type: "steps", items: [
+                { title: "Rapport training", description: "Your trainer walks through the techniques and takes questions. The guide is shared here so you can follow along without writing everything down." },
+                { title: "Topics and scenarios", description: "Working through the five homeowner types with examples from live calls the team has run." },
+                { title: "Mock role plays between reps", description: "You pair up and practise on each other — one plays the homeowner, one makes the call, then swap. Rapport is the only thing being judged." }
+              ] },
+              { type: "highlight-box", title: "One thing that works on all five", content: "Repeat something they told you earlier, later in the call. Nothing proves you were listening faster, and nothing is harder to fake.", color: "purple" }
             ] as RichContentBlock[],
             downloadFile: "rapport-building-guide.pdf",
           },

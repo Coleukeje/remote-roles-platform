@@ -997,60 +997,78 @@ export const curriculum: Week[] = [
         day: 5,
         title: "Cold Calling Deep Training",
         description:
-          "Physical session — go deeper into cold calling, master rapport building, and practice mock role plays with your cohort.",
+          "Physical session — cold calling in its own right, not as a footnote to telemarketing. Tonality, listening, empathy and script navigation, then mock calls with your cohort.",
         objectives: [
-          "Understand advanced rapport building techniques",
-          "Apply rapport building in cold calling contexts",
-          "Practice mock role plays with fellow reps",
-          "Get introduced to the ChatGPT role play model for independent practice",
+          "Work through the six pillars cold calling actually rests on",
+          "Control tonality, pace and energy deliberately rather than by accident",
+          "Use active listening and empathy to lower a stranger's defences",
+          "Navigate a script as a map — including how to recover after an interruption",
+          "Practise mock calls with fellow reps",
         ],
         lessons: [
           {
-            id: "w1d5-rapport",
-            title: "Rapport Building Deep Dive",
-            duration: "22 min",
+            id: "w1d5-coldcall-deep",
+            title: "Cold Calling, Properly",
+            duration: "30 min",
             type: "slides",
-            description: "How to build rapport quickly over the phone — connect with people in seconds.",
-            heroImage: "https://images.unsplash.com/photo-1521791136064-7986c2920216?w=1200&h=600&fit=crop&q=80",
+            description: "Cold calling as its own discipline — the six pillars, and how you sound before anyone hears what you say.",
+            heroImage: "https://images.unsplash.com/photo-1587560699334-cc4ff634909a?w=1200&h=600&fit=crop&q=80",
             content: [
-              { type: "heading", level: 1, text: "Rapport Building Deep Dive" },
-              { type: "paragraph", text: "Rapport is the foundation of every successful call. People buy from people they like and trust — and you have about 30 seconds to establish that over the phone." },
-              { type: "callout", style: "definition", content: "Rapport is a sense of connection and trust between two people. On a phone call, you build it through your voice, your words, and your attention." },
+              { type: "heading", level: 1, text: "Cold Calling, Properly" },
+              { type: "paragraph", text: "Day 1 mentioned cold calling as one thing telemarketers do. Today it gets its own session, because it is its own discipline — and almost none of it is about what you say." },
+              { type: "callout", style: "key-takeaway", title: "Your only job in the first moments", content: "Earn the next thirty seconds. Not the meeting, not the offer, not the close. Thirty seconds. Every new caller who struggles is trying to do too much too early." },
               { type: "divider" },
-              { type: "heading", level: 2, text: "Rapport Building Techniques" },
-              { type: "image", src: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=1200&h=500&fit=crop&q=80", alt: "Team collaboration and rapport building", caption: "Building genuine connection is a skill — and it can be learned" },
+              { type: "heading", level: 2, text: "What a cold call actually is" },
               { type: "columns", columns: [
-                { title: "Match Their Energy", content: "If they're calm, be calm. If they're quick and upbeat, pick up your pace. Don't be high-energy with someone who's clearly mellow.", icon: "🔄" },
-                { title: "Use Their Name", content: "Say their name 2-3 times naturally. \"John, that's a great question.\" People love hearing their name.", icon: "👤" },
-                { title: "Find Common Ground", content: "Location, weather, shared experience. \"Oh you're in Texas? I've heard the market down there is really moving.\"", icon: "🤝" }
+                { title: "A conversation", content: "Not a performance. You are not delivering lines at someone.", icon: "💬" },
+                { title: "A discovery call", content: "Not a sales pitch. You are finding out whether there is anything here.", icon: "🔍" },
+                { title: "An interaction", content: "Not a demand. They owe you nothing, and acting otherwise is audible.", icon: "🤝" }
               ] },
+              { type: "divider" },
+              { type: "heading", level: 2, text: "The six pillars" },
+              { type: "paragraph", text: "Everything in this session sits on one of these. The deck goes through each in turn — objection handling you already covered on Day 3, so today we spend the time on the other five." },
+              { type: "list", style: "number", items: [
+                "Tonality and energy — how you sound decides whether they keep listening",
+                "Active listening — hearing what they mean, not just what they said",
+                "Empathy — acknowledging their reality before asking for anything",
+                "Rapport — making someone feel safe rather than sold to",
+                "Objection handling — covered in Day 3, not repeated here",
+                "Script navigation — flexible, not robotic"
+              ] },
+              { type: "divider" },
+              { type: "heading", level: 2, text: "How you sound" },
+              { type: "paragraph", text: "Prospects hear your tone before they hear your words. Four things you control, every one of them deliberately:" },
               { type: "columns", columns: [
-                { title: "Be Genuine", content: "People can sense fake friendliness from a mile away. Actually care about what they're saying.", icon: "💯" },
-                { title: "Mirroring", content: "Repeat the last 1-3 words they said as a question. This gets them talking without you asking another question.", icon: "🪞" }
+                { title: "Pace", content: "Calm, unhurried, intentional. Nearly everyone speeds up when nervous — and nervous is what it sounds like.", icon: "🐢" },
+                { title: "Pitch", content: "Natural and warm. A pitch that climbs reads as rehearsed.", icon: "🎚️" },
+                { title: "Volume", content: "Confident, not overpowering.", icon: "🔊" }
               ] },
-              { type: "divider" },
-              { type: "heading", level: 2, text: "Rapport in the Script" },
-              { type: "list", style: "check", items: [
-                "Your opening tone IS your rapport builder — confident and warm",
-                "Qualifying questions build rapport when you actively listen to answers",
-                "Show you heard them: \"So you've owned it for 15 years — that's a long time. A lot of memories in that house.\"",
-                "Strategic compliments: \"You clearly take good care of your property. That tells me a lot about you.\""
-              ] },
-              { type: "divider" },
-              { type: "heading", level: 2, text: "What Breaks Rapport" },
+              { type: "callout", style: "pro-tip", title: "Smile in your voice", content: "People can hear it down a phone line. It is the single cheapest improvement available to you, and it costs nothing but remembering." },
+              { type: "heading", level: 2, text: "What good sounds like" },
               { type: "do-dont", dos: [
-                "Speak at a natural pace that matches theirs",
-                "Listen carefully and respond to what they actually said",
-                "Be warm and genuine in your approach",
-                "Let them finish their sentences before responding"
+                "Curious",
+                "Confident",
+                "Relaxed",
+                "Brief — \"I'll be brief\" and then actually being brief"
               ], donts: [
-                "Talking too fast through the conversation",
-                "Not listening to their actual answers",
-                "Being overly aggressive or pushy",
-                "Sounding scripted and robotic",
-                "Interrupting them mid-sentence"
-              ] }
+                "Desperate",
+                "Aggressive",
+                "Rushed",
+                "Apologetic about having called"
+              ] },
+              { type: "divider" },
+              { type: "heading", level: 2, text: "Where sales actually happen" },
+              { type: "paragraph", text: "Listening is the pillar most people assume they already have. Listen to understand rather than to reply, and pick up on what sits underneath the words — a change in tone, a hesitation, frustration, or a flicker of interest." },
+              { type: "quote", text: "So what you're saying is…" },
+              { type: "paragraph", text: "The deck has the phrases that keep someone talking, and the one distinction worth more than all of them: the difference between a reactive response and a correct one. Validate first, explain second — and never the other way round." },
+              { type: "divider" },
+              { type: "heading", level: 2, text: "A script is a map" },
+              { type: "paragraph", text: "Not the journey. Know the intention of each section rather than the words — the opening sets context, the middle is discovery, the close is one next step. Then, when you get interrupted, you have somewhere to return to." },
+              { type: "highlight-box", title: "Acknowledge, respond, return", content: "The three-step recovery for any interruption, and the reason a script is worth memorising at the level of purpose rather than wording. \"That's fair. Just to finish the thought…\" and you're back on the map.", color: "purple" },
+              { type: "callout", style: "warning", title: "One thing to raise in the session", content: "The deck's opening example asks the prospect for thirty seconds. Our standing rule is that you never ask permission to ask — it hands them a clean exit at the exact moment the call is going well. Your trainer will cover which version Remote Roles uses." }
             ] as RichContentBlock[],
+            downloadFile: "cold-calling-deep-training.pptx",
+            meetingNote: "Your trainer walks through this deck live, including the recordings of real calls.",
           },
           {
             id: "w1d5-rapport-topics",
@@ -1115,32 +1133,6 @@ export const curriculum: Week[] = [
             meetingNote: "Mock role plays happen in-person during today's physical training session.",
             requiresConfirmation: true,
             confirmationText: "I confirm that I have participated in the mock role play session with the team.",
-          },
-          {
-            id: "w1d5-gpt",
-            title: "AI Role Play Tool — ChatGPT Model",
-            duration: "20 min",
-            type: "video-upload",
-            description: "Learn how to set up and use the ChatGPT role play model for independent practice.",
-            heroImage: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1200&h=600&fit=crop&q=80",
-            content: [
-              { type: "heading", level: 1, text: "AI Role Play Tool" },
-              { type: "paragraph", text: "We've built a custom ChatGPT model specifically for cold calling role play practice. This tool lets you practice your script and objection handling anytime, anywhere — without needing a partner." },
-              { type: "divider" },
-              { type: "heading", level: 2, text: "What the GPT Model Does" },
-              { type: "columns", columns: [
-                { title: "Multiple Personalities", content: "Plays friendly, hostile, skeptical, and busy prospect roles", icon: "🎭" },
-                { title: "Realistic Objections", content: "Throws real objections based on actual call data", icon: "🛡️" },
-                { title: "Instant Feedback", content: "Gives you feedback on your responses after each attempt", icon: "📊" }
-              ] },
-              { type: "columns", columns: [
-                { title: "Adaptive Difficulty", content: "Adjusts difficulty as you improve over time", icon: "📈" },
-                { title: "24/7 Practice", content: "Available anytime, anywhere — unlimited practice reps", icon: "🕐" }
-              ] },
-              { type: "callout", style: "pro-tip", content: "Your trainer will upload a video walkthrough below showing exactly how to set up the GPT model. Watch the video, follow the steps, and you'll be ready to practice on your own." },
-              { type: "highlight-box", title: "Why This Matters", content: "The more reps you get, the better you'll be. You can practice any time, test different approaches without consequences, and build confidence before live calls. It prepares you for the unexpected.", color: "green" }
-            ] as RichContentBlock[],
-            meetingNote: "Your trainer will demonstrate the GPT model setup in the live meeting.",
           },
           {
             id: "w1d5-confirm",

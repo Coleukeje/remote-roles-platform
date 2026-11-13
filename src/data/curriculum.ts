@@ -782,26 +782,6 @@ export const curriculum: Week[] = [
             ] as RichContentBlock[],
           },
           {
-            id: "w1d3-gpt-assignment",
-            title: "GPT Role Play Assignment",
-            duration: "10 min",
-            type: "reading",
-            description: "Your assignment: practice role plays with the GPT AI tool and submit feedback before the next session.",
-            content: [
-              { type: "heading", level: 1, text: "Assignment — Due Before Day 4" },
-              { type: "callout", style: "warning", content: "Don't skip this. The reps you put in now will show in your Day 4 performance." },
-              { type: "paragraph", text: "You've been introduced to the ChatGPT role play model. Now it's time to practice on your own." },
-              { type: "steps", items: [
-                { title: "Open the GPT Role Play Tool", description: "Use the GPT role play tool your trainer shared with the team." },
-                { title: "Run 3+ Full Role Plays", description: "Complete at least 3 full cold call role plays from opening to close." },
-                { title: "Focus on Key Areas", description: "Opening, script flow, and objection handling — the three pillars." },
-                { title: "Take Notes", description: "After each role play, note what went well and what needs work." },
-                { title: "Submit Feedback", description: "Send your notes to your trainer before the Day 4 meeting." }
-              ] },
-              { type: "highlight-box", title: "Why This Matters", content: "The more reps you get, the more natural your delivery becomes. Independent practice builds confidence for the final role play. Your trainer will review your feedback and address weak areas in the next session.", color: "blue" }
-            ] as RichContentBlock[],
-          },
-          {
             id: "w1d3-quiz",
             title: "Objection Handling Quiz",
             duration: "10 min",
@@ -928,6 +908,7 @@ export const curriculum: Week[] = [
             content: [
               { type: "heading", level: 1, text: "Final Role Play — Full Mock Call" },
               { type: "paragraph", text: "You will run a complete cold call from beginning to end. Your trainer plays the prospect and evaluates every phase." },
+              { type: "callout", style: "key-takeaway", title: "Which script you'll be using", content: "The same cold call script from Day 2 of this module — the one you downloaded and have been practising all week. Nothing new is introduced for this. If your trainer wants to run it against a different scenario, they'll tell you in the session beforehand." },
               { type: "divider" },
               { type: "heading", level: 2, text: "Evaluation Criteria" },
               { type: "stats", items: [

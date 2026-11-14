@@ -1593,6 +1593,22 @@ export const curriculum: Week[] = [
             ] as RichContentBlock[],
             meetingNote: "Your trainer shares their screen and walks through a live session during the physical training.",
           },
+        ],
+      },
+
+      {
+        id: "w2d2",
+        day: 2,
+        title: "DISC Personality Types",
+        description:
+          "Four kinds of seller, four different calls. Learn to name the type inside the first thirty seconds and adjust the way you carry the script.",
+        objectives: [
+          "Identify all four DISC types from how someone speaks",
+          "Adapt pace, warmth and detail to the type in front of you",
+          "Handle each type's characteristic objection",
+          "Practise all four live with your trainer",
+        ],
+        lessons: [
           {
             id: "w2d2-disc",
             title: "Read People. Close Deals. — DISC Framework",
@@ -1769,6 +1785,7 @@ export const curriculum: Week[] = [
           },
         ],
       },
+
 
       // ─── Day 3: Leads & Property Research (Physical) ───
       {
@@ -2353,22 +2370,55 @@ export const curriculum: Week[] = [
       },
 
       // ─── Day 5: Seller Discovery ───
+
+      // ─── Day 6: Setting the Stage ───
       {
         id: "w2d5",
         day: 5,
-        title: "Seller Discovery",
+        title: "Setting the Stage",
         description:
-          "Master the 4 Pillars of Seller Discovery — Motivation, Timeline, Condition, and Price. Learn to uncover what really drives a seller's decision.",
+          "Before you ask a single question, you tell the seller what is about to happen. Done well, the rest of the call stops feeling like an interrogation.",
         objectives: [
-          "Understand and apply the 4 Pillars of Seller Discovery",
-          "Ask the right follow-up questions based on seller responses",
-          "Identify key details and dig deeper",
-          "Practice seller interviews with partner roleplay",
+          "Frame the call so the seller knows what is coming and why",
+          "State the process and the time it takes without asking for permission",
+          "Give the seller a way out early, which makes them less likely to use it",
+          "Recover the frame when a call drifts",
         ],
         lessons: [
           {
+            id: "w2d5-why",
+            title: "Why the Frame Comes First",
+            duration: "18 min",
+            type: "slides",
+            description: "A seller who doesn't know where a call is going assumes the worst. Setting the stage removes that.",
+            heroImage: "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=1200&h=600&fit=crop&q=80",
+            content: [
+              { type: "heading", level: 1, text: "Setting the Stage" },
+              { type: "paragraph", text: "A stranger has just called about their house. They don't know who you are, how long this will take, or what you want. Every question you ask lands inside that uncertainty, which is why calls feel like interrogations even when the questions are reasonable." },
+              { type: "paragraph", text: "Setting the stage is the thirty seconds where you remove the uncertainty. You say who you are, what the next few minutes look like, and what happens at the end. Then the questions stop feeling like prying and start feeling like a process." },
+              { type: "callout", style: "key-takeaway", title: "The counterintuitive part", content: "Telling someone they can stop the call at any point makes them far less likely to stop it. Pressure creates resistance. Removing the pressure removes the thing they were resisting." },
+              { type: "divider" },
+              { type: "heading", level: 2, text: "The four things you establish" },
+              { type: "columns", columns: [
+                { title: "Who you are", content: "A real company with real buyers. Not a mystery number.", icon: "👤" },
+                { title: "What you do", content: "Buy as-is, all cash, close on their timeline, no fees or commissions.", icon: "🏠" },
+                { title: "How long", content: "Name the number of minutes. Vagueness is what makes people anxious.", icon: "⏱️" }
+              ] },
+              { type: "columns", columns: [
+                { title: "What happens after", content: "They hear their options and choose. Nothing is decided on this call.", icon: "➡️" },
+                { title: "The exit", content: "They can stop at any point and say so. Offering it is what makes it unnecessary.", icon: "🚪" }
+              ] },
+              { type: "divider" },
+              { type: "heading", level: 2, text: "Said properly" },
+              { type: "quote", text: "We're a real estate investment company — we work with a group of investors, we buy in as-is condition, all cash, and we close on your timeframe. No hidden fees, no commission, and we cover the closing costs. The whole thing takes about seven minutes. I'll ask about the property and your situation, then I'll tell you what your options are and you decide what you want to do." },
+              { type: "callout", style: "warning", title: "Where this goes wrong", content: "Two mistakes. Rushing it, so it sounds like small print being read out. And turning it into a permission request — \"is that okay?\", \"do you have seven minutes?\" — which invites the no you were trying to avoid. State it. Then ask your first real question." },
+              { type: "highlight-box", title: "The line worth stealing", content: "\"If at any stage you feel like we're not a right fit, just tell me and we'll stop.\" It costs you nothing, it sounds like confidence rather than desperation, and it almost never gets used.", color: "purple" }
+            ] as RichContentBlock[],
+            downloadFile: "acquisitions-script.pdf",
+          },
+          {
             id: "w2d5-pillars",
-            title: "The 4 Pillars of Seller Discovery",
+            title: "The Four Things You're Here to Find",
             duration: "25 min",
             type: "slides",
             description: "Motivation, Timeline, Condition, Price — the four things you must uncover on every call.",
@@ -2430,6 +2480,336 @@ export const curriculum: Week[] = [
                 "\"What do you think it's worth in its current condition?\""
               ] },
               { type: "callout", style: "pro-tip", content: "If their number is too high, acknowledge and redirect: \"I appreciate that. Our offer reflects that we cover all closing costs, buy as-is, and close in 2 weeks. When you factor that in, the net is usually closer than people think.\"" }
+            ] as RichContentBlock[],
+          },
+          {
+            id: "w2d5-practice",
+            title: "Frame It in Thirty Seconds",
+            duration: "25 min",
+            type: "roleplay",
+            description: "Deliver the frame cold, out loud, until it sounds like you rather than like reading.",
+            heroImage: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=1200&h=600&fit=crop&q=80",
+            content: [
+              { type: "heading", level: 1, text: "Say It Until It's Yours" },
+              { type: "paragraph", text: "The frame only works if it sounds unrehearsed, and it only sounds unrehearsed after you have said it enough times to stop thinking about it. That takes repetition out loud, not reading." },
+              { type: "divider" },
+              { type: "heading", level: 2, text: "The drill" },
+              { type: "steps", items: [
+                { title: "Read it once", description: "From the script, exactly as written, so you know the shape." },
+                { title: "Say it without looking", description: "You'll lose a chunk. That's the point — the chunk you lose is the one you don't believe yet." },
+                { title: "Cut it to thirty seconds", description: "Time yourself. If it runs past forty seconds you are explaining rather than framing." },
+                { title: "Deliver it to a partner", description: "They play a seller who is mildly irritated. The frame has to survive that." }
+              ] },
+              { type: "callout", style: "pro-tip", title: "What your trainer is listening for", content: "Not the words. Whether you slowed down, whether you sounded certain, and whether you asked permission anywhere in it. The last one fails the drill on its own." }
+            ] as RichContentBlock[],
+            meetingNote: "Run live in the session, in pairs, with the trainer listening in.",
+            requiresConfirmation: true,
+            confirmationText: "I confirm that I delivered the frame from memory in the live session.",
+          },
+        ],
+      },
+
+      // ─── Day 7: Uncovering Motivation ───
+      {
+        id: "w2d6",
+        day: 6,
+        title: "Uncovering Motivation",
+        description:
+          "The condition of the house is data. The reason they're selling is the lead. This is the day you learn to find it without interrogating anyone.",
+        objectives: [
+          "Separate the stated reason from the real one",
+          "Use Socratic questions that make the seller do the thinking",
+          "Soften a hard question so it can be asked at all",
+          "Recognise when there is no motivation and stop",
+        ],
+        lessons: [
+          {
+            id: "w2d6-motivation",
+            title: "The Only Question That Matters",
+            duration: "22 min",
+            type: "slides",
+            description: "Five qualifying questions. One of them decides whether the lead is real.",
+            heroImage: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1200&h=600&fit=crop&q=80",
+            content: [
+              { type: "heading", level: 1, text: "The Only Question That Matters" },
+              { type: "paragraph", text: "Beds, baths, condition, price — an acquisitions manager can pull most of that from a database. What they can't pull is why this person is answering the phone to a stranger about their house." },
+              { type: "callout", style: "key-takeaway", title: "No motivation, no deal", content: "A perfect property with an owner who doesn't need to sell is worth less than a wreck owned by someone relocating in six weeks. Motivation is the lead. Everything else is paperwork." },
+              { type: "divider" },
+              { type: "heading", level: 2, text: "Stated reason versus real reason" },
+              { type: "paragraph", text: "People rarely open with the truth, not because they're lying but because the real reason is usually personal. \"Thinking about downsizing\" is a stated reason. Underneath it might be a divorce, a job loss, a parent who died, or a tenant who stopped paying eight months ago." },
+              { type: "paragraph", text: "You are not trying to extract a confession. You are trying to find out whether something is actually pushing this sale, because that determines whether acquisitions should spend an hour on it." },
+              { type: "divider" },
+              { type: "heading", level: 2, text: "Socratic questions" },
+              { type: "paragraph", text: "A Socratic question makes the seller work out the answer rather than receive it. It's slower and far more effective, because people don't argue with conclusions they reached themselves." },
+              { type: "quote", text: "What would need to happen for selling to make sense for you?" },
+              { type: "quote", text: "If you did nothing with it for another year, how would that sit with you?" },
+              { type: "paragraph", text: "Compare those with \"are you motivated to sell?\", which invites a yes or no and tells you nothing either way." },
+              { type: "divider" },
+              { type: "heading", level: 2, text: "Softening" },
+              { type: "paragraph", text: "Some questions can't be asked flat. A softening statement gives the seller permission to answer honestly without feeling exposed." },
+              { type: "do-dont", dos: [
+                "\"A lot of people in your position tell me it's just become more hassle than it's worth — is that where you're at?\"",
+                "\"I don't want to pry, so stop me if this is the wrong question —\"",
+                "\"There's no wrong answer here, I'm just trying to see if we can actually help.\""
+              ], donts: [
+                "\"Why are you selling?\" asked cold, early, with nothing around it",
+                "\"Are you in financial difficulty?\"",
+                "Repeating the question harder when they deflect the first time"
+              ] },
+              { type: "highlight-box", title: "When to stop", content: "If someone deflects the same question twice, they have answered it — the answer is no. Note it, move to the next question, and let the record say there was no clear motivation. A lead marked honestly is worth more than one talked up.", color: "purple" }
+            ] as RichContentBlock[],
+          },
+          {
+            id: "w2d6-drill",
+            title: "Motivation Drill",
+            duration: "25 min",
+            type: "roleplay",
+            description: "Your trainer gives a surface answer. You find what's underneath without pushing.",
+            heroImage: "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=1200&h=600&fit=crop&q=80",
+            content: [
+              { type: "heading", level: 1, text: "Find What's Underneath" },
+              { type: "paragraph", text: "Your trainer plays a seller with a reason they won't volunteer. You get three questions to find it. Three, not thirty — because on a real call that's roughly what you have before it starts feeling like an interview." },
+              { type: "divider" },
+              { type: "heading", level: 2, text: "Scenarios" },
+              { type: "list", style: "number", items: [
+                "\"Just seeing what it's worth.\" — curiosity, or a decision already made?",
+                "\"My brother and I inherited it.\" — two owners, and they may not agree",
+                "\"The tenants moved out.\" — how long has it been empty, and can they carry it?",
+                "\"We're thinking about moving closer to the grandkids.\" — a timeline exists, find it"
+              ] },
+              { type: "callout", style: "pro-tip", title: "Scored on restraint", content: "You lose points for pushing a deflected question a second time, and for asking anything that sounds like a form being filled in. You gain them for a question that made the seller pause before answering." }
+            ] as RichContentBlock[],
+            meetingNote: "Live in the session. Trainer plays all four sellers.",
+            requiresConfirmation: true,
+            confirmationText: "I confirm that I completed the motivation drill in the live session.",
+          },
+        ],
+      },
+
+      // ─── Day 8: Property Condition & Timeline ───
+      {
+        id: "w2d7",
+        day: 7,
+        title: "Seller Discovery — Property & Timeline",
+        description:
+          "The part of the call that most often sounds like an interrogation. Here you learn to get the property details without it feeling like a form being filled in — then timeline, and the trick of lowering your energy exactly when you want something.",
+        objectives: [
+          "Get property details without the call turning into an interview",
+          "Capture condition accurately without guessing at repairs",
+          "Recognise the signals that change what a property is worth",
+          "Ask for a timeline without creating pressure",
+          "Use lowered energy and the takeaway so the seller stops feeling chased",
+        ],
+        lessons: [
+          {
+            id: "w2d7-interrogation",
+            title: "Asking Without Interrogating",
+            duration: "22 min",
+            type: "slides",
+            description: "Six property questions in a row is a form. The same six, wrapped properly, is a conversation. This is the difference.",
+            heroImage: "https://images.unsplash.com/photo-1560520653-9e0e4c89eb11?w=1200&h=600&fit=crop&q=80",
+            content: [
+              { type: "heading", level: 1, text: "Asking Without Interrogating" },
+              { type: "paragraph", text: "You need bedrooms, bathrooms, condition, roof age, occupancy and timeline. That is six pieces of information from someone who did not ask to be called. Asked flat, one after another, it is a form being filled in — and sellers hang up on forms." },
+              { type: "paragraph", text: "The questions are not the problem. What makes a call feel like an interrogation is the rhythm: question, answer, next question, with nothing in between. You never react to what they said, so they work out quickly that you are not listening, you are collecting." },
+              { type: "callout", style: "key-takeaway", title: "The fix in one sentence", content: "React to the answer before you ask the next question. One sentence is enough — it turns a list into a conversation and costs you about three seconds per question." },
+              { type: "divider" },
+              { type: "heading", level: 2, text: "Same questions, two calls" },
+              { type: "do-dont", dos: [
+                "\"Three bed — nice size. And is anyone in it at the moment?\"",
+                "\"Empty since March, right, so you've been carrying it a while. What sort of shape is it in?\"",
+                "\"Roof's original, OK, that's useful to know — the specialist will ask me that.\"",
+                "\"Sorry, bear with me, I'm writing this down so you don't have to say it twice.\""
+              ], donts: [
+                "\"How many bedrooms? ... Bathrooms? ... Is it occupied? ... Roof age?\"",
+                "Silence after every answer, then the next item",
+                "\"OK.\" ... \"OK.\" ... \"OK.\"",
+                "Reading the questions in the exact order they appear on your sheet, every call"
+              ] },
+              { type: "divider" },
+              { type: "heading", level: 2, text: "Four things that keep it conversational" },
+              { type: "columns", columns: [
+                { title: "Say why you're asking", content: "\"The specialist will want to know\" turns nosiness into process.", icon: "🧭" },
+                { title: "Bundle the easy ones", content: "Beds and baths go together in one question. Don't spend two.", icon: "🔗" },
+                { title: "Let them wander", content: "If they start telling you about the tenant, let them. You'll get three answers for free.", icon: "🌿" }
+              ] },
+              { type: "columns", columns: [
+                { title: "Narrate the pause", content: "\"Give me one second, I'm typing\" is better than dead air they have to fill.", icon: "⌨️" },
+                { title: "Drop one", content: "If a question clearly isn't landing, skip it. A blank field beats a lost call.", icon: "✂️" }
+              ] },
+              { type: "divider" },
+              { type: "heading", level: 2, text: "The question that does most of the work" },
+              { type: "quote", text: "If we were standing in it together right now, what sort of shape would I be looking at?" },
+              { type: "paragraph", text: "It gets a description instead of a rating, it gives the seller something to picture rather than something to score, and it usually answers two or three of your other questions before you ask them. It is the one line on this page worth memorising word for word." },
+              { type: "callout", style: "warning", title: "Where people slip back", content: "Under pressure — a rushed seller, a hostile one, a caller behind on their numbers — everyone reverts to reading the list. That is exactly when the reaction sentence matters most, because a rushed seller is deciding whether you are worth their next two minutes." },
+              { type: "highlight-box", title: "The deck below", content: "The property condition deck walks through the full question set and what each answer tells acquisitions. Read this page first, then the deck — the deck gives you the questions, this page gives you the way to ask them.", color: "purple" }
+            ] as RichContentBlock[],
+            downloadFile: "property-condition-training.pptx",
+          },
+          {
+            id: "w2d7-condition",
+            title: "Condition — What You Need and What You Don't",
+            duration: "25 min",
+            type: "slides",
+            description: "You are not an inspector. You are the person who notices the roof is twenty years old and writes it down.",
+            heroImage: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=1200&h=600&fit=crop&q=80",
+            content: [
+              { type: "heading", level: 1, text: "Condition Without Guessing" },
+              { type: "paragraph", text: "Acquisitions needs to know what shape the house is in. You are on a phone, you cannot see it, and the seller is not a builder. So the job is not to assess the property — it is to capture what the seller tells you accurately, and to notice the handful of things that change the number significantly." },
+              { type: "callout", style: "warning", title: "Never estimate a repair cost", content: "Not a roof, not a kitchen, not \"probably a few thousand\". A figure you invent becomes the figure the seller expects, and the acquisitions manager has to walk it back. That conversation loses deals." },
+              { type: "divider" },
+              { type: "heading", level: 2, text: "The questions, in order" },
+              { type: "list", style: "number", items: [
+                "How long have you owned it?",
+                "Is anyone living in it right now?",
+                "If we were standing in it together, what sort of shape would I be looking at?",
+                "How many bedrooms and bathrooms?",
+                "Anything major that needs doing?",
+                "Have the roof or windows been replaced while you've owned it?"
+              ] },
+              { type: "paragraph", text: "Question three is the useful one. Asking someone to picture walking you through gets a far more honest answer than asking them to rate it out of ten, because a number lets them round up and a description doesn't." },
+              { type: "divider" },
+              { type: "heading", level: 2, text: "What to listen for" },
+              { type: "columns", columns: [
+                { title: "Roof age", content: "The single biggest number in most rehabs. Always ask, always write down the answer.", icon: "🏚️" },
+                { title: "Vacancy", content: "Empty and for how long. Long-empty houses carry problems nobody mentions.", icon: "🚪" },
+                { title: "Water", content: "Any mention of leaks, damp or flooding. Note the words they use, don't interpret them.", icon: "💧" }
+              ] },
+              { type: "highlight-box", title: "Write what they said, not what you concluded", content: "\"Seller says roof was done maybe 15 years ago, not sure\" is useful. \"Roof needs replacing\" is you guessing, and it's the kind of note that sends an acquisitions manager into a call with the wrong expectation.", color: "purple" }
+            ] as RichContentBlock[],
+          },
+          {
+            id: "w2d7-timeline",
+            title: "Timeline, and the Art of Caring Less",
+            duration: "20 min",
+            type: "reading",
+            description: "The counterintuitive move — drop your energy exactly when you want something.",
+            heroImage: "https://images.unsplash.com/photo-1501139083538-0139583c060f?w=1200&h=600&fit=crop&q=80",
+            content: [
+              { type: "heading", level: 1, text: "Timeline" },
+              { type: "paragraph", text: "How soon they want to be out is the clearest signal of real motivation you will get. Someone who says \"within a month\" has already decided something. Someone who says \"no rush at all\" is usually telling you the truth about that too." },
+              { type: "quote", text: "If the number worked for you, how soon would you want to close?" },
+              { type: "paragraph", text: "The conditional matters. \"If the number worked\" lets them answer without feeling committed, so you get the real timeline instead of a defensive one." },
+              { type: "divider" },
+              { type: "heading", level: 2, text: "Lower your energy here" },
+              { type: "paragraph", text: "Most callers get faster and brighter as they approach the thing they want. The seller hears that shift and tightens up, because keenness in a stranger asking about your house is exactly what you'd expect from someone about to pressure you." },
+              { type: "callout", style: "key-takeaway", title: "Do the opposite", content: "Slow down. Flatten out. Sound slightly less interested than you were a minute ago. The seller relaxes because nothing is being pushed, and relaxed people give you real answers." },
+              { type: "divider" },
+              { type: "heading", level: 2, text: "The takeaway" },
+              { type: "paragraph", text: "When a seller is hesitating, removing the thing works better than offering it harder." },
+              { type: "quote", text: "Honestly, it might not be a fit. We only buy at a certain number, and plenty of people decide it's not for them. That's completely fine." },
+              { type: "callout", style: "warning", title: "Use it once", content: "The takeaway works because it's sincere. Used twice in one call it becomes a tactic the seller can feel, and then you've lost something harder to get back than the deal.", },
+              { type: "highlight-box", title: "Both of these are tone, not words", content: "You can read this page and still fail the drill, because what your trainer is listening for is whether your voice actually changed. Record yourself asking the timeline question twice — once normally, once slowed down — and you'll hear the difference immediately.", color: "purple" }
+            ] as RichContentBlock[],
+          },
+          {
+            id: "w2d7-roleplay",
+            title: "\"Seller Interview\" — Partner Roleplay",
+            duration: "25 min",
+            type: "roleplay",
+            description: "Partner roleplay with secret seller profiles. Uncover all 4 pillars through conversation.",
+            heroImage: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=1200&h=600&fit=crop&q=80",
+            content: [
+              { type: "heading", level: 1, text: "Seller Interview — Partner Roleplay" },
+              { type: "paragraph", text: "Your partner receives a secret seller profile card with motivation, timeline, condition, and price details. They won't volunteer anything — you must uncover each pillar through your questions." },
+              { type: "stats", items: [
+                { value: "4", label: "Secret Profiles", icon: "🃏" },
+                { value: "4", label: "Pillars to Uncover", icon: "🏛️" },
+                { value: "25 min", label: "Total Session", icon: "⏱️" }
+              ] },
+              { type: "divider" },
+              { type: "heading", level: 2, text: "Rules of Engagement" },
+              { type: "list", style: "numbered", items: [
+                "The \"seller\" can only answer what's asked — they don't volunteer information",
+                "You must uncover all 4 pillars through conversation",
+                "Use natural follow-up questions, not an interrogation",
+                "Build rapport while you discover — don't just fire questions"
+              ] },
+              { type: "divider" },
+              { type: "heading", level: 2, text: "Secret Seller Profiles" },
+              { type: "highlight-box", title: "The Overwhelmed Inheritor", content: "Inherited property, lives in another state, doesn't know what to do with it. Emotional attachment but no practical use.", color: "purple" },
+              { type: "highlight-box", title: "The Tired Landlord", content: "Owns a rental property, tenants destroyed it, completely tired of property management. Ready to walk away.", color: "amber" },
+              { type: "highlight-box", title: "The Desperate Divorcee", content: "Going through a divorce, need to sell fast and split proceeds. High urgency, emotional situation.", color: "red" },
+              { type: "highlight-box", title: "The Skeptical Retiree", content: "Owns the property free and clear, considering downsizing. Cautious, not in a rush, protective of their equity.", color: "blue" },
+              { type: "divider" },
+              { type: "heading", level: 2, text: "After Each Round — Debrief" },
+              { type: "list", style: "check", items: [
+                "Did you uncover all 4 pillars?",
+                "Which pillar was hardest to uncover? Why?",
+                "How natural did the conversation feel?",
+                "Did you build rapport or did it feel like an interrogation?"
+              ] },
+              { type: "callout", style: "key-takeaway", content: "Independent Assignment: Create 10 discovery questions for a provided seller profile and submit to your trainer." }
+            ] as RichContentBlock[],
+            meetingNote: "Partner roleplays happen during the training meeting. Your trainer assigns profile cards.",
+            requiresConfirmation: true,
+            confirmationText: "I confirm that I have completed the Seller Interview roleplay session.",
+          },
+        ],
+      },
+
+      // ─── Day 9: Asking Price, Lead Temperature & Handoff ───
+      {
+        id: "w2d8",
+        day: 8,
+        title: "Asking Price & The Handoff",
+        description:
+          "Capture a number without reacting to it, grade the lead honestly, and pass it up with everything acquisitions needs. This is where the cold caller's job ends.",
+        objectives: [
+          "Ask for a price without countering, reacting or negotiating",
+          "Hold silence after the question",
+          "Grade a lead cold, warm or hot against real criteria",
+          "Write a handoff an acquisitions manager can act on",
+        ],
+        lessons: [
+          {
+            id: "w2d8-price",
+            title: "Ask, Then Say Nothing",
+            duration: "20 min",
+            type: "slides",
+            description: "The three rules on price, and why the hardest part is what you do after they answer.",
+            heroImage: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1200&h=600&fit=crop&q=80",
+            content: [
+              { type: "heading", level: 1, text: "The Price Question" },
+              { type: "paragraph", text: "You need a number from the seller. You are not going to negotiate it, improve it, or react to it. Those are the acquisitions manager's job, and doing any of them here costs them room they can't get back." },
+              { type: "quote", text: "What sort of number did you have in your head for the place?" },
+              { type: "divider" },
+              { type: "heading", level: 2, text: "Three rules, no exceptions" },
+              { type: "list", style: "number", items: [
+                "Never counter. Whatever they say, you write it down.",
+                "Never react. Not a wince, not a laugh, not \"wow\". They can hear every one of those.",
+                "Never give a number first. Not a range, not a ballpark, not \"somewhere in the low 200s\"."
+              ] },
+              { type: "callout", style: "warning", title: "What a reaction costs", content: "A seller who hears surprise in your voice learns their number is wrong before anyone has made them an offer. They either dig in to defend it or lose confidence in the whole conversation. Either way the acquisitions manager inherits a harder call." },
+              { type: "divider" },
+              { type: "heading", level: 2, text: "Then stop talking" },
+              { type: "paragraph", text: "Ask the question and go silent. Most people cannot tolerate four seconds of silence on a phone call and will fill it — often by revising their own number downward, or by explaining how they arrived at it, which tells you more than the figure did." },
+              { type: "callout", style: "key-takeaway", title: "Whoever speaks first", content: "If you fill that silence, you have just negotiated against yourself on behalf of a company that hasn't made an offer yet. Count to four in your head if you have to." },
+              { type: "heading", level: 2, text: "If they won't give one" },
+              { type: "paragraph", text: "Plenty of sellers turn it back on you. That's fine, and there's one answer:" },
+              { type: "quote", text: "That's what the specialist works out — it depends on the condition and what's sold nearby recently. I just want to know roughly where your head's at so I'm not wasting your time." },
+              { type: "highlight-box", title: "No number is still data", content: "\"Wouldn't give a figure, said they'd listen to an offer\" is a perfectly good note. An invented one isn't.", color: "purple" }
+            ] as RichContentBlock[],
+          },
+          {
+            id: "w2d8-temperature",
+            title: "Grading the Lead — Flashcards",
+            duration: "12 min",
+            type: "exercise",
+            description: "Cold, warm, hot — and the discipline to mark a lead honestly when you'd rather look productive.",
+            heroImage: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&h=600&fit=crop&q=80",
+            content: [
+              { type: "heading", level: 1, text: "Grading the Lead" },
+              { type: "paragraph", text: "Every call ends with a grade. It decides whether an acquisitions manager rings them today, next month, or never — so grading generously to make your day look better wastes their time and eventually costs you their trust." },
+              { type: "flashcards", title: "The grades and the traps", cards: [
+                { term: "Cold", definition: "Curious, no timeline, no pressure to sell, often just wanted to know what it's worth. Real but not now.", inPractice: "Tag it, note the reason, move on. No follow-up scheduled." },
+                { term: "Warm", definition: "Open to an offer, some flexibility, but nothing forcing a decision. The largest category and the one most often over-graded.", inPractice: "Note what would have to change for them to move, and when to check back." },
+                { term: "Hot", definition: "A reason to sell, a timeline inside a few months, and a realistic sense of price. All three — not two.", inPractice: "Flag it to acquisitions the same day." },
+                { term: "The friendly cold lead", definition: "Pleasant, talkative, gave you every answer, has no intention of selling. Enjoyable calls are not warm leads, and this is the mistake almost everyone makes in their first fortnight.", inPractice: "Ask yourself what is actually pushing this sale. If nothing is, it's cold." },
+                { term: "The unrealistic hot lead", definition: "Real motivation, real timeline, and a price nowhere near reality. Still worth flagging — but say so in the note, so acquisitions arrives prepared.", inPractice: "Hot, but asking 320 against comps nearer 240." },
+                { term: "Why honesty pays you", definition: "Your grades get checked against what actually closes. A caller whose hot leads convert gets trusted, and trusted callers get the better lists.", inPractice: "Internal — grade for the deal, not for the day's numbers." }
+              ] },
+              { type: "highlight-box", title: "The whole point of Module 2", content: "You collect, you don't convince. Everything on this page is about handing someone else a true picture. Module 3 is where you learn to do something with it.", color: "purple" }
             ] as RichContentBlock[],
           },
           {
@@ -2545,47 +2925,41 @@ export const curriculum: Week[] = [
             ],
           },
           {
-            id: "w2d5-roleplay",
-            title: "\"Seller Interview\" — Partner Roleplay",
-            duration: "25 min",
-            type: "roleplay",
-            description: "Partner roleplay with secret seller profiles. Uncover all 4 pillars through conversation.",
-            heroImage: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=1200&h=600&fit=crop&q=80",
+            id: "w2d8-handoff",
+            title: "The Handoff",
+            duration: "18 min",
+            type: "exercise",
+            description: "Write a note an acquisitions manager can pick up cold and run with.",
+            heroImage: "https://images.unsplash.com/photo-1586281380117-5a60ae2050cc?w=1200&h=600&fit=crop&q=80",
             content: [
-              { type: "heading", level: 1, text: "Seller Interview — Partner Roleplay" },
-              { type: "paragraph", text: "Your partner receives a secret seller profile card with motivation, timeline, condition, and price details. They won't volunteer anything — you must uncover each pillar through your questions." },
-              { type: "stats", items: [
-                { value: "4", label: "Secret Profiles", icon: "🃏" },
-                { value: "4", label: "Pillars to Uncover", icon: "🏛️" },
-                { value: "25 min", label: "Total Session", icon: "⏱️" }
-              ] },
+              { type: "heading", level: 1, text: "The Handoff" },
+              { type: "paragraph", text: "Your call is over. Someone who has never spoken to this seller now has to ring them and sound like they already know the situation. Everything they need has to be in your note, and nothing that isn't true can be." },
               { type: "divider" },
-              { type: "heading", level: 2, text: "Rules of Engagement" },
-              { type: "list", style: "numbered", items: [
-                "The \"seller\" can only answer what's asked — they don't volunteer information",
-                "You must uncover all 4 pillars through conversation",
-                "Use natural follow-up questions, not an interrogation",
-                "Build rapport while you discover — don't just fire questions"
-              ] },
-              { type: "divider" },
-              { type: "heading", level: 2, text: "Secret Seller Profiles" },
-              { type: "highlight-box", title: "The Overwhelmed Inheritor", content: "Inherited property, lives in another state, doesn't know what to do with it. Emotional attachment but no practical use.", color: "purple" },
-              { type: "highlight-box", title: "The Tired Landlord", content: "Owns a rental property, tenants destroyed it, completely tired of property management. Ready to walk away.", color: "amber" },
-              { type: "highlight-box", title: "The Desperate Divorcee", content: "Going through a divorce, need to sell fast and split proceeds. High urgency, emotional situation.", color: "red" },
-              { type: "highlight-box", title: "The Skeptical Retiree", content: "Owns the property free and clear, considering downsizing. Cautious, not in a rush, protective of their equity.", color: "blue" },
-              { type: "divider" },
-              { type: "heading", level: 2, text: "After Each Round — Debrief" },
+              { type: "heading", level: 2, text: "What goes in, every time" },
               { type: "list", style: "check", items: [
-                "Did you uncover all 4 pillars?",
-                "Which pillar was hardest to uncover? Why?",
-                "How natural did the conversation feel?",
-                "Did you build rapport or did it feel like an interrogation?"
+                "Name, best number, and the address as the seller stated it",
+                "Why they're selling, in their words rather than your summary",
+                "Timeline, and whether it's firm or vague",
+                "Condition, including anything they flagged and anything they avoided",
+                "Their number, or a clear note that they wouldn't give one",
+                "Grade, with one line saying why you graded it that way"
               ] },
-              { type: "callout", style: "key-takeaway", content: "Independent Assignment: Create 10 discovery questions for a provided seller profile and submit to your trainer." }
+              { type: "divider" },
+              { type: "heading", level: 2, text: "Their words, not your conclusions" },
+              { type: "do-dont", dos: [
+                "\"Says the tenants left in March and he's been covering the mortgage since\"",
+                "\"Wouldn't give a number — said he'd listen to an offer\"",
+                "\"Went quiet when I asked why now. Didn't push.\""
+              ], donts: [
+                "\"Desperate seller, will take anything\"",
+                "\"Needs about 40k of work\"",
+                "\"Very motivated!!\""
+              ] },
+              { type: "callout", style: "pro-tip", title: "The test", content: "Read your note back and ask whether someone could ring this seller in twenty minutes and sound informed. If they'd have to ask something you already know, it's not finished." },
+              { type: "highlight-box", title: "End of Module 2", content: "That's the cold caller's job, start to finish. Module 3 picks the same lead up from the other side — and the rules change completely.", color: "purple" }
             ] as RichContentBlock[],
-            meetingNote: "Partner roleplays happen during the training meeting. Your trainer assigns profile cards.",
             requiresConfirmation: true,
-            confirmationText: "I confirm that I have completed the Seller Interview roleplay session.",
+            confirmationText: "I confirm that I completed a full handoff note and had it reviewed.",
           },
         ],
       },
@@ -2874,6 +3248,201 @@ export const curriculum: Week[] = [
       {
         id: "w3d2",
         day: 2,
+        title: "The Skills — Tactical Empathy",
+        description:
+          "Four techniques from hostage negotiation that work just as well on a seller who thinks you're a lowball investor. Labeling, the accusation audit, mirroring, and calibrated questions.",
+        objectives: [
+          "Label a seller's emotion out loud and let them correct you",
+          "Run an accusation audit before presenting a number",
+          "Use mirroring to keep someone talking without asking anything",
+          "Replace a demand with a calibrated question",
+        ],
+        lessons: [
+          {
+            id: "w3d2-intro",
+            title: "Why Any of This Works",
+            duration: "14 min",
+            type: "reading",
+            description: "Four techniques, one principle. Learn the principle and the techniques stop feeling like tricks.",
+            heroImage: "https://images.unsplash.com/photo-1521791136064-7986c2920216?w=1200&h=600&fit=crop&q=80",
+            content: [
+              { type: "heading", level: 1, text: "Tactical Empathy" },
+              { type: "paragraph", text: "Everything in this day comes from the same place: people stop resisting you once they believe you understand their position. Not agree with it — understand it. That is the whole mechanism, and the four techniques are just different ways of proving it out loud." },
+              { type: "callout", style: "key-takeaway", title: "The principle", content: "An emotion that has been named loses most of its force. An emotion you ignore runs the call." },
+              { type: "divider" },
+              { type: "heading", level: 2, text: "What you'll learn today" },
+              { type: "columns", columns: [
+                { title: "Labeling", content: "Say what they're feeling before they have to.", icon: "🏷️" },
+                { title: "Accusation audit", content: "Voice their objection yourself, first.", icon: "📋" },
+                { title: "Mirroring", content: "Repeat their last words. They keep talking.", icon: "🪞" },
+                { title: "Calibrated questions", content: "\"How\" and \"what\" instead of a demand.", icon: "❓" }
+              ] },
+              { type: "paragraph", text: "Module 2 was about collecting information honestly. This is different work — this is what you use when someone is annoyed, suspicious, dug in on a number, or about to hang up. Which, on a real desk, is most of the interesting calls." },
+              { type: "highlight-box", title: "A warning worth reading twice", content: "Used as tricks, all four of these fail, and they fail loudly — people can hear a technique being run on them. Used because you actually want to understand what the person on the other end is dealing with, they work almost every time. Same words, different outcome.", color: "purple" }
+            ] as RichContentBlock[],
+          },
+          {
+            id: "w3d2-labeling",
+            title: "Labeling — Say What They Feel",
+            duration: "25 min",
+            type: "slides",
+            description: "\"It seems like this house has been a headache for you.\" Why that one sentence changes a call.",
+            heroImage: "https://images.unsplash.com/photo-1573164713988-8665fc963095?w=1200&h=600&fit=crop&q=80",
+            content: [
+              { type: "heading", level: 1, text: "Labeling" },
+              { type: "paragraph", text: "A label is you saying out loud what you think the other person is feeling, and then stopping. That's it. It sounds too simple to matter, and it is the single most useful thing on this page." },
+              { type: "paragraph", text: "Labels start with a handful of openings — \"it seems like\", \"it sounds like\", \"it looks like\" — and never with \"I\". The moment you say \"I think you're frustrated\", it becomes about you and they argue. \"It seems like this has been frustrating\" is something they can agree with, correct, or expand on, and all three of those are useful to you." },
+              { type: "callout", style: "key-takeaway", title: "Then say nothing", content: "A label works in the silence after it. If you label and immediately keep talking, you've just made an observation. If you label and wait, they explain — and what they explain is usually the thing you needed." },
+              { type: "divider" },
+              { type: "heading", level: 2, text: "The frustrated seller" },
+              { type: "paragraph", text: "The deck below has the one worked example you should study before your next live call: a seller who has had three lowball offers and says so, and what a labelled response does to that conversation versus a defensive one." },
+              { type: "paragraph", text: "The short version — you don't defend your industry, your company or the offers they've had. You name where they are. They go from arguing with you to telling you things." },
+              { type: "do-dont", dos: [
+                "\"It seems like you've been messed around on this already.\"",
+                "\"It sounds like the number matters more than the timing.\"",
+                "\"It looks like you'd rather hold it than take a bad deal.\"",
+                "Getting a label wrong, then letting them correct you — that's a win too"
+              ], donts: [
+                "\"I understand how you feel.\" — proves nothing, and they've heard it",
+                "\"I think you're being unreasonable.\"",
+                "Labelling, then filling the silence yourself",
+                "Taking their anger personally and getting cold"
+              ] },
+              { type: "callout", style: "warning", title: "When you can't turn it around", content: "Some calls don't recover, and the deck is blunt about this: ending a hostile call graciously — leaving the door open rather than winning the argument — is worth more than the lead you lost, because sellers who told you no in March call back in September." },
+              { type: "highlight-box", title: "In the deck", content: "The full labeling framework, the opening phrases, four example labels built for seller calls, the frustration script worked line by line, and what not to do when someone is shouting.", color: "purple" }
+            ] as RichContentBlock[],
+            downloadFile: "negotiation-techniques.pptx",
+          },
+          {
+            id: "w3d2-audit",
+            title: "The Accusation Audit",
+            duration: "25 min",
+            type: "slides",
+            description: "Say the worst thing they're thinking about you — before they do. The most counterintuitive technique in the programme.",
+            heroImage: "https://images.unsplash.com/photo-1554224154-26032ffc0d07?w=1200&h=600&fit=crop&q=80",
+            content: [
+              { type: "heading", level: 1, text: "The Accusation Audit" },
+              { type: "paragraph", text: "Before you present a number you know is below what they hoped for, you have two options. You can present it and defend it, or you can say the accusation yourself first and take its power away." },
+              { type: "paragraph", text: "The second one feels wrong. You are about to tell a seller that they are going to think you're another lowball investor, that you're embarrassed about your numbers, that they might hang up on you. Every instinct says this is handing them a weapon." },
+              { type: "callout", style: "key-takeaway", title: "Why it does the opposite", content: "Ever said \"I'm such an idiot\" after a mistake, and had someone immediately tell you you're not? That reflex is what the audit uses. When you beat yourself up, people stop wanting to — and often start reassuring you instead." },
+              { type: "divider" },
+              { type: "heading", level: 2, text: "Blame yourself, on purpose" },
+              { type: "paragraph", text: "The rule in the deck is one line: in an accusation audit, you blame yourself. Not the market, not your boss, not what the numbers say. Yourself. It defuses the objection before it's voiced and, more often than people expect, it lightens the whole call." },
+              { type: "paragraph", text: "The worked script in the deck is four sentences long and ends with a question that sounds almost absurd when you read it cold. It works. Read it, say it out loud, and notice what it does to your own tone — you cannot deliver that line aggressively." },
+              { type: "callout", style: "pro-tip", title: "Where it belongs", content: "Immediately before a number, and nowhere else. An audit at the top of a cold call is just strange. An audit thirty seconds before you say a figure is the difference between a seller who argues and a seller who asks how you got there." },
+              { type: "highlight-box", title: "In the deck", content: "What an accusation audit is, the self-disparagement reflex it relies on, the full four-line script for presenting a low offer, and the blame-yourself rule.", color: "purple" }
+            ] as RichContentBlock[],
+            downloadFile: "accusation-audit.pptx",
+          },
+          {
+            id: "w3d2-mirroring",
+            title: "Mirroring — Three Words and Silence",
+            duration: "16 min",
+            type: "reading",
+            description: "The laziest technique here, and the one that gets people talking fastest.",
+            heroImage: "https://images.unsplash.com/photo-1507208773393-40d9fc670acf?w=1200&h=600&fit=crop&q=80",
+            content: [
+              { type: "heading", level: 1, text: "Mirroring" },
+              { type: "paragraph", text: "Repeat the last one to three words the seller said, with a slight upward inflection, then stop. They will almost always expand on it. You have asked nothing, you have risked nothing, and you have moved the call forward." },
+              { type: "callout", style: "definition", title: "What it sounds like", content: "Seller: \"We've just had enough of dealing with it, honestly.\"  —  You: \"Had enough of dealing with it?\"  —  Seller: \"Yeah. The tenant left it in a state, there's a load of work and my wife wants nothing more to do with it.\"" },
+              { type: "paragraph", text: "Three words got you the tenant, the condition, and a second decision-maker. A direct question would have got you one answer, and it would have sounded like the next item on a list." },
+              { type: "divider" },
+              { type: "heading", level: 2, text: "The rules" },
+              { type: "list", style: "check", items: [
+                "One to three words. Mirror a whole sentence and you sound like you're mocking them.",
+                "Upward inflection, like a question, not flat like a repetition.",
+                "Then silence. The silence is doing the work, not the words.",
+                "Mirror the emotional word, not the factual one — \"a state?\" beats \"the tenant?\".",
+                "Twice in a call is plenty. Four times and they'll notice."
+              ] },
+              { type: "callout", style: "pro-tip", title: "Use it when you're lost", content: "Mirroring is what you reach for when you don't know what to ask next, when someone said something you don't understand, or when you need five seconds to think. It buys time and looks like attentiveness." },
+              { type: "highlight-box", title: "Pair it with labeling", content: "Mirror to get them talking. Label to show you heard it. Those two together will carry a difficult call further than any question you could prepare in advance.", color: "purple" }
+            ] as RichContentBlock[],
+          },
+          {
+            id: "w3d2-calibrated",
+            title: "Calibrated Questions",
+            duration: "25 min",
+            type: "slides",
+            description: "\"How am I supposed to do that?\" — handing the problem back without saying no.",
+            heroImage: "https://images.unsplash.com/photo-1512758017271-d7b84c2113f1?w=1200&h=600&fit=crop&q=80",
+            content: [
+              { type: "heading", level: 1, text: "Calibrated Questions" },
+              { type: "paragraph", text: "A calibrated question is a \"how\" or \"what\" question built to make the other person solve your problem for you. It replaces the word no, which starts arguments, with a question they have to think about." },
+              { type: "paragraph", text: "The classic is four words long: \"How am I supposed to do that?\" Said with curiosity it is not a refusal, not a complaint, and not a negotiation tactic they can push back on. It is a problem, politely handed over." },
+              { type: "divider" },
+              { type: "heading", level: 2, text: "The one you'll use this week" },
+              { type: "paragraph", text: "A seller who won't give you any detail and just says \"give me an offer\" is the most common wall a cold caller hits. The deck has the exact reply, and it is a calibrated question rather than an explanation of your process." },
+              { type: "paragraph", text: "Notice what it does: it doesn't argue that they should give you details, it makes the gap between what they want and what they've given you their problem to close. Most sellers start answering." },
+              { type: "callout", style: "key-takeaway", title: "Never \"why\"", content: "\"Why\" questions sound like accusations — \"why haven't you sold it?\", \"why do you want that much?\". Convert every one of them to a how or a what. Same information, none of the defensiveness." },
+              { type: "divider" },
+              { type: "heading", level: 2, text: "Tone is the whole thing" },
+              { type: "paragraph", text: "The deck closes on this and so does this lesson: a calibrated question asked from curiosity opens a conversation, and the identical words asked with an edge start a fight. If you are irritated when you ask \"how am I supposed to do that?\", they will hear it and you will have made things worse." },
+              { type: "highlight-box", title: "In the deck", content: "What calibrated questions are and why they shift the power in a conversation, how they're structured, the \"give me an offer\" reply in full, and the tone rule that decides whether any of it works.", color: "purple" }
+            ] as RichContentBlock[],
+            downloadFile: "calibrated-questions.pptx",
+          },
+          {
+            id: "w3d2-flashcards",
+            title: "Four Skills — Flashcards",
+            duration: "12 min",
+            type: "exercise",
+            description: "Drill the four until you can reach for the right one mid-call without thinking.",
+            heroImage: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=1200&h=600&fit=crop&q=80",
+            content: [
+              { type: "heading", level: 1, text: "Pick the Right Tool" },
+              { type: "paragraph", text: "Knowing four techniques is easy. Knowing which one a situation calls for, while someone is annoyed at you, is the skill. Each card gives you the technique, when to reach for it, and the words." },
+              { type: "flashcards", title: "The four, plus the traps", cards: [
+                { term: "Label", definition: "Name the emotion you think they're feeling, then stop talking. Starts with \"it seems like\" or \"it sounds like\", never \"I think\".", inPractice: "\"It seems like this house has really been a headache for you.\"" },
+                { term: "Accusation audit", definition: "Voice the objection they're about to make — about you — before they make it. Blame yourself, not the market. Goes immediately before a number.", inPractice: "\"You're going to think I'm another lowball investor. I'm honestly a bit embarrassed about my numbers...\"" },
+                { term: "Mirror", definition: "Repeat their last one to three words with an upward inflection, then silence. Gets them talking without you asking anything.", inPractice: "Seller: \"...enough of dealing with it.\"  You: \"Had enough of dealing with it?\"" },
+                { term: "Calibrated question", definition: "A \"how\" or \"what\" question that hands the problem back instead of saying no. Never \"why\" — that lands as an accusation.", inPractice: "\"How am I supposed to give you an accurate number without knowing the condition?\"" },
+                { term: "Trap: labeling then talking", definition: "A label only works in the silence that follows it. Fill that silence yourself and you've made a comment instead of opening a door.", inPractice: "Label. Count to three. Let them go first." },
+                { term: "Trap: the edge in your voice", definition: "All four of these fail when you're irritated, because the words are identical and the tone isn't. The seller hears the tone.", inPractice: "If you're annoyed, mirror — it's the only one that survives a bad mood." },
+                { term: "Trap: running the whole set", definition: "Using all four in one call is obvious and it reads as technique. Pick the one the moment needs.", inPractice: "Difficult seller: mirror, then label. That's usually enough." }
+              ] }
+            ] as RichContentBlock[],
+          },
+          {
+            id: "w3d2-roleplay",
+            title: "\"The Angry Seller\" — Partner Roleplay",
+            duration: "30 min",
+            type: "roleplay",
+            description: "Your trainer plays a seller who is genuinely annoyed. You have four tools and no script.",
+            heroImage: "https://images.unsplash.com/photo-1600880292089-90a7e086ee0c?w=1200&h=600&fit=crop&q=80",
+            content: [
+              { type: "heading", level: 1, text: "The Angry Seller" },
+              { type: "paragraph", text: "This one runs live in the session, and there is no script for it — that's the point. Your trainer plays a seller who is irritated for a reason you don't know yet, and your job is to find out what it is without defending yourself." },
+              { type: "divider" },
+              { type: "heading", level: 2, text: "The four openings you'll face" },
+              { type: "list", style: "number", items: [
+                "\"You're the fourth one of you people today.\"",
+                "\"The offers I've had so far were insulting, so don't waste my time.\"",
+                "\"How did you get this number?\"",
+                "\"Just give me an offer and stop asking me questions.\""
+              ] },
+              { type: "paragraph", text: "Each one has an obvious bad answer, and most people reach for it in the first two seconds. The bad answers are: apologising at length, defending the industry, explaining your data sources, and giving a number you have no business giving." },
+              { type: "divider" },
+              { type: "heading", level: 2, text: "Scored on" },
+              { type: "list", style: "check", items: [
+                "Did you label before you explained anything?",
+                "Did you stay silent after the label?",
+                "Did you convert at least one \"why\" into a how or a what?",
+                "If the call was unrecoverable, did you close it so they'd take your next one?",
+                "Did your voice stay level when they were rude?"
+              ] },
+              { type: "callout", style: "pro-tip", title: "The one that catches everyone", content: "Scenario four. The pull to just say a number is enormous, especially when they're annoyed and you want the call to go well. Hold the line — the calibrated question exists precisely for this moment." }
+            ] as RichContentBlock[],
+            meetingNote: "Live in the physical training session. Your trainer runs all four openings and escalates if you handle the first one too easily.",
+            requiresConfirmation: true,
+            confirmationText: "I confirm that I completed the Angry Seller roleplay and received feedback on all four scenarios.",
+          },
+        ],
+      },
+
+      {
+        id: "w3d3",
+        day: 3,
         title: "CRM Mastery — HubSpot",
         description:
           "Learn HubSpot CRM inside and out — import leads, manage pipelines, track activities, and build the documentation habits that get you placed with clients.",
@@ -2885,7 +3454,7 @@ export const curriculum: Week[] = [
         ],
         lessons: [
           {
-            id: "w3d2-intro",
+            id: "w3d3-intro",
             title: "Introduction to HubSpot CRM",
             duration: "20 min",
             type: "slides",
@@ -2939,7 +3508,7 @@ export const curriculum: Week[] = [
             meetingNote: "HubSpot walkthrough happens during the live training meeting.",
           },
           {
-            id: "w3d2-import",
+            id: "w3d3-import",
             title: "CSV Import Practice",
             duration: "15 min",
             type: "exercise",
@@ -2987,7 +3556,7 @@ export const curriculum: Week[] = [
             meetingNote: "CSV import is done together during the training session.",
           },
           {
-            id: "w3d2-practice",
+            id: "w3d3-practice",
             title: "CRM Practice — Update 10 Demo Leads",
             duration: "20 min",
             type: "exercise",
@@ -3019,7 +3588,7 @@ export const curriculum: Week[] = [
             meetingNote: "CRM practice is supervised during the training session.",
           },
           {
-            id: "w3d2-workbook",
+            id: "w3d3-workbook",
             title: "CRM Workbook",
             duration: "10 min",
             type: "exercise",
@@ -3050,7 +3619,7 @@ export const curriculum: Week[] = [
             ] as RichContentBlock[],
           },
           {
-            id: "w3d2-quiz",
+            id: "w3d3-quiz",
             title: "CRM Quiz",
             duration: "10 min",
             type: "quiz",
@@ -3068,7 +3637,7 @@ export const curriculum: Week[] = [
             ] as RichContentBlock[],
             quiz: [
               {
-                id: "w3d2-q1",
+                id: "w3d3-q1",
                 question: "After every call, you should:",
                 options: [
                   "Move to the next call immediately",
@@ -3080,7 +3649,7 @@ export const curriculum: Week[] = [
                 explanation: "Every call gets logged — no exceptions. Disposition, notes, and a follow-up task if needed.",
               },
               {
-                id: "w3d2-q2",
+                id: "w3d3-q2",
                 question: "A lead confirms ownership, expresses interest, and has a vacant property behind on taxes. What pipeline stage?",
                 options: [
                   "New Lead",
@@ -3092,7 +3661,7 @@ export const curriculum: Week[] = [
                 explanation: "Confirmed ownership + interest + motivation indicators = Qualified Lead. Flag it for the acquisitions team.",
               },
               {
-                id: "w3d2-q3",
+                id: "w3d3-q3",
                 question: "What's the most important reason to write detailed call notes?",
                 options: [
                   "To impress your manager",
@@ -3104,7 +3673,7 @@ export const curriculum: Week[] = [
                 explanation: "Your notes are the institutional memory. If someone else calls this lead tomorrow, they need to know exactly where the conversation left off.",
               },
               {
-                id: "w3d2-q4",
+                id: "w3d3-q4",
                 question: "When setting a callback task, the most important detail is:",
                 options: [
                   "The lead's email address",
@@ -3116,7 +3685,7 @@ export const curriculum: Week[] = [
                 explanation: "Always set specific day and time for callbacks. 'Follow up later' almost never happens.",
               },
               {
-                id: "w3d2-q5",
+                id: "w3d3-q5",
                 question: "A prospect firmly says 'Do not call me again.' You should:",
                 options: [
                   "Try one more time to change their mind",
@@ -3130,7 +3699,7 @@ export const curriculum: Week[] = [
             ],
           },
           {
-            id: "w3d2-confirm",
+            id: "w3d3-confirm",
             title: "CRM Session Confirmation",
             duration: "5 min",
             type: "confirmation",

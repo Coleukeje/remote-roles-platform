@@ -1302,6 +1302,7 @@ export const curriculum: Week[] = [
               ] },
               { type: "callout", style: "pro-tip", content: "Companies pay well for cold callers because each qualified lead can become a $10K–$30K deal. A skilled caller producing 2–5 leads per week is incredibly valuable." }
             ] as RichContentBlock[],
+            downloadFile: "re-introduction.pptx",
             meetingNote: "The slide deck is presented and discussed during the physical training session.",
             requiresConfirmation: true,
             confirmationText: "I confirm that I have reviewed the real estate investing slide deck with the team.",
@@ -1562,28 +1563,35 @@ export const curriculum: Week[] = [
             meetingNote: "The Build the Deal exercise is done as a group activity during the physical session.",
           },
           {
-            id: "w2d1-gpt-demo",
-            title: "GPT AI for Practice — Screen Share Demo",
-            duration: "10 min",
-            type: "video-upload",
-            description: "Your trainer shares their screen and shows you how to use the GPT AI tool for real estate role play practice.",
-            heroImage: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=1200&h=600&fit=crop&q=80",
+            id: "w2d1-sales-trainer-ai",
+            title: "Sales Trainer AI — Your Practice Partner",
+            duration: "15 min",
+            type: "reading",
+            description: "A Remote Roles training tool you can run anytime. Set it up once, then practise difficult calls on demand.",
+            heroImage: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1200&h=600&fit=crop&q=80",
             content: [
-              { type: "heading", level: 1, text: "GPT AI for Real Estate Practice" },
-              { type: "paragraph", text: "Your trainer shares their screen and demonstrates how to use the GPT AI role play tool specifically for real estate cold calling practice." },
+              { type: "heading", level: 1, text: "Sales Trainer AI" },
+              { type: "paragraph", text: "This is a Remote Roles training tool, built for you and added to the programme. It plays the seller so you can practise without burning a real lead — and unlike a classmate, it will be as difficult as you ask it to be, at two in the morning, as many times as you want." },
+              { type: "callout", style: "key-takeaway", title: "What it's actually for", content: "Generating situations you haven't met yet. An angry landlord, a grieving son, someone who has already had four calls this week. You can spin up a complicated scenario in seconds and run it until you stop fumbling it." },
               { type: "divider" },
-              { type: "heading", level: 2, text: "What You'll See" },
-              { type: "list", style: "check", items: [
-                "How to access the GPT model",
-                "How to set up a real estate cold calling scenario",
-                "A live demo of a role play session",
-                "How to get feedback on your performance",
-                "Tips for getting the most out of independent practice"
+              { type: "heading", level: 2, text: "Open it" },
+              { type: "paragraph", text: "https://chatgpt.com/g/g-6812824395448191bae198e3bcd81465-sales-trainer-ai-prompt" },
+              { type: "callout", style: "pro-tip", title: "Pin it so you never hunt for that link again", content: "Open the link while signed in to ChatGPT. On desktop, click the chat name at the top of the conversation and choose Keep in sidebar — it then sits in your left-hand sidebar permanently. On mobile, tap the three dots at the top right and choose Keep in sidebar. Do this once, today, in the session. People who skip it never come back to the tool." },
+              { type: "divider" },
+              { type: "heading", level: 2, text: "How to run a session" },
+              { type: "steps", items: [
+                { title: "Tell it who you are calling", description: "Give it the scenario — absentee landlord, inherited property, someone who has already said no once. The more specific you are, the more useful the practice." },
+                { title: "Run the call properly", description: "Use the real script. Don't skip the opening because you've typed it a hundred times — the opening is the part that breaks under pressure." },
+                { title: "Make it harder", description: "Ask it to be sceptical, rushed, or hostile. Practising on an easy seller teaches you nothing you'll need." },
+                { title: "Ask for feedback at the end", description: "It will tell you where you lost control of the call. Bring that to your trainer rather than only your wins." }
               ] },
-              { type: "callout", style: "pro-tip", content: "After the demo, role play with GPT AI and submit your feedback to your trainer. The more reps you get in, the more natural your calls will sound." },
-              { type: "highlight-box", title: "Assignment", content: "After watching the demo, complete at least one full role play session with the GPT AI tool. Focus on running through the full call anatomy you learned today — Opening, Reason, Discovery, Property, Timeline, Price, Next Step.", color: "green" }
+              { type: "divider" },
+              { type: "heading", level: 2, text: "If you're on a free ChatGPT account" },
+              { type: "paragraph", text: "Voice mode is not available on the free plan, so you can't speak to it the way you'd speak to a seller. That matters, because typing a good answer and saying one under pressure are different skills." },
+              { type: "callout", style: "warning", title: "The workaround", content: "Practise typed on your laptop to learn the structure, then say every answer out loud as you type it — do not practise silently. Many trainees find the mobile app easier for this, since talking to your phone feels closer to a real call. If you can afford the paid plan, voice mode is the single upgrade worth paying for on this programme." },
+              { type: "highlight-box", title: "This replaces nothing", content: "The AI does not know your market, your buyers or your trainer's standards. It is reps between sessions, not a substitute for them. Everything that counts still gets assessed live.", color: "purple" }
             ] as RichContentBlock[],
-            meetingNote: "Screen share demo happens during the physical training session.",
+            meetingNote: "Your trainer shares their screen and walks through a live session during the physical training.",
           },
           {
             id: "w2d1-recorded-calls",
@@ -1694,6 +1702,7 @@ export const curriculum: Week[] = [
               ] },
               { type: "callout", style: "pro-tip", content: "Most people are a blend of two types. Look for the dominant trait in the first 30 seconds of conversation — that's the one to adapt to first." }
             ] as RichContentBlock[],
+            downloadFile: "disc-personality-types.pptx",
           },
           {
             id: "w2d2-cheatsheet",
@@ -1753,35 +1762,45 @@ export const curriculum: Week[] = [
           },
           {
             id: "w2d2-youtube",
-            title: "Live Cold Call Analysis — YouTube",
-            duration: "20 min",
+            title: "The Four Types, From the Author",
+            duration: "35 min",
             type: "youtube",
-            description: "Watch real wholesaling cold calls on YouTube. Pause and identify the seller's DISC type. Break down what the caller did right and wrong.",
+            description: "Thomas Erikson on each of the four personality types — one video per colour, straight from the man who wrote the book.",
             heroImage: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=1200&h=600&fit=crop&q=80",
             content: [
-              { type: "heading", level: 1, text: "Live Cold Call Analysis" },
-              { type: "paragraph", text: "Watch real cold calling recordings and analyze them through the DISC lens. This is where theory meets reality — real calls are messy, unpredictable, and fast." },
+              { type: "heading", level: 1, text: "The Four Types, From the Author" },
+              { type: "paragraph", text: "Thomas Erikson wrote the book this framework comes from. Four videos, one per colour, in his own words — which is worth more than any summary of it, including ours." },
+              { type: "callout", style: "key-takeaway", title: "Watch these with one question running", content: "Which of these am I? You will read other people faster once you can see your own default, because the type you find most irritating is usually the one furthest from your own." },
               { type: "divider" },
-              { type: "heading", level: 2, text: "Active Watching Prompts" },
+              { type: "heading", level: 2, text: "While you watch" },
               { type: "list", style: "check", items: [
-                "Pause after the first 30 seconds — what DISC type is the seller?",
-                "Watch the caller's approach — did they adapt to the type?",
-                "Note what the caller did RIGHT",
-                "Note what the caller could have done BETTER",
-                "Identify the specific moment where the call either gained or lost momentum"
+                "Name someone you know who fits each type — it sticks far better than the label alone",
+                "Note the phrase that would annoy each type most",
+                "Work out which type you are, and which one you handle worst",
+                "Think about what each would do when a stranger calls about their house"
               ] },
-              { type: "callout", style: "key-takeaway", content: "The more real calls you watch, the faster you'll get at reading people. Pattern recognition is a skill — and it only develops through repetition." }
+              { type: "highlight-box", title: "Seven seconds", content: "That is roughly how long a seller takes to decide whether you are worth listening to. You will not have time to work out their type from scratch on the call — you need to recognise it, which is a different skill and comes only from hours like these.", color: "purple" }
             ] as RichContentBlock[],
             videos: [
               {
-                title: "Real Estate Wholesaling Cold Call — Motivated Seller",
-                url: "https://www.youtube.com/watch?v=eBGIQ7ZuuiU",
-                description: "Watch a real wholesaling cold call and identify the seller's personality type.",
+                title: "The Red Personality — Dominant",
+                url: "https://www.youtube.com/watch?v=QEbLvnIaeKE",
+                description: "Direct, impatient, decides fast. On a call they will cut you off and ask for the number — and that is not rudeness, it is the type.",
               },
               {
-                title: "House Flipping Cold Call — Live Recording",
-                url: "https://www.youtube.com/watch?v=2xLJe_BKYYE",
-                description: "Analyze a house flipping cold call — what DISC type is this seller?",
+                title: "The Yellow Personality — Influential",
+                url: "https://www.youtube.com/watch?v=7B-2albTQBk",
+                description: "Talkative, warm, easily sidetracked. The easiest to build rapport with and the hardest to keep on the question you asked.",
+              },
+              {
+                title: "The Green Personality — Stable",
+                url: "https://www.youtube.com/watch?v=LaLBR65N_Gs",
+                description: "Agreeable, cautious, hates being rushed. The polite yes that means nothing usually comes from here.",
+              },
+              {
+                title: "The Blue Personality — Compliant",
+                url: "https://www.youtube.com/watch?v=WkN7vVYFaEA",
+                description: "Precise, sceptical, wants detail. Guess a number with this one and you have lost them for good.",
               },
             ],
           },
@@ -2963,6 +2982,7 @@ export const curriculum: Week[] = [
               ] },
               { type: "callout", style: "pro-tip", content: "Treat your CRM like your professional reputation — because it is. When a client audits your work, they're looking at your CRM entries." }
             ] as RichContentBlock[],
+            downloadFile: "crm-fundamentals.pptx",
             meetingNote: "HubSpot walkthrough happens during the live training meeting.",
           },
           {

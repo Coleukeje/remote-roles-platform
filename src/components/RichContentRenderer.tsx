@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import type { RichContentBlock } from "@/data/curriculum";
 
 /* ═══════════════════════════════════════════════
@@ -499,6 +500,104 @@ function HighlightBoxBlock({
    Detects string (legacy) vs RichContentBlock[]
    ═══════════════════════════════════════════════ */
 
+/* ═══════════════════════════════════════════════
+   FLASHCARDS
+   ═══════════════════════════════════════════════ */
+function FlashcardsBlock({
+  title,
+  cards,
+}: {
+  title?: string;
+  cards: { term: string; definition: string; inPractice?: string }[];
+}) {
+  const [i, setI] = useState(0);
+  const [flipped, setFlipped] = useState(false);
+  const [seen, setSeen] = useState<Set<number>>(new Set([0]));
+
+  const card = cards[i];
+  if (!card) return null;
+
+  function go(next: number) {
+    const target = (next + cards.length) % cards.length;
+    setFlipped(false);
+    setI(target);
+    setSeen((prev) => new Set(prev).add(target));
+  }
+
+  return (
+    <div className="my-7">
+      <div className="flex items-baseline justify-between mb-3">
+        <p className="text-sm font-bold text-ink">{title ?? "Key terms"}</p>
+        <p className="text-xs text-muted tabular-nums">
+          {seen.size} of {cards.length} seen
+        </p>
+      </div>
+
+      {/* Card */}
+      <button
+        onClick={() => setFlipped((f) => !f)}
+        className="w-full text-left min-h-[190px] rounded-2xl border border-purple-200 bg-gradient-to-br from-purple-50 to-white p-6 flex flex-col justify-center transition-colors hover:border-purple-300"
+      >
+        {!flipped ? (
+          <>
+            <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-purple-500 mb-2">
+              Term {i + 1}
+            </p>
+            <p className="font-[family-name:var(--font-display)] text-2xl font-bold text-ink leading-tight">
+              {card.term}
+            </p>
+            <p className="text-xs text-muted mt-3">Tap to see what it means</p>
+          </>
+        ) : (
+          <>
+            <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-purple-500 mb-2">
+              {card.term}
+            </p>
+            <p className="text-[15px] text-ink leading-relaxed">{card.definition}</p>
+            {card.inPractice && (
+              <p className="mt-3 pt-3 border-t border-purple-200/70 text-[13px] text-purple-900 italic leading-relaxed">
+                On a call: &ldquo;{card.inPractice}&rdquo;
+              </p>
+            )}
+          </>
+        )}
+      </button>
+
+      {/* Controls */}
+      <div className="flex items-center justify-between mt-3">
+        <button
+          onClick={() => go(i - 1)}
+          className="text-xs font-semibold text-muted hover:text-purple-600 transition-colors px-2 py-1"
+        >
+          &larr; Previous
+        </button>
+
+        <div className="flex gap-1.5">
+          {cards.map((_, n) => (
+            <span
+              key={n}
+              className={`h-1.5 rounded-full transition-all ${
+                n === i
+                  ? "w-5 bg-purple-600"
+                  : seen.has(n)
+                    ? "w-1.5 bg-purple-300"
+                    : "w-1.5 bg-surface-dim"
+              }`}
+            />
+          ))}
+        </div>
+
+        <button
+          onClick={() => go(i + 1)}
+          className="text-xs font-bold text-purple-600 hover:text-purple-700 transition-colors px-2 py-1"
+        >
+          Next &rarr;
+        </button>
+      </div>
+    </div>
+  );
+}
+
 function RenderBlock({ block, index }: { block: RichContentBlock; index: number }) {
   switch (block.type) {
     case "heading":
@@ -557,6 +656,8 @@ function RenderBlock({ block, index }: { block: RichContentBlock; index: number 
           color={block.color}
         />
       );
+    case "flashcards":
+      return <FlashcardsBlock key={index} title={block.title} cards={block.cards} />;
     default:
       return null;
   }

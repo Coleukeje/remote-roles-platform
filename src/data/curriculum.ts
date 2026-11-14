@@ -68,6 +68,14 @@ export type RichContentBlock =
       title: string;
       content: string;
       color?: "purple" | "blue" | "green" | "amber" | "red";
+    }
+  | {
+      /** Terminology drill. Term on the front, meaning on the back, and
+       *  `inPractice` for what it sounds like on an actual call — jargon is
+       *  only useful once you can hear it in a sentence. */
+      type: "flashcards";
+      title?: string;
+      cards: { term: string; definition: string; inPractice?: string }[];
     };
 
 export type Lesson = {
@@ -1297,6 +1305,36 @@ export const curriculum: Week[] = [
             meetingNote: "The slide deck is presented and discussed during the physical training session.",
             requiresConfirmation: true,
             confirmationText: "I confirm that I have reviewed the real estate investing slide deck with the team.",
+          },
+          {
+            id: "w2d1-terms",
+            title: "The Language — Flashcards",
+            duration: "12 min",
+            type: "exercise",
+            description: "The twelve terms sellers and acquisitions managers will use on you. Drill them until none of them make you hesitate.",
+            heroImage: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=1200&h=600&fit=crop&q=80",
+            content: [
+              { type: "heading", level: 1, text: "Learn the Language First" },
+              { type: "paragraph", text: "You will be on a call with someone who has owned property for thirty years, or passing a lead to an acquisitions manager who talks in shorthand. Neither will slow down for you. Hesitating over a word is the fastest way to sound like someone who doesn't belong on the call." },
+              { type: "callout", style: "key-takeaway", title: "Knowing the word isn't the point", content: "Being able to use it without thinking is. Each card has the definition and what the term sounds like in an actual sentence — the second one matters more." },
+              { type: "flashcards", title: "The twelve you'll hear most", cards: [
+                { term: "ARV", definition: "After Repair Value — what the property would be worth once it's fixed up. Every offer is calculated backwards from this number.", inPractice: "ARV looks like about 240, so we're working back from there." },
+                { term: "As-is", definition: "Bought in its current condition, with no repairs asked of the seller. This is the core of what Remote Roles' buyers offer.", inPractice: "We buy as-is, so you don't fix anything and you don't clean anything." },
+                { term: "Motivation", definition: "The real reason someone is selling. Not the house, the situation behind it — divorce, relocation, inheritance, tired landlord. It decides whether a lead is worth anything.", inPractice: "What's got you thinking about selling?" },
+                { term: "Distressed property", definition: "A property needing significant work, or an owner under financial pressure. Often both. These are the leads acquisitions wants most.", inPractice: "Sounds like it needs a fair bit of work — tell me about the roof." },
+                { term: "Comps", definition: "Comparable sales — recently sold properties nearby, similar in size and condition, used to establish value.", inPractice: "The comps on that street are coming in around 190." },
+                { term: "Equity", definition: "The share of the property the owner actually owns — value minus what's still owed. No equity usually means no deal.", inPractice: "Do you still owe anything on it, or is it paid off?" },
+                { term: "Wholesaling", definition: "Putting a property under contract and assigning that contract to an end buyer for a fee, rather than buying it yourself. It's the model behind most of these calls.", inPractice: "Internal term — never say this one to a seller." },
+                { term: "Timeline", definition: "How soon the seller needs to be out. One of the four qualifying pillars, and often the clearest signal of real motivation.", inPractice: "If the number worked, how soon would you want to close?" },
+                { term: "FSBO", definition: "For Sale By Owner — listed by the owner without an agent. Pronounced \"fizz-bo\". Often means they've already tried and struggled to sell.", inPractice: "I saw it's for sale by owner — how's that been going?" },
+                { term: "Absentee owner", definition: "An owner who doesn't live at the property. Landlords, inherited properties, people who moved away. A strong lead category.", inPractice: "Are you living at the property, or is it rented out?" },
+                { term: "Lead temperature", definition: "How ready a seller is: cold is just curious, warm is open with some flexibility, hot wants to sell soon. It determines what you do with the record.", inPractice: "Internal term — cold gets tagged, hot gets flagged to acquisitions." },
+                { term: "Handoff", definition: "Passing a qualified lead to an acquisitions manager with the data they need. The end of the cold caller's job and the start of theirs.", inPractice: "One of our Home Buying Specialists will review this and follow up." }
+              ] },
+              { type: "divider" },
+              { type: "callout", style: "pro-tip", title: "How to drill these", content: "Go through once reading both sides. Then go again covering the definition and saying it out loud before you flip. The three marked \"internal term\" are the ones to be careful with — they belong in your notes and your handoff, never in the seller's ear." },
+              { type: "highlight-box", title: "Where this gets tested", content: "The fundamentals quiz later today assumes you know these, and your trainer will use them without explanation from Day 2 onward. Twelve minutes now saves you guessing for the rest of the module.", color: "purple" }
+            ] as RichContentBlock[],
           },
           {
             id: "w2d1-workbook",

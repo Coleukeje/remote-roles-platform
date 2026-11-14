@@ -1594,46 +1594,6 @@ export const curriculum: Week[] = [
             meetingNote: "Your trainer shares their screen and walks through a live session during the physical training.",
           },
           {
-            id: "w2d1-recorded-calls",
-            title: "Share & Review Recorded Calls",
-            duration: "15 min",
-            type: "video-upload",
-            description: "Share and review recorded calls from Module 1 practice. Learn from real examples.",
-            heroImage: "https://images.unsplash.com/photo-1590602847861-f357a9332bbc?w=1200&h=600&fit=crop&q=80",
-            content: [
-              { type: "heading", level: 1, text: "Share & Review Recorded Calls" },
-              { type: "paragraph", text: "The team shares recorded practice calls from Module 1 and reviews them together. Hearing real calls — even practice ones — and breaking them down as a team is one of the most effective learning tools." },
-              { type: "divider" },
-              { type: "heading", level: 2, text: "What to Listen For" },
-              { type: "list", style: "check", items: [
-                "Is the opener direct and confident?",
-                "How does the caller handle objections?",
-                "Is the tone warm and professional?",
-                "Does the caller set a firm appointment or callback?"
-              ] },
-              { type: "callout", style: "key-takeaway", content: "Learning from real calls accelerates your development faster than anything else. Listen critically, take notes, and apply what you hear to your own approach." }
-            ] as RichContentBlock[],
-            meetingNote: "Recorded calls are shared and reviewed during the training meeting.",
-          },
-        ],
-      },
-
-      // ─── Day 2: DISC Personality Types & Sales Communication ───
-      {
-        id: "w2d2",
-        day: 2,
-        title: "DISC Personality Types & Sales Communication",
-        description:
-          "Learn to read people over the phone using the DISC framework. Identify personality types and adapt your approach to close more deals.",
-        objectives: [
-          "Understand the four DISC personality types",
-          "Identify personality types from phone conversations",
-          "Adapt your communication style to each type",
-          "Practice with live role play scenarios",
-          "Analyze real cold calls for DISC types",
-        ],
-        lessons: [
-          {
             id: "w2d2-disc",
             title: "Read People. Close Deals. — DISC Framework",
             duration: "25 min",
@@ -1706,25 +1666,28 @@ export const curriculum: Week[] = [
           },
           {
             id: "w2d2-cheatsheet",
-            title: "DISC Quick-Reference Cheat Sheet",
-            duration: "5 min",
-            type: "download",
-            description: "Download the DISC cheat sheet — one card with all 4 types: spot, do, don't, and a go-to phrase for each.",
-            heroImage: "https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=1200&h=600&fit=crop&q=80",
+            title: "Read the Type — Flashcards",
+            duration: "10 min",
+            type: "exercise",
+            description: "Drill the four types until you can name one from the first few sentences of a call.",
+            heroImage: "https://images.unsplash.com/photo-1552581234-26160f608093?w=1200&h=600&fit=crop&q=80",
             content: [
-              { type: "heading", level: 1, text: "DISC Quick-Reference Cheat Sheet" },
-              { type: "paragraph", text: "Your quick-reference card for live calls. Print it and keep it visible at your desk while you practice." },
-              { type: "divider" },
-              { type: "columns", columns: [
-                { title: "D — Dominant", content: "Spot: Direct, impatient, fast talker. Do: Be brief, give options. Say: \"Here's the bottom line.\"", icon: "🔴" },
-                { title: "I — Influential", content: "Spot: Friendly, talkative, enthusiastic. Do: Be warm, let them talk. Say: \"Tell me more about that.\"", icon: "🟡" },
-                { title: "S — Steady", content: "Spot: Calm, patient, hesitant. Do: Build trust slowly. Say: \"No rush. Let me walk you through it.\"", icon: "🟢" },
-                { title: "C — Conscientious", content: "Spot: Detailed questions, skeptical, quiet. Do: Have facts ready. Say: \"Great question. Here are the numbers.\"", icon: "🔵" }
+              { type: "heading", level: 1, text: "Read the Type" },
+              { type: "paragraph", text: "Knowing the four types is easy. Naming one while a stranger is talking at you, in the first few sentences, before you've had time to think — that is the skill, and it only comes from drilling." },
+              { type: "callout", style: "key-takeaway", title: "Spot, then adjust", content: "Each card gives you what the type sounds like, what to do about it, and the one phrase that works. The phrase matters least. Spotting it fast matters most." },
+              { type: "flashcards", title: "The four types", cards: [
+                { term: "D — Dominant (Red)", definition: "Direct, impatient, talks fast, interrupts. Wants the point and wants it now. Be brief, give options, skip the warm-up entirely — with this one, friendliness reads as time-wasting.", inPractice: "Here's the bottom line — we buy as-is and you pick the closing date." },
+                { term: "I — Influential (Yellow)", definition: "Friendly, talkative, enthusiastic, wanders off the question. Easiest to build rapport with and hardest to keep on track. Be warm, let them talk, then steer back.", inPractice: "Tell me more about that — and while I've got you, how many bedrooms is it?" },
+                { term: "S — Steady (Green)", definition: "Calm, patient, agreeable, hesitant to commit. Hates being rushed and will say yes to end an uncomfortable call. Build trust slowly and never press for a decision.", inPractice: "No rush at all. Let me walk you through how it works." },
+                { term: "C — Conscientious (Blue)", definition: "Precise, sceptical, quiet, asks detailed questions. Wants evidence, not enthusiasm. Have your facts ready and never guess a number — one invented figure and you've lost them.", inPractice: "Good question. I'd rather get you the exact figure than guess at it." },
+                { term: "The polite yes", definition: "An agreeable answer that means nothing. Almost always comes from a Green, who is agreeing to end the discomfort rather than because they want to sell.", inPractice: "Listen for warmth with no detail. Ask a question that needs a real answer." },
+                { term: "The type you'll handle worst", definition: "Usually the one furthest from your own. A Yellow caller tends to find Blues cold; a Red caller tends to steamroll Greens. Knowing your own default tells you which calls to prepare for.", inPractice: "Internal — work out your own type before you need to read someone else's." },
+                { term: "Seven seconds", definition: "Roughly how long a seller takes to decide whether you're worth listening to. You won't have time to reason your way to a type — you need to recognise it, which is a different skill.", inPractice: "Internal — this is why the drill matters more than the theory." }
               ] },
-              { type: "callout", style: "remember", content: "Use this cheat sheet during practice calls until you can identify types instinctively. The goal is to recognize someone's type within the first 30 seconds and adjust your approach without thinking about it." },
-              { type: "callout", style: "pro-tip", content: "Print this card and tape it next to your monitor. Glance at it during calls until the patterns become automatic." }
+              { type: "divider" },
+              { type: "callout", style: "pro-tip", title: "How to drill these", content: "Go through once reading both sides. Then cover the back and say the approach out loud before flipping. Finish by naming someone you actually know for each type — it sticks far better than the label on its own." },
+              { type: "highlight-box", title: "Where this gets used", content: "The role play scenarios later today have your trainer playing each of the four. You'll be expected to name the type and adjust without being told which one you're getting.", color: "purple" }
             ] as RichContentBlock[],
-            downloadFile: "disc-cheatsheet.pdf",
           },
           {
             id: "w2d2-roleplay",

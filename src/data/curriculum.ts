@@ -2671,6 +2671,7 @@ export const curriculum: Week[] = [
               { type: "callout", style: "warning", title: "DNC — Do Not Call", content: "When someone clearly says \"Do not call me again\" or \"Put me on your do-not-call list\" — respect it immediately. Mark it DNC in the CRM and move on. Pushing past a firm opt-out is unprofessional and potentially illegal." },
               { type: "callout", style: "pro-tip", content: "There are plenty of other leads. A firm opt-out is not a failure — it's a signal to redirect your energy to sellers who actually want help." }
             ] as RichContentBlock[],
+            downloadFile: "acquisitions-script.pdf",
           },
           {
             id: "w3d1-videos",
@@ -2694,18 +2695,7 @@ export const curriculum: Week[] = [
               ] },
               { type: "callout", style: "pro-tip", content: "Pay attention to tone and pacing, not just the words. How something is said matters as much as what is said." }
             ] as RichContentBlock[],
-            videos: [
-              {
-                title: "Ibibio with Idy — Objection Handling Scenarios",
-                url: "https://www.youtube.com/watch?v=eBGIQ7ZuuiU",
-                description: "Real-world objection handling scenarios — analyze the approach and identify what works.",
-              },
-              {
-                title: "Flip With Rick — Objection Roleplay",
-                url: "https://www.youtube.com/watch?v=2xLJe_BKYYE",
-                description: "Live objection roleplay — watch how a pro handles pushback in real time.",
-              },
-            ],
+
           },
           {
             id: "w3d1-flashcards",

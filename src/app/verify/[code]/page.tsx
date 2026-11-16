@@ -31,7 +31,7 @@ export default async function VerifyPage({
     <main className="flex min-h-screen items-center justify-center bg-surface px-5 py-16">
       <div className="w-full max-w-lg rounded-2xl border border-purple-100 bg-white p-8">
         <p className="text-xs font-medium uppercase tracking-[0.18em] text-purple-600">
-          Remote Roles · Certificate check
+          Remote Roles Hub · Certificate check
         </p>
 
         {valid ? (
@@ -41,7 +41,7 @@ export default async function VerifyPage({
             </div>
             <h1 className="mt-4 text-2xl font-semibold text-ink">{cert!.recipient_name}</h1>
             <p className="mt-2 text-muted">
-              completed the Remote Roles Remote Work and Real Estate Cold Calling Programme.
+              completed the Remote Roles Hub Remote Work and Real Estate Cold Calling Programme.
             </p>
             <dl className="mt-6 grid gap-3 border-t border-purple-100 pt-5 text-sm">
               <div className="flex justify-between gap-4">
@@ -74,7 +74,7 @@ export default async function VerifyPage({
             </div>
             <h1 className="mt-4 text-2xl font-semibold text-ink">This certificate was withdrawn</h1>
             <p className="mt-2 text-muted">
-              It was issued and has since been revoked by Remote Roles. Treat it as invalid.
+              It was issued and has since been revoked by Remote Roles Hub. Treat it as invalid.
             </p>
           </>
         ) : (
@@ -91,7 +91,7 @@ export default async function VerifyPage({
         )}
 
         <p className="mt-8 border-t border-purple-100 pt-5 text-xs text-muted">
-          Remote Roles ·{" "}
+          Remote Roles Hub ·{" "}
           <Link href="/" className="text-purple-600 hover:underline">
             remoteroles.online
           </Link>

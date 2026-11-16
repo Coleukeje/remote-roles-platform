@@ -87,17 +87,17 @@ export async function buildCertificatePdf(data: CertificateData): Promise<Uint8A
   const page = pdf.addPage([W, H]);
   const cx = W / 2;
 
-  pdf.setTitle(`Remote Roles — Certificate of Completion — ${data.recipientName}`);
-  pdf.setAuthor("Remote Roles");
+  pdf.setTitle(`Remote Roles Hub — Certificate of Completion — ${data.recipientName}`);
+  pdf.setAuthor("Remote Roles Hub");
   pdf.setSubject(`Certificate ${data.code}`);
-  pdf.setProducer("Remote Roles Training Platform");
+  pdf.setProducer("Remote Roles Hub");
 
   page.drawRectangle({ x: 0, y: 0, width: W, height: H, color: PAPER });
 
   // Deep ink spine down the left edge, with the wordmark running up it.
   const spine = 46;
   page.drawRectangle({ x: 0, y: 0, width: spine, height: H, color: INK });
-  page.drawText("REMOTE ROLES", {
+  page.drawText("REMOTE ROLES HUB", {
     x: spine / 2 + 5.5,
     y: 40,
     size: 9,
@@ -156,7 +156,7 @@ export async function buildCertificatePdf(data: CertificateData): Promise<Uint8A
 
   // Citation
   const lines = [
-    "has completed the Remote Roles Remote Work and Real Estate",
+    "has completed the Remote Roles Hub Remote Work and Real Estate",
     "Cold Calling Programme — sixteen days of training, assessment",
     "and live roleplay across telemarketing, seller discovery and acquisitions.",
   ];

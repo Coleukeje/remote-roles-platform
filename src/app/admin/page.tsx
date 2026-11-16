@@ -87,7 +87,20 @@ function getAllDownloads() {
   return downloads;
 }
 
-type Tab = "users" | "quizzes" | "roleplays" | "downloads" | "content";
+type Tab = "users" | "certificates" | "quizzes" | "roleplays" | "downloads" | "content";
+
+type CertificateRow = {
+  id: string;
+  user_id: string;
+  code: string;
+  recipient_name: string;
+  email: string;
+  status: "pending" | "approved" | "revoked";
+  lessons_completed: number | null;
+  lessons_total: number | null;
+  requested_at: string;
+  approved_at: string | null;
+};
 
 export default function AdminPage() {
   const [users, setUsers] = useState<UserProfile[]>([]);
@@ -105,6 +118,10 @@ export default function AdminPage() {
   const [inviteName, setInviteName] = useState("");
   const [inviteLoading, setInviteLoading] = useState(false);
   const [inviteResult, setInviteResult] = useState<{ success?: string; error?: string } | null>(null);
+
+  const [certificates, setCertificates] = useState<CertificateRow[]>([]);
+  const [certBusy, setCertBusy] = useState<string | null>(null);
+  const [certNote, setCertNote] = useState<string | null>(null);
 
   const quizzes = getAllQuizzes();
   const roleplays = getAllRolePlays();
@@ -126,9 +143,39 @@ export default function AdminPage() {
     }
   }, []);
 
+  const fetchCertificates = useCallback(async () => {
+    try {
+      const res = await fetch("/api/admin/certificates");
+      const data = await res.json();
+      if (res.ok) setCertificates(data.certificates || []);
+    } catch {
+      // the tab shows an empty state; no need to break the whole panel
+    }
+  }, []);
+
   useEffect(() => {
     fetchUsers();
-  }, [fetchUsers]);
+    fetchCertificates();
+  }, [fetchUsers, fetchCertificates]);
+
+  async function decideCertificate(certificateId: string, action: "approve" | "revoke") {
+    setCertBusy(certificateId);
+    setCertNote(null);
+    try {
+      const res = await fetch("/api/admin/certificates", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ certificateId, action }),
+      });
+      const data = await res.json();
+      setCertNote(data.message || data.error);
+      if (res.ok) await fetchCertificates();
+    } catch {
+      setCertNote("That didn't go through. Try again.");
+    } finally {
+      setCertBusy(null);
+    }
+  }
 
   async function toggleAccess(userId: string, newLevel: "free" | "full") {
     setToggling(userId);
@@ -186,6 +233,11 @@ export default function AdminPage() {
 
   const tabs: { id: Tab; label: string; count?: number }[] = [
     { id: "users", label: "Users", count: users.length },
+    {
+      id: "certificates",
+      label: "Certificates",
+      count: certificates.filter((c) => c.status === "pending").length,
+    },
     { id: "quizzes", label: "Quizzes", count: quizzes.length },
     { id: "roleplays", label: "Role Plays", count: roleplays.length },
     { id: "downloads", label: "Downloads", count: downloads.length },
@@ -579,6 +631,99 @@ export default function AdminPage() {
                 </div>
               </form>
             </div>
+          </div>
+        )}
+
+        {/* ─── Certificates Tab ─── */}
+        {activeTab === "certificates" && (
+          <div className="bg-white rounded-xl border border-surface-dim overflow-hidden">
+            <div className="px-5 py-4 border-b border-surface-dim">
+              <h2 className="font-semibold text-ink">Certificate requests</h2>
+              <p className="text-sm text-muted mt-1">
+                A trainee can only request one after completing every lesson. Approving
+                releases the PDF for download and makes the verification page public.
+              </p>
+              {certNote && <p className="text-sm text-purple-700 mt-2">{certNote}</p>}
+            </div>
+
+            {certificates.length === 0 ? (
+              <p className="px-5 py-10 text-sm text-muted text-center">
+                No requests yet.
+              </p>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead>
+                    <tr className="text-left text-xs uppercase tracking-wide text-muted border-b border-surface-dim">
+                      <th className="px-5 py-3 font-medium">Name</th>
+                      <th className="px-5 py-3 font-medium">Code</th>
+                      <th className="px-5 py-3 font-medium">Lessons</th>
+                      <th className="px-5 py-3 font-medium">Requested</th>
+                      <th className="px-5 py-3 font-medium">Status</th>
+                      <th className="px-5 py-3 font-medium text-right">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {certificates.map((c) => (
+                      <tr key={c.id} className="border-b border-surface-dim last:border-0">
+                        <td className="px-5 py-3">
+                          <div className="font-medium text-ink">{c.recipient_name}</div>
+                          <div className="text-xs text-muted">{c.email}</div>
+                        </td>
+                        <td className="px-5 py-3 font-mono text-xs text-muted">{c.code}</td>
+                        <td className="px-5 py-3 text-sm tabular-nums text-muted">
+                          {c.lessons_completed ?? "—"} / {c.lessons_total ?? "—"}
+                        </td>
+                        <td className="px-5 py-3 text-sm text-muted">
+                          {new Date(c.requested_at).toLocaleDateString("en-GB", {
+                            day: "numeric",
+                            month: "short",
+                            year: "numeric",
+                          })}
+                        </td>
+                        <td className="px-5 py-3">
+                          <span
+                            className={`inline-flex rounded-full px-2.5 py-1 text-xs font-medium ${
+                              c.status === "approved"
+                                ? "bg-green-50 text-green-700"
+                                : c.status === "revoked"
+                                  ? "bg-red-50 text-red-700"
+                                  : "bg-amber-50 text-amber-700"
+                            }`}
+                          >
+                            {c.status === "approved"
+                              ? "Approved"
+                              : c.status === "revoked"
+                                ? "Revoked"
+                                : "Pending"}
+                          </span>
+                        </td>
+                        <td className="px-5 py-3 text-right">
+                          {c.status === "pending" && (
+                            <button
+                              onClick={() => decideCertificate(c.id, "approve")}
+                              disabled={certBusy === c.id}
+                              className="rounded-lg bg-purple-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-purple-700 disabled:opacity-60"
+                            >
+                              {certBusy === c.id ? "Working…" : "Approve"}
+                            </button>
+                          )}
+                          {c.status === "approved" && (
+                            <button
+                              onClick={() => decideCertificate(c.id, "revoke")}
+                              disabled={certBusy === c.id}
+                              className="rounded-lg border border-surface-dim px-3 py-1.5 text-xs font-medium text-muted hover:text-ink disabled:opacity-60"
+                            >
+                              {certBusy === c.id ? "Working…" : "Revoke"}
+                            </button>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </div>
         )}
 

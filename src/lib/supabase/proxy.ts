@@ -6,8 +6,11 @@ import { NextResponse, type NextRequest } from "next/server";
  * The Paystack webhook is a server-to-server POST — it carries no cookie,
  * so redirecting it to /login would silently break every payment.
  * It authenticates itself with an HMAC signature instead.
+ *
+ * /verify is the certificate check an employer follows from a CV. Putting a
+ * login wall in front of it would defeat the point of printing the link.
  */
-const PUBLIC_PATHS = ["/api/paystack/webhook"];
+const PUBLIC_PATHS = ["/api/paystack/webhook", "/verify"];
 
 export async function updateSession(request: NextRequest) {
   if (PUBLIC_PATHS.some((p) => request.nextUrl.pathname.startsWith(p))) {

@@ -189,13 +189,20 @@ export default function Sidebar() {
         </div>
 
         {/* ─── Quick nav ─── */}
-        <div className={`rr-quick ${showAdminLink ? "rr-quick-2" : ""}`}>
+        <div className={`rr-quick ${showAdminLink ? "rr-quick-3" : "rr-quick-2"}`}>
           <Link
             href="/training"
             onClick={close}
             className={pathname === "/training" ? "on" : ""}
           >
             Dashboard
+          </Link>
+          <Link
+            href="/certificate"
+            onClick={close}
+            className={pathname === "/certificate" ? "on" : ""}
+          >
+            Certificate
           </Link>
           {showAdminLink && (
             <Link
@@ -396,6 +403,7 @@ const rrStyles = `
 
 .rr-quick{display:grid;grid-template-columns:1fr;gap:8px;margin:0 14px 12px}
 .rr-quick-2{grid-template-columns:1fr 1fr}
+.rr-quick-3{grid-template-columns:repeat(3,1fr)}
 .rr-quick a{text-align:center;font-size:11px;font-weight:700;padding:8px 0;border-radius:9px;
   background:var(--rr-ink-2);color:var(--rr-text-3);text-decoration:none;border:1px solid transparent;transition:color .15s,background .15s}
 .rr-quick a:hover{color:var(--rr-text-2)}

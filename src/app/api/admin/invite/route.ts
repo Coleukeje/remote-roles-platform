@@ -1,17 +1,14 @@
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { isAdmin } from "@/lib/access-control";
+import { getStaffUser } from "@/lib/staff";
 import { NextRequest } from "next/server";
 
 // POST: Invite a user by email — creates account with full access
 export async function POST(request: NextRequest) {
   try {
-    const supabase = await createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    const user = await getStaffUser();
 
-    if (!user || !isAdmin(user.email ?? null)) {
+    if (!user) {
       return Response.json({ error: "Unauthorized" }, { status: 403 });
     }
 
@@ -51,7 +48,8 @@ export async function POST(request: NextRequest) {
       // who was invited but never opened it in time would otherwise be
       // stuck: the account exists, so re-inviting fails, and they have no
       // password to sign in with.
-      const { error: linkError } = await supabase.auth.resetPasswordForEmail(
+      const anon = await createClient();
+      const { error: linkError } = await anon.auth.resetPasswordForEmail(
         email.toLowerCase(),
         { redirectTo: `${origin}/auth/callback?next=/reset-password` },
       );

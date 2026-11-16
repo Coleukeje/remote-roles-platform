@@ -1,17 +1,9 @@
-import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { isAdmin } from "@/lib/access-control";
+import { getStaffUser } from "@/lib/staff";
 import { checkEligibility } from "@/lib/certificates";
 import { NextRequest } from "next/server";
 
-async function requireAdmin() {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user || !isAdmin(user.email ?? null)) return null;
-  return user;
-}
+const requireAdmin = getStaffUser;
 
 /** GET — every certificate request, newest first, with the progress that
  *  earned it so an admin isn't approving blind. */

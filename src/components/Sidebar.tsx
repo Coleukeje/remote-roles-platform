@@ -7,7 +7,7 @@ import { useState, useMemo, useEffect } from "react";
 import { useMobileNav } from "./MobileNav";
 import { createClient } from "@/lib/supabase/client";
 import { signOut } from "@/app/actions/auth";
-import { isDayFree, isAdmin } from "@/lib/access-constants";
+import { isDayFree } from "@/lib/access-constants";
 import { useActiveLesson } from "./ActiveLesson";
 
 function ChevronIcon({ open }: { open: boolean }) {
@@ -65,7 +65,6 @@ export default function Sidebar() {
   const [userEmail, setUserEmail] = useState("");
   const [userInitial, setUserInitial] = useState("T");
   const [hasFullAccess, setHasFullAccess] = useState(true);
-  const [showAdminLink, setShowAdminLink] = useState(false);
   const [doneLessons, setDoneLessons] = useState<Set<string>>(new Set());
 
   useEffect(() => {
@@ -79,9 +78,6 @@ export default function Sidebar() {
       setUserEmail(user.email || "");
       setUserInitial(name.charAt(0).toUpperCase());
 
-      const admin = isAdmin(user.email ?? null);
-      setShowAdminLink(admin);
-
       // Which lessons are finished — drives every tick and the spine fill.
       const { data: rows } = await supabase
         .from("lesson_progress")
@@ -90,11 +86,6 @@ export default function Sidebar() {
         .eq("completed", true);
 
       if (rows) setDoneLessons(new Set(rows.map((r) => r.lesson_id)));
-
-      if (admin) {
-        setHasFullAccess(true);
-        return;
-      }
 
       const { data: profile } = await supabase
         .from("profiles")
@@ -189,7 +180,7 @@ export default function Sidebar() {
         </div>
 
         {/* ─── Quick nav ─── */}
-        <div className={`rr-quick ${showAdminLink ? "rr-quick-3" : "rr-quick-2"}`}>
+        <div className="rr-quick rr-quick-2">
           <Link
             href="/training"
             onClick={close}
@@ -204,15 +195,6 @@ export default function Sidebar() {
           >
             Certificate
           </Link>
-          {showAdminLink && (
-            <Link
-              href="/admin"
-              onClick={close}
-              className={pathname.startsWith("/admin") ? "on" : ""}
-            >
-              Admin
-            </Link>
-          )}
         </div>
 
         {/* ─── Curriculum ─── */}

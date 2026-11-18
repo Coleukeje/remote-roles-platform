@@ -2483,6 +2483,26 @@ export const curriculum: Week[] = [
             ] as RichContentBlock[],
           },
           {
+            id: "w2d5-video",
+            title: "Setting the Stage — Walkthrough",
+            duration: "15 min",
+            type: "youtube",
+            description: "The frame delivered properly, by someone who does it for a living.",
+            heroImage: "https://images.unsplash.com/photo-1590650153855-d9e808231d41?w=1200&h=600&fit=crop&q=80",
+            content: [
+              { type: "heading", level: 1, text: "Watch It Done" },
+              { type: "paragraph", text: "You have read what the frame is for. This is it spoken aloud, which is the only form that actually teaches you the pacing. Listen for where he slows down and where he does not ask permission." },
+              { type: "callout", style: "pro-tip", title: "Watch it twice", content: "First time for the words. Second time with the sound of your own delivery in mind — most people discover they are going about thirty percent too fast." },
+            ] as RichContentBlock[],
+            videos: [
+              {
+                title: "Setting the Stage",
+                url: "https://www.youtube.com/watch?v=Ep9vQo91cXg",
+                description: "How to open the call so the questions that follow stop feeling like an interrogation.",
+              },
+            ],
+          },
+          {
             id: "w2d5-practice",
             title: "Frame It in Thirty Seconds",
             duration: "25 min",
@@ -2558,6 +2578,26 @@ export const curriculum: Week[] = [
               ] },
               { type: "highlight-box", title: "When to stop", content: "If someone deflects the same question twice, they have answered it — the answer is no. Note it, move to the next question, and let the record say there was no clear motivation. A lead marked honestly is worth more than one talked up.", color: "purple" }
             ] as RichContentBlock[],
+          },
+          {
+            id: "w2d6-video",
+            title: "Advanced Questioning",
+            duration: "20 min",
+            type: "youtube",
+            description: "Questions that make the seller do the thinking, demonstrated rather than described.",
+            heroImage: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=1200&h=600&fit=crop&q=80",
+            content: [
+              { type: "heading", level: 1, text: "Advanced Questioning" },
+              { type: "paragraph", text: "The lesson before this gave you the shape of a Socratic question. Watching one land is different — you hear the pause the seller takes before answering, and that pause is the whole technique working." },
+              { type: "callout", style: "key-takeaway", title: "Count the pauses", content: "Every time the seller goes quiet before answering, note what was asked. Those are the questions worth stealing word for word." },
+            ] as RichContentBlock[],
+            videos: [
+              {
+                title: "Advanced Questioning",
+                url: "https://www.youtube.com/watch?v=XIMcMqxsElU",
+                description: "Going past the surface answer without the call turning into an interview.",
+              },
+            ],
           },
           {
             id: "w2d6-drill",
@@ -2921,6 +2961,27 @@ export const curriculum: Week[] = [
                 ],
                 correctIndex: 1,
                 explanation: "Financial pressure + deadline + foreclosure = highest motivation. This seller NEEDS to sell, not just wants to.",
+              },
+            ],
+          },
+          {
+            id: "w2d8-video",
+            title: "A Polite No Is Not a Yes",
+            duration: "18 min",
+            type: "youtube",
+            description: "The single most common grading mistake, and why friendly calls fool almost everyone in their first fortnight.",
+            heroImage: "https://images.unsplash.com/photo-1512428559087-560fa5ceab42?w=1200&h=600&fit=crop&q=80",
+            content: [
+              { type: "heading", level: 1, text: "A Polite No Is Not a Yes" },
+              { type: "paragraph", text: "The flashcards called this the friendly cold lead: pleasant, talkative, answered everything, has no intention of selling. It is the easiest call of your day and the one most likely to end up wrongly marked warm." },
+              { type: "paragraph", text: "Politeness is not interest. Someone being nice to you on the phone is being nice to you on the phone. What makes a lead warm is a reason and a timeline, and neither of those is a tone of voice." },
+              { type: "callout", style: "warning", title: "Why it matters to you specifically", content: "Your grades get checked against what actually closes. A caller whose warm leads go nowhere stops being trusted with the good lists, and that happens quietly — nobody tells you it is happening." },
+            ] as RichContentBlock[],
+            videos: [
+              {
+                title: "Don't Confuse a Polite No With a Hard Yes",
+                url: "https://www.youtube.com/watch?v=8d4_DvHD7PM",
+                description: "Reading what a seller actually means, rather than how they sounded while saying it.",
               },
             ],
           },

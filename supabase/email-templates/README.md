@@ -35,10 +35,16 @@ Supabase's address, slowly.
 `{{ .ConfirmationURL }}` is the link, `{{ .Email }}` is the recipient.
 Supabase fills both in. Don't rename them.
 
-## No images
+## The logo
 
-Both templates are text and colour only. Mail clients block remote images
-by default, so a logo would show as a broken box for most recipients the
-first time they open it. Once the domain is live you can swap the header
-wordmark for an `<img>` pointing at `https://remoteroles.online/brand/rr-logo.png`
-if you'd rather — just know roughly half of people won't see it.
+Both templates load the logo from
+`https://remoteroles.online/brand/rr-logo-email.png` — a 160px copy kept in
+`public/brand/` specifically for email, so nothing heavy is being pulled
+into an inbox.
+
+That URL only resolves once the site is deployed at that domain. Until
+then, point it at the Netlify address instead:
+`https://rrh-training.netlify.app/brand/rr-logo-email.png`
+
+Either way the email reads correctly with images off — mail clients block
+them by default, and the alt text carries the wordmark.

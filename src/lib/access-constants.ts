@@ -43,7 +43,7 @@ export function isAdmin(email: string | null): boolean {
   return ADMIN_EMAILS.includes(email.toLowerCase());
 }
 
-/** Payment amount in kobo (₦80,000 = 8,000,000 kobo) */
-export const PAYMENT_AMOUNT_KOBO = 8_000_000;
-export const PAYMENT_AMOUNT_NAIRA = 80_000;
+/** Payment amount in kobo (₦100,000 = 10,000,000 kobo) */
+export const PAYMENT_AMOUNT_KOBO = 10_000_000;
+export const PAYMENT_AMOUNT_NAIRA = 100_000;
 export const PAYMENT_CURRENCY = "NGN";

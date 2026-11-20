@@ -76,6 +76,15 @@ export type RichContentBlock =
       type: "flashcards";
       title?: string;
       cards: { term: string; definition: string; inPractice?: string }[];
+    }
+  | {
+      /** A plain two-or-more column table. For pairs that genuinely line up
+       *  — a metric and what it proves, a term and its equivalent — where a
+       *  bulleted list would lose the correspondence. */
+      type: "table";
+      title?: string;
+      headers: string[];
+      rows: string[][];
     };
 
 export type Lesson = {
@@ -3309,7 +3318,7 @@ export const curriculum: Week[] = [
       {
         id: "w3d2",
         day: 2,
-        title: "The Skills — Tactical Empathy",
+        title: "Skill Sets & Tactical Empathy",
         description:
           "Four techniques from hostage negotiation that work just as well on a seller who thinks you're a lowball investor. Labeling, the accusation audit, mirroring, and calibrated questions.",
         objectives: [
@@ -3785,6 +3794,501 @@ export const curriculum: Week[] = [
             ] as RichContentBlock[],
             requiresConfirmation: true,
             confirmationText: "I confirm that I have completed the HubSpot CRM training session and all practice exercises.",
+          },
+        ],
+      },
+
+      // ─── Day 4: CRM Mastery — Monday.com ───
+      {
+        id: "w3d4",
+        day: 4,
+        title: "CRM Mastery — Monday.com",
+        description:
+          "Half the small acquisitions shops you'll work for run their leads on Monday boards rather than a real CRM. Knowing why that is, and where it breaks, makes you useful in week one.",
+        objectives: [
+          "Explain why Monday is a work board rather than a CRM, and what follows from that",
+          "Build a lead board with the columns acquisitions actually needs",
+          "Set up the two automations that save a caller the most time",
+          "Move the same ten leads through Monday that you moved through HubSpot",
+        ],
+        lessons: [
+          {
+            id: "w3d4-intro",
+            title: "It Isn't Really a CRM",
+            duration: "16 min",
+            type: "reading",
+            description: "And that single fact explains everything that's good and everything that's fragile about it.",
+            heroImage: "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=1200&h=600&fit=crop&q=80",
+            content: [
+              { type: "heading", level: 1, text: "It Isn't Really a CRM" },
+              { type: "paragraph", text: "HubSpot was built to manage relationships with people who might buy something. Monday was built to manage work. Somebody somewhere decided a lead is a piece of work, dragged it onto a board, and a surprising number of small property companies now run their whole pipeline that way." },
+              { type: "callout", style: "key-takeaway", title: "The thing to understand", content: "Monday has no idea what a lead is. There's no Lead object, no pipeline logic, no built-in sense that a seller who went quiet three weeks ago needs chasing. There are only columns someone chose, and whatever meaning the team agreed to give them." },
+              { type: "divider" },
+              { type: "heading", level: 2, text: "Why companies use it anyway" },
+              { type: "columns", columns: [
+                { title: "It's already there", content: "The business runs its projects on Monday. Adding a lead board costs nothing and needs no new subscription.", icon: "💸" },
+                { title: "Anyone can change it", content: "A new column takes ten seconds. In Salesforce it takes an admin.", icon: "⚡" },
+                { title: "You can see everything", content: "The whole pipeline on one screen, colour-coded. Owners like that.", icon: "👁️" }
+              ] },
+              { type: "heading", level: 2, text: "Where it breaks, and why that's your job" },
+              { type: "paragraph", text: "Because nothing is enforced, a Monday board decays. Columns get added and never filled in. Two people use \"Hot\" to mean different things. A lead sits in a group nobody looks at. There is no system telling anyone this is happening." },
+              { type: "paragraph", text: "The caller who keeps the board honest — same words in the same columns, every call logged the same way — becomes the person the acquisitions manager trusts. On a board with no rules, discipline is the entire value you add." },
+              { type: "highlight-box", title: "What to say in an interview", content: "\"I've worked leads in HubSpot and on Monday boards. They're different jobs — Monday gives you no guard rails, so the notes discipline has to come from you.\" That sentence tells a hiring manager you've actually done it.", color: "purple" }
+            ] as RichContentBlock[],
+          },
+          {
+            id: "w3d4-board",
+            title: "Building the Lead Board",
+            duration: "22 min",
+            type: "slides",
+            description: "Groups as stages, columns as the data acquisitions needs. Six columns worth having, four everyone adds and never fills in.",
+            heroImage: "https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?w=1200&h=600&fit=crop&q=80",
+            content: [
+              { type: "heading", level: 1, text: "Building the Lead Board" },
+              { type: "paragraph", text: "A board is groups and columns. Groups are your stages, stacked down the page. Columns are everything you know about each lead. Get those two right and the board runs itself; get them wrong and you'll be fighting it daily." },
+              { type: "divider" },
+              { type: "heading", level: 2, text: "Groups — the stages" },
+              { type: "list", style: "number", items: [
+                "New — pulled from the list, never dialled",
+                "Attempted — dialled, no contact yet",
+                "Contacted — spoke to someone, qualification not finished",
+                "Qualified — the full discovery is done and graded",
+                "With Acquisitions — handed off, not yours any more",
+                "Dead — with a reason in the notes, always"
+              ] },
+              { type: "callout", style: "pro-tip", title: "Why Dead needs a reason", content: "A board full of dead leads with no reason is a board nobody can learn from. \"Wrong number\" and \"wants retail price\" are completely different outcomes, and in six months the split between them tells the owner which list to stop buying." },
+              { type: "divider" },
+              { type: "heading", level: 2, text: "The six columns worth having" },
+              { type: "columns", columns: [
+                { title: "Status", content: "Cold, warm, hot. The one everybody reads.", icon: "🌡️" },
+                { title: "Owner", content: "Which caller. Without it nobody chases anything.", icon: "👤" },
+                { title: "Last contact", content: "A date column. Powers every follow-up automation.", icon: "📅" }
+              ] },
+              { type: "columns", columns: [
+                { title: "Motivation", content: "Free text, in the seller's words. The field that earns you trust.", icon: "🔑" },
+                { title: "Asking price", content: "Numbers column, or blank if they wouldn't give one.", icon: "💷" },
+                { title: "Next step", content: "What happens next and when. Not a status — an action.", icon: "➡️" }
+              ] },
+              { type: "heading", level: 2, text: "The four that always rot" },
+              { type: "do-dont", dos: [
+                "Fewer columns, filled in every time",
+                "One free-text notes column that people actually use",
+                "A date column rather than a text column for anything time-based"
+              ], donts: [
+                "\"Lead score\" — nobody agrees what it means, so nobody sets it",
+                "\"Property type\" dropdowns with fourteen options",
+                "Duplicate phone-number columns, one from the list and one \"verified\"",
+                "\"Priority\" alongside Status — two fields for the same idea, both half-filled"
+              ] },
+              { type: "highlight-box", title: "The rule", content: "Every column must have a person whose job it is to fill it in. A column with no owner is a column that is empty within a fortnight.", color: "purple" }
+            ] as RichContentBlock[],
+          },
+          {
+            id: "w3d4-automations",
+            title: "Two Automations Worth Setting Up",
+            duration: "15 min",
+            type: "reading",
+            description: "Five minutes of setup that saves a caller an hour a week.",
+            heroImage: "https://images.unsplash.com/photo-1518186285589-2f7649de83e0?w=1200&h=600&fit=crop&q=80",
+            content: [
+              { type: "heading", level: 1, text: "Two Automations Worth Setting Up" },
+              { type: "paragraph", text: "Monday's automations are plain English sentences with blanks in them. You don't write code, you fill in a template. Most people never touch them, which is exactly why knowing two makes you look senior." },
+              { type: "divider" },
+              { type: "heading", level: 2, text: "One — the handoff" },
+              { type: "quote", text: "When Status changes to Hot, notify the acquisitions manager." },
+              { type: "paragraph", text: "Without it, a hot lead sits on a board waiting to be noticed. With it, the person who closes deals knows within seconds. This is the single highest-value automation on any lead board, and it takes about forty seconds to create." },
+              { type: "heading", level: 2, text: "Two — the follow-up" },
+              { type: "quote", text: "When Follow-up date arrives, notify the item's owner." },
+              { type: "paragraph", text: "The warm leads you never call back are where most money quietly leaks out of a pipeline. A caller who nurses warm leads properly is worth more than one who only chases new lists." },
+              { type: "callout", style: "warning", title: "Don't over-automate", content: "It's tempting to automate everything — move the item, change the colour, post an update, email the owner. Boards with twelve automations become boards nobody understands, and when something fires wrongly nobody can work out which rule did it. Two good ones beat ten clever ones." },
+              { type: "highlight-box", title: "Say this on the call", content: "\"I set up the hot-lead notification and the follow-up reminder on our Monday board.\" You've just described yourself as someone who improves a system rather than only working inside it.", color: "purple" }
+            ] as RichContentBlock[],
+          },
+          {
+            id: "w3d4-practice",
+            title: "Build It — The Same Ten Leads",
+            duration: "30 min",
+            type: "exercise",
+            description: "Rebuild the HubSpot exercise on a Monday board, so you feel the difference rather than read about it.",
+            heroImage: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1200&h=600&fit=crop&q=80",
+            content: [
+              { type: "heading", level: 1, text: "Build It Yourself" },
+              { type: "paragraph", text: "Monday's free plan is enough for this. Make an account, make a board, and put the same ten demo leads through it that you used on the HubSpot day." },
+              { type: "steps", items: [
+                { title: "Create the board", description: "Name it Seller Leads. Delete the sample items Monday gives you." },
+                { title: "Build the six groups", description: "New through Dead, in the order from the lesson." },
+                { title: "Add the six columns", description: "Status, Owner, Last contact, Motivation, Asking price, Next step. Resist adding a seventh." },
+                { title: "Enter the ten leads", description: "Same data as the HubSpot exercise. Notice what's harder and what's faster." },
+                { title: "Set both automations", description: "Hot-lead notification and follow-up reminder." },
+                { title: "Move three leads", description: "One to Qualified, one to With Acquisitions, one to Dead with a written reason." }
+              ] },
+              { type: "callout", style: "pro-tip", title: "Screenshot it", description: "", content: "Take a screenshot of the finished board. It goes in the portfolio you'll assemble on Day 6, and a real board you built beats any course certificate in an interview." },
+              { type: "highlight-box", title: "What you should notice", content: "Entering leads is faster in Monday. Finding anything later is slower. That trade is the whole story of running a pipeline on a work board, and being able to say it out loud is what this day was for.", color: "purple" }
+            ] as RichContentBlock[],
+            requiresConfirmation: true,
+            confirmationText: "I confirm that I built the Monday.com lead board with all ten demo leads and both automations.",
+          },
+          {
+            id: "w3d4-flashcards",
+            title: "Monday vs HubSpot — Flashcards",
+            duration: "10 min",
+            type: "exercise",
+            description: "Same ideas, different words. Know both and you can walk into either.",
+            heroImage: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=1200&h=600&fit=crop&q=80",
+            content: [
+              { type: "heading", level: 1, text: "Two Vocabularies, One Job" },
+              { type: "flashcards", title: "Translate between them", cards: [
+                { term: "Board", definition: "Monday's container for a set of work. The nearest thing to a HubSpot pipeline, except it enforces nothing.", inPractice: "\"Our seller leads live on one board.\"" },
+                { term: "Item", definition: "A single row. In a lead board, one item is one seller.", inPractice: "HubSpot would call it a contact or a deal." },
+                { term: "Group", definition: "A block of rows on a board, used as a stage. Dragging an item between groups is how a lead advances.", inPractice: "HubSpot's pipeline stage." },
+                { term: "Column", definition: "A field, with a type — status, date, number, text, person. The type matters: a date column can drive automations, a text column can't.", inPractice: "HubSpot's property." },
+                { term: "Automation", definition: "A fill-in-the-blank rule. When X happens, do Y.", inPractice: "HubSpot's workflow, with far less power and far less setup." },
+                { term: "The real difference", definition: "HubSpot knows what a lead is and will tell you when one is going stale. Monday will not. Everything that keeps a Monday board useful is a habit, not a feature.", inPractice: "Which is why your notes discipline is the product." }
+              ] }
+            ] as RichContentBlock[],
+          },
+        ],
+      },
+
+      // ─── Day 5: CRM Mastery — Salesforce ───
+      {
+        id: "w3d5",
+        day: 5,
+        title: "CRM Mastery — Salesforce",
+        description:
+          "The one that scares people. It isn't harder than HubSpot, it's older and more literal — and once the vocabulary clicks, the rest follows.",
+        objectives: [
+          "Explain the difference between a Lead, Contact, Account and Opportunity",
+          "Know what conversion does and when it should happen",
+          "Log calls and tasks the way a sales team expects",
+          "Build a working pipeline in your own free Salesforce instance",
+        ],
+        lessons: [
+          {
+            id: "w3d5-why",
+            title: "Why Salesforce Feels Hard",
+            duration: "14 min",
+            type: "reading",
+            description: "It isn't complexity. It's that nothing is called what you'd expect.",
+            heroImage: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&h=600&fit=crop&q=80",
+            content: [
+              { type: "heading", level: 1, text: "Why Salesforce Feels Hard" },
+              { type: "paragraph", text: "Salesforce runs a vast share of the world's sales teams, it has been doing it since before most software you use existed, and it shows. Everything is an object. Every object has a name chosen by someone in 2003. Nothing is where you'd guess." },
+              { type: "callout", style: "key-takeaway", title: "The good news", content: "The actual work is the same work. You call someone, you learn things, you write them down, you pass them on. Salesforce is just a strict building to do it in. Learn four words and the strictness stops being a problem." },
+              { type: "divider" },
+              { type: "heading", level: 2, text: "Why it's worth your time" },
+              { type: "paragraph", text: "Two reasons, both practical. The large property firms and most US companies that pay well for remote sales support run Salesforce — so it's the one that opens the better-paid doors. And almost nobody applying for an entry-level remote role can say they've used it, so saying it truthfully puts you in a very short queue." },
+              { type: "highlight-box", title: "What this day gives you", content: "By the end you'll have your own Salesforce instance with a working pipeline in it. Not a course certificate — an instance you can open on a call and show someone.", color: "purple" }
+            ] as RichContentBlock[],
+          },
+          {
+            id: "w3d5-objects",
+            title: "Lead, Contact, Account, Opportunity",
+            duration: "25 min",
+            type: "slides",
+            description: "The four words that confuse every new hire, and the one moment where they all connect.",
+            heroImage: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&h=600&fit=crop&q=80",
+            content: [
+              { type: "heading", level: 1, text: "The Four Words" },
+              { type: "paragraph", text: "This is the lesson a hiring manager is really testing when they ask whether you know Salesforce. Get these four right and you sound like someone who has used it. Get them wrong and no amount of enthusiasm covers it." },
+              { type: "divider" },
+              { type: "columns", columns: [
+                { title: "Lead", content: "An unqualified person. Someone you might do business with, not yet proven. Your cold list lands here.", icon: "🌱" },
+                { title: "Contact", content: "A real person at a real organisation, qualified and kept. A Lead becomes one when it converts.", icon: "👤" }
+              ] },
+              { type: "columns", columns: [
+                { title: "Account", content: "The organisation itself. In property it's often a company, a trust, or the household behind the deal.", icon: "🏢" },
+                { title: "Opportunity", content: "An actual potential deal with a value and a close date. This is what management counts.", icon: "💼" }
+              ] },
+              { type: "divider" },
+              { type: "heading", level: 2, text: "Conversion — the moment it all connects" },
+              { type: "paragraph", text: "When a Lead is qualified, you convert it. In one action Salesforce turns that single record into three: a Contact for the person, an Account for the organisation, and usually an Opportunity for the deal. The Lead record itself is closed and kept for history." },
+              { type: "callout", style: "warning", title: "Conversion is one-way", content: "You cannot un-convert a Lead through the normal interface. This is the mistake every new user makes in their first week — converting everything that answers the phone, because it feels like progress. Convert when the lead is genuinely qualified, not when it is merely friendly." },
+              { type: "heading", level: 2, text: "Where you fit" },
+              { type: "paragraph", text: "As a cold caller you live almost entirely in Leads. You work them, you qualify them, you write the notes. Conversion is usually the acquisitions manager's call, and the Opportunity is theirs to run." },
+              { type: "paragraph", text: "That boundary is exactly the one you learned in Module 2: you collect, they convince. Salesforce has it built into the software." },
+              { type: "highlight-box", title: "Say this and you sound experienced", content: "\"I worked the Lead object and left conversion to the acquisitions manager — my job was getting the qualification and the notes right before it became an Opportunity.\"", color: "purple" }
+            ] as RichContentBlock[],
+          },
+          {
+            id: "w3d5-logging",
+            title: "Logging Calls the Way a Team Expects",
+            duration: "18 min",
+            type: "reading",
+            description: "Activities, tasks and why your notes are the thing you're actually paid for.",
+            heroImage: "https://images.unsplash.com/photo-1586281380117-5a60ae2050cc?w=1200&h=600&fit=crop&q=80",
+            content: [
+              { type: "heading", level: 1, text: "Logging Properly" },
+              { type: "paragraph", text: "Every call, email and note attaches to a record as an Activity. A completed call is logged; a future one is a Task with a date. Done consistently, the record tells the next person the whole story without a conversation." },
+              { type: "divider" },
+              { type: "heading", level: 2, text: "After every call, three things" },
+              { type: "list", style: "number", items: [
+                "Log the call — what happened, in the seller's words where it matters",
+                "Update the Lead Status — so the list views stay honest",
+                "Create the next Task with a date — or the follow-up does not exist"
+              ] },
+              { type: "callout", style: "key-takeaway", title: "The third one is the one people skip", content: "\"I'll remember to call them back Thursday\" is how warm leads die. If it isn't a dated task, it isn't a follow-up — it's an intention." },
+              { type: "divider" },
+              { type: "heading", level: 2, text: "What a good log looks like" },
+              { type: "do-dont", dos: [
+                "\"Spoke 4 mins. Tenant left in March, covering mortgage since. Would take 240 for a quick close. Calling back Tues 2pm.\"",
+                "Their words for motivation, your words for facts",
+                "The next step, with a date"
+              ], donts: [
+                "\"Called, no answer\" when you actually spoke for five minutes",
+                "\"Good lead!!\"",
+                "Nothing at all, because you were going straight into the next dial"
+              ] },
+              { type: "highlight-box", title: "Why this is the lesson that gets you promoted", content: "Dials can be counted by a machine. Clean, honest, useful notes cannot, and they're what an acquisitions manager notices when deciding who to give the better list to.", color: "purple" }
+            ] as RichContentBlock[],
+          },
+          {
+            id: "w3d5-views",
+            title: "List Views and Reports",
+            duration: "16 min",
+            type: "reading",
+            description: "Enough to pull your own call list each morning without asking anyone.",
+            heroImage: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&h=600&fit=crop&q=80",
+            content: [
+              { type: "heading", level: 1, text: "Making Salesforce Work For You" },
+              { type: "paragraph", text: "Most new users wait to be handed a list. The ones who get noticed build their own, which in Salesforce means two features and about ten minutes of learning." },
+              { type: "divider" },
+              { type: "heading", level: 2, text: "List views" },
+              { type: "paragraph", text: "A saved filter on a single object. \"My leads, status Attempted, not contacted in 7 days\" is a list view, and it's your morning call list. Build three and you never wonder what to work on." },
+              { type: "list", style: "check", items: [
+                "My new leads — never dialled",
+                "My warm leads due a follow-up — dated this week or earlier",
+                "My qualified leads waiting on acquisitions — so nothing sits forgotten"
+              ] },
+              { type: "heading", level: 2, text: "Reports" },
+              { type: "paragraph", text: "The same idea with grouping and totals, and the place your own numbers come from. Leads by status, calls logged this week, conversion rate from contacted to qualified." },
+              { type: "callout", style: "pro-tip", title: "This feeds your CV directly", content: "The resume lesson on Day 6 asks for numbers — dials, conversations, qualified leads, appointments. A weekly report is where those numbers come from. Start pulling it in your first week of real work and you'll never have to guess at an interview." },
+              { type: "highlight-box", title: "The habit", content: "Friday afternoon, run your report, write the figures somewhere you keep. Six months of that is the difference between \"I did cold calling\" and a resume with evidence on it.", color: "purple" }
+            ] as RichContentBlock[],
+          },
+          {
+            id: "w3d5-practice",
+            title: "Build Your Own Instance",
+            duration: "35 min",
+            type: "exercise",
+            description: "Salesforce gives developer accounts away. Every trainee leaves this day with a real one.",
+            heroImage: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1200&h=600&fit=crop&q=80",
+            content: [
+              { type: "heading", level: 1, text: "Your Own Salesforce" },
+              { type: "paragraph", text: "A Developer Edition org is free, permanent, and a full Salesforce. You are about to own one. This is the single most valuable forty minutes in the module, because at the end of it you can say something almost nobody applying against you can say." },
+              { type: "steps", items: [
+                { title: "Sign up for a Developer org", description: "Search \"Salesforce Developer Edition signup\". It's free and doesn't ask for a card. Use an email you'll keep." },
+                { title: "Find the Leads tab", description: "Have a look around first. Nothing you do here can break anything." },
+                { title: "Create ten leads", description: "Same ten demo sellers from the HubSpot and Monday exercises." },
+                { title: "Work three of them", description: "Log a call on each, write a real note, set a dated follow-up task." },
+                { title: "Convert one", description: "Take a qualified lead through conversion and watch it become a Contact, an Account and an Opportunity. Do it once so the idea is concrete." },
+                { title: "Build a list view", description: "My leads, not contacted in 7 days. Save it." },
+                { title: "Run one report", description: "Leads grouped by status." }
+              ] },
+              { type: "callout", style: "warning", title: "Keep the login", content: "Save the username and password somewhere you'll still have in six months. People lose these and have to start again the week they get an interview." },
+              { type: "highlight-box", title: "What you've got now", content: "A live Salesforce instance with a worked pipeline in it. In an interview that's not a claim, it's a screen you can share — and it goes straight into the Day 6 portfolio.", color: "purple" }
+            ] as RichContentBlock[],
+            requiresConfirmation: true,
+            confirmationText: "I confirm that I created my own Salesforce Developer org, worked ten leads, converted one, and built a list view and a report.",
+          },
+          {
+            id: "w3d5-flashcards",
+            title: "Salesforce Vocabulary — Flashcards",
+            duration: "12 min",
+            type: "exercise",
+            description: "The words you'll be asked about, and the mistakes that give a beginner away.",
+            heroImage: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=1200&h=600&fit=crop&q=80",
+            content: [
+              { type: "heading", level: 1, text: "Know the Words" },
+              { type: "flashcards", title: "Salesforce, in the terms they'll use", cards: [
+                { term: "Lead", definition: "An unqualified person you might do business with. Where a cold caller spends almost all of their time.", inPractice: "Your purchased list imports as Leads." },
+                { term: "Contact", definition: "A qualified person, kept and linked to an Account. Created when a Lead converts.", inPractice: "A seller who's now genuinely in play." },
+                { term: "Account", definition: "The organisation or household behind the person.", inPractice: "The LLC that owns the property." },
+                { term: "Opportunity", definition: "A potential deal with a value and a close date. What management reports on.", inPractice: "Usually created at conversion and owned by acquisitions." },
+                { term: "Conversion", definition: "Turning a qualified Lead into a Contact, an Account and usually an Opportunity, in one action. One-way.", inPractice: "Don't convert friendly leads. Convert qualified ones." },
+                { term: "Activity", definition: "Anything that happened on a record — a logged call, an email, a note. Tasks are activities with a date in the future.", inPractice: "\"Log the call, set the task\" is the whole routine." },
+                { term: "List view", definition: "A saved filter on one object. Your morning call list.", inPractice: "My leads, Attempted, untouched 7 days." },
+                { term: "Object", definition: "A type of record. Lead, Contact, Account and Opportunity are all objects, and so is everything else in Salesforce.", inPractice: "Once this word stops being strange, Salesforce stops being strange." },
+                { term: "The beginner tell", definition: "Calling everything a \"contact\". In Salesforce, Lead and Contact are different records at different stages, and mixing them up is the fastest way to sound like you've only watched a video.", inPractice: "Use the right word even in casual conversation." }
+              ] }
+            ] as RichContentBlock[],
+          },
+        ],
+      },
+
+      // ─── Day 6: Getting Hired ───
+      {
+        id: "w3d6",
+        day: 6,
+        title: "Getting Hired",
+        description:
+          "Everything you've learned is worth nothing if nobody reads your application. What an ATS actually does, how to put this work on a resume, and the things that beat a resume entirely.",
+        objectives: [
+          "Explain what an applicant tracking system really does, and what it doesn't",
+          "Write real estate cold calling experience with evidence in it",
+          "Record a voice clip and a short video that make you impossible to ignore",
+          "Assemble a portfolio a hiring manager can check in two minutes",
+        ],
+        lessons: [
+          {
+            id: "w3d6-ats",
+            title: "What an ATS Actually Does",
+            duration: "22 min",
+            type: "slides",
+            description: "Almost everything you've been told about this is wrong, and believing it is costing people jobs.",
+            heroImage: "https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=1200&h=600&fit=crop&q=80",
+            content: [
+              { type: "heading", level: 1, text: "What an ATS Actually Does" },
+              { type: "paragraph", text: "You have probably been told that 75% of resumes are rejected by a robot before a human sees them. It is on every careers blog and in every other LinkedIn post. It is not true, and the hours people spend defending against it are hours taken from the thing that actually works." },
+              { type: "callout", style: "key-takeaway", title: "What the research found", content: "When recruiters were surveyed about their own systems, 92% said their ATS does not automatically reject anyone. The few that filter do it on hard requirements — work authorisation, a licence, a location — never on formatting or keywords. About two thirds of recruiters traced the myth to viral social posts; another fifth blamed the companies selling \"ATS-optimised\" templates." },
+              { type: "divider" },
+              { type: "heading", level: 2, text: "So what is it?" },
+              { type: "paragraph", text: "Greenhouse, Workday, Lever, Taleo, Ashby. They are databases. Your application goes in, gets parsed into fields, and waits there until a human searches or opens it. The ATS is a filing cabinet, not a bouncer on a door." },
+              { type: "heading", level: 2, text: "Then what is actually killing your applications?" },
+              { type: "paragraph", text: "Volume, and nothing else comes close." },
+              { type: "columns", columns: [
+                { title: "Entry-level roles", content: "Several hundred applicants is normal.", icon: "📥" },
+                { title: "Remote support roles", content: "Over a thousand within the first week.", icon: "🌊" },
+                { title: "Remote technical roles", content: "Past two thousand.", icon: "🏔️" }
+              ] },
+              { type: "paragraph", text: "Recruiters often stop reading, or take the job down entirely, once they have a strong early batch. Your resume is not being rejected. In most cases it is never reached." },
+              { type: "callout", style: "key-takeaway", title: "The finding that should change what you do", content: "More than half the recruiters surveyed said applying in the first two or three days meaningfully improves your chances of being seen. A good resume sent on day nine loses to an average one sent on day one. Speed beats polish." },
+              { type: "divider" },
+              { type: "heading", level: 2, text: "What to do instead of worrying" },
+              { type: "do-dont", dos: [
+                "Set job alerts and apply the day a role appears",
+                "Use the job ad's own words where they honestly describe what you did",
+                "Answer the knockout questions carefully — those are the only real automatic filters",
+                "One or two pages, short bullets, numbers in them"
+              ], donts: [
+                "Stuffing keywords in white text — a human reads it eventually and it ends your application",
+                "Paying for an \"ATS-optimised\" template",
+                "Rewriting your resume for the eleventh time instead of sending it",
+                "Applying three weeks after a role posted and wondering why nobody replied"
+              ] },
+              { type: "heading", level: 2, text: "Formatting — worth doing, not worth fearing" },
+              { type: "paragraph", text: "Parsing failures are rare, and a recruiter who hits one usually just opens the file and reads it. Still, these are free to avoid: two-column layouts, tables, text baked into an image, anything important in a header or footer, and design-tool exports where the text isn't selectable." },
+              { type: "highlight-box", title: "The fifteen-second test", content: "Open your PDF. Select all, copy, paste into a blank document. If it comes out as readable text in roughly the right order, every ATS on earth can read it. If it comes out scrambled or empty, fix it. That is the entire check, and it replaces everything else you've read about ATS formatting.", color: "purple" }
+            ] as RichContentBlock[],
+          },
+          {
+            id: "w3d6-resume",
+            title: "Putting This Work on a Resume",
+            duration: "28 min",
+            type: "slides",
+            description: "\"Cold caller\" reads like a call centre. What you actually did is worth far more than that.",
+            heroImage: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1200&h=600&fit=crop&q=80",
+            content: [
+              { type: "heading", level: 1, text: "Putting This Work on a Resume" },
+              { type: "paragraph", text: "The job you have been trained for is lead qualification for a real estate acquisitions pipeline. If you write \"cold caller\", a hiring manager pictures a call centre. Same work, completely different reaction." },
+              { type: "divider" },
+              { type: "heading", level: 2, text: "Numbers are the whole thing" },
+              { type: "paragraph", text: "This is the part nobody does, and it is why most applications for remote sales roles are interchangeable. A line with a number in it is evidence. A line without one is a claim, and everyone is making the same claims." },
+              { type: "table", headers: ["Track from day one", "What it proves"], rows: [
+                ["Dials per day", "Work rate"],
+                ["Conversations per day", "You get past the first ten seconds"],
+                ["Leads qualified per week", "Judgement, not just volume"],
+                ["Appointments set", "The number acquisitions managers care about"],
+                ["Contracts your leads produced", "Money. Use it the moment you have it."]
+              ] },
+              { type: "callout", style: "pro-tip", title: "Where these come from", content: "The Salesforce report you learned to run on Day 5. Pull it every Friday, write the figures down, and in six months your resume writes itself." },
+              { type: "divider" },
+              { type: "heading", level: 2, text: "The same job, written two ways" },
+              { type: "do-dont", dos: [
+                "Qualified 40+ seller leads a week from a 250-dial daily list; set 6–8 acquisitions appointments weekly and maintained handoff notes for a three-person acquisitions team",
+                "Ran seller discovery on inbound and outbound leads, grading each cold, warm or hot against motivation, timeline, condition and price",
+                "Kept the CRM clean enough that acquisitions could call a lead cold and sound informed"
+              ], donts: [
+                "Made cold calls to property owners and updated the CRM",
+                "Responsible for lead generation and data entry",
+                "Excellent communication skills and a strong work ethic"
+              ] },
+              { type: "heading", level: 2, text: "The tools line" },
+              { type: "paragraph", text: "One line near the top listing what you've actually touched — HubSpot, Monday.com, Salesforce, your dialer, PropStream. This is the one place where naming things plainly is exactly right, because a recruiter searching their database is searching for these words." },
+              { type: "divider" },
+              { type: "heading", level: 2, text: "When you haven't been paid for it yet" },
+              { type: "paragraph", text: "Most of you are here, and the answer is not to pad it. Describe the training honestly and let the certificate carry the weight." },
+              { type: "quote", text: "Remote Roles Hub — Remote Work & Real Estate Cold Calling Programme. Sixteen days of assessed training across telemarketing, seller discovery and acquisitions, including live roleplay assessment and CRM work in HubSpot, Monday.com and Salesforce. Certificate verifiable at remoteroles.online/verify." },
+              { type: "paragraph", text: "That last clause is doing real work. Every other candidate's training claim is unverifiable. Yours resolves to a page with your name on it." },
+              { type: "callout", style: "warning", title: "Never invent a number", content: "A hiring manager will ask about it on the call — \"walk me through a day where you hit 250 dials\" — and the follow-up question ends the interview for anyone who made it up. Real small numbers beat impressive fake ones, every time." },
+              { type: "highlight-box", title: "Your homework", content: "Rewrite your resume today, with the fifteen-second paste test done and at least three bullets carrying a number. You'll submit it at the end of this day.", color: "purple" }
+            ] as RichContentBlock[],
+          },
+          {
+            id: "w3d6-beyond",
+            title: "The Things That Beat a Resume",
+            duration: "24 min",
+            type: "video",
+            description: "A thousand people sent a document. You are being hired for your voice — so let them hear it.",
+            heroImage: "https://images.unsplash.com/photo-1598550476439-6847785fcea6?w=1200&h=600&fit=crop&q=80",
+            content: [
+              { type: "heading", level: 1, text: "The Things That Beat a Resume" },
+              { type: "paragraph", text: "A thousand people applied for that remote role. Every one of them sent a document, and not one of those documents tells the hiring manager what the candidate sounds like on a phone. For a job that is entirely phone work, that is an enormous gap — and it costs you about three minutes to fill." },
+              { type: "callout", style: "key-takeaway", title: "The whole idea", content: "They are hiring a voice. Give them the voice. Everything below is a way of letting someone hear or see you doing the job before they have decided whether to interview you." },
+              { type: "divider" },
+              { type: "heading", level: 2, text: "Watch this first" },
+              { type: "paragraph", text: "Seventy-five seconds, filmed at home on a laptop, no editing, no studio. Notice what is actually carrying it: she is clear, she is warm, she sounds like someone you would be happy to have call your sellers. That is the entire production budget." },
+              { type: "divider" },
+              { type: "heading", level: 2, text: "Vocaroo — the sixty-second voice clip" },
+              { type: "paragraph", text: "Free, no account, records in your browser, gives you a link. One minute of work." },
+              { type: "list", style: "number", items: [
+                "Who you are and what you do, in one sentence",
+                "Thirty seconds of a real opener — delivered, not read aloud",
+                "One line on why this role specifically"
+              ] },
+              { type: "paragraph", text: "Put the link in the application and at the top of the resume. On a cold calling role it is the single highest-leverage thing in the whole application." },
+              { type: "heading", level: 2, text: "Loom — the ninety-second screen video" },
+              { type: "paragraph", text: "Face and screen together. Use it to walk through the pipeline you built in your own Salesforce instance, or — far better — to show how you would handle the company's own lead flow." },
+              { type: "callout", style: "pro-tip", title: "The move that wins jobs", content: "Doing a small piece of the work before anyone has hired you. A ninety-second Loom saying \"here's how I'd structure your seller pipeline\" puts you in a category of roughly one." },
+              { type: "heading", level: 2, text: "The proof line" },
+              { type: "paragraph", text: "One line at the top of your resume, under your name:" },
+              { type: "quote", text: "Hear me: vocaroo.com/xxxxx · Certificate: remoteroles.online/verify/RR-2026-XXXXXX" },
+              { type: "do-dont", dos: [
+                "Record it three times and send the third",
+                "Somewhere quiet, with the mic close",
+                "Smile while you talk — it is audible",
+                "Test every link in a private window before you send it"
+              ], donts: [
+                "Five minutes of rambling",
+                "Reading audibly off a page",
+                "Background noise, generator hum, traffic",
+                "A dead link, which is worse than no link"
+              ] },
+              { type: "highlight-box", title: "Do it today", content: "Not after you've perfected the resume. The voice clip takes three minutes and it is worth more than the eleventh revision of a document nobody has opened yet.", color: "purple" }
+            ] as RichContentBlock[],
+            videos: [
+              {
+                title: "A real sixty-second intro, filmed at home",
+                url: "/examples/video-intro-example.mp4",
+                description: "No studio, no editing. Clear, warm, and she sounds like someone you'd trust with your sellers — which is the whole point.",
+              },
+            ],
+          },
+          {
+            id: "w3d6-portfolio",
+            title: "Your Portfolio — Final Submission",
+            duration: "30 min",
+            type: "exercise",
+            description: "Four links a hiring manager can check in two minutes. This is the last gate before your certificate.",
+            heroImage: "https://images.unsplash.com/photo-1586281380117-5a60ae2050cc?w=1200&h=600&fit=crop&q=80",
+            content: [
+              { type: "heading", level: 1, text: "Your Portfolio" },
+              { type: "paragraph", text: "Everything in this programme now has to turn into something a stranger can check quickly. Assemble these four and send them to your trainer." },
+              { type: "list", style: "check", items: [
+                "Your rewritten resume, with the paste test done and numbers in at least three bullets",
+                "A Vocaroo link — sixty seconds, your real opener",
+                "A Loom link — ninety seconds walking through a CRM pipeline you built",
+                "A screenshot of your Monday board or your Salesforce instance"
+              ] },
+              { type: "divider" },
+              { type: "heading", level: 2, text: "What your trainer is checking" },
+              { type: "paragraph", text: "Not polish. Whether a hiring manager opening these would believe you can do the job: does the resume carry evidence, does the voice clip sound like the phone calls you've been trained for, does the CRM work exist." },
+              { type: "callout", style: "warning", title: "Test your own links first", content: "Open every one in a private browsing window. A Loom set to \"only people I invite\" looks, from the other side, exactly like someone who couldn't be bothered to check." },
+              { type: "highlight-box", title: "Then you're done", content: "Once your trainer has reviewed this, you can request your certificate from the Certificate page — and the verification link on it is the last thing in this programme that keeps working for you long after you've finished it.", color: "purple" }
+            ] as RichContentBlock[],
+            meetingNote: "Submitted to your trainer for review. The certificate is released after this.",
+            requiresConfirmation: true,
+            confirmationText: "I confirm that I submitted my resume, Vocaroo link, Loom link and CRM screenshot to my trainer.",
           },
         ],
       },

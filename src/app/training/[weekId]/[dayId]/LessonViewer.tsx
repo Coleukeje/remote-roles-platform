@@ -373,6 +373,31 @@ function VideoCard({
   const [playing, setPlaying] = useState(false);
   const [thumbFailed, setThumbFailed] = useState(false);
   const videoId = getVideoId(video.url);
+  const isLocalFile = /\.(mp4|webm|mov)$/i.test(video.url);
+
+  // A file we host ourselves rather than a YouTube embed. Used for the
+  // short example clips, where sending trainees off-platform to watch a
+  // 75-second video is a worse experience than just playing it here.
+  if (!videoId && isLocalFile) {
+    return (
+      <div className="rounded-2xl border border-surface-dim bg-white overflow-hidden">
+        <video
+          controls
+          preload="metadata"
+          playsInline
+          src={video.url}
+          className="w-full bg-black"
+          style={{ maxHeight: "460px" }}
+        />
+        <div className="p-4">
+          <p className="text-sm font-bold text-ink">{video.title}</p>
+          {video.description && (
+            <p className="text-xs text-muted mt-1 leading-relaxed">{video.description}</p>
+          )}
+        </div>
+      </div>
+    );
+  }
 
   if (!videoId) {
     return (

@@ -656,6 +656,48 @@ function RenderBlock({ block, index }: { block: RichContentBlock; index: number 
           color={block.color}
         />
       );
+    case "table":
+      return (
+        <div key={index} className="my-6">
+          {block.title && (
+            <p className="text-sm font-bold text-ink mb-2">{block.title}</p>
+          )}
+          {/* Its own scroller so a wide table never widens the page on a phone */}
+          <div className="overflow-x-auto rounded-xl border border-surface-dim">
+            <table className="w-full border-collapse text-sm">
+              <thead>
+                <tr className="bg-surface">
+                  {block.headers.map((h, i) => (
+                    <th
+                      key={i}
+                      className="text-left text-[10px] font-bold uppercase tracking-wider text-muted px-4 py-2.5 border-b border-surface-dim"
+                    >
+                      {h}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {block.rows.map((row, ri) => (
+                  <tr key={ri} className="border-b border-surface-dim last:border-0">
+                    {row.map((cell, ci) => (
+                      <td
+                        key={ci}
+                        className={`px-4 py-2.5 align-top leading-relaxed ${
+                          ci === 0 ? "font-medium text-ink" : "text-muted"
+                        }`}
+                      >
+                        {cell}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      );
+
     case "flashcards":
       return <FlashcardsBlock key={index} title={block.title} cards={block.cards} />;
     default:

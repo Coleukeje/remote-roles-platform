@@ -15,7 +15,7 @@ const nunitoSans = Nunito_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Remote Roles — Training Academy",
+  title: "Remote Roles Hub — Training Academy",
   description:
     "Remote Roles onboarding and training platform for remote professionals.",
 };

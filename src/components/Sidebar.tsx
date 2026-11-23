@@ -7,7 +7,7 @@ import { useState, useMemo, useEffect } from "react";
 import { useMobileNav } from "./MobileNav";
 import { createClient } from "@/lib/supabase/client";
 import { signOut } from "@/app/actions/auth";
-import { isDayFree } from "@/lib/access-constants";
+import { isDayFree, MARKETING_SITE_URL, MARKETING_SITE_LABEL } from "@/lib/access-constants";
 import { useActiveLesson } from "./ActiveLesson";
 
 function ChevronIcon({ open }: { open: boolean }) {
@@ -333,6 +333,16 @@ export default function Sidebar() {
         </nav>
 
         {/* ─── Footer ─── */}
+        {/* Way back to the public site. Training is a separate app, so
+            there is otherwise no route out of it except the browser's
+            back button. */}
+        <a href={MARKETING_SITE_URL} className="rr-site">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+            <path d="m15 18-6-6 6-6" />
+          </svg>
+          Back to {MARKETING_SITE_LABEL}
+        </a>
+
         <div className="rr-foot">
           <span className="rr-av">{userInitial}</span>
           <span className="rr-foot-t">
@@ -447,6 +457,9 @@ const rrStyles = `
 .rr-l-d{flex:none;font-size:10px;color:#564C6B;font-variant-numeric:tabular-nums;margin-top:1px}
 .rr-lesson.here .rr-l-d{color:#C4B5FD}
 
+.rr-site{display:flex;align-items:center;gap:7px;margin:0 14px 10px;padding:9px 11px;border-radius:10px;
+  font-size:12px;color:var(--rr-text-3);text-decoration:none;border:1px solid var(--rr-line);transition:.15s}
+.rr-site:hover{color:var(--rr-text);background:var(--rr-ink-2)}
 .rr-foot{border-top:1px solid var(--rr-line);padding:12px 16px;display:flex;align-items:center;gap:10px}
 .rr-av{width:32px;height:32px;flex:none;border-radius:50%;background:linear-gradient(135deg,#A855F7,#6D28D9);
   display:grid;place-items:center;color:#fff;font-weight:700;font-size:12px;font-family:var(--font-display),sans-serif}

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { MARKETING_SITE_URL, MARKETING_SITE_LABEL } from "@/lib/access-constants";
 
 /**
  * Where a recovery or invite link lands once its session is established.
@@ -177,7 +178,16 @@ export default function ResetPasswordPage() {
 
 function Shell({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen bg-surface flex items-center justify-center p-4">
+    <div className="relative min-h-screen bg-surface flex items-center justify-center p-4">
+      <a
+        href={MARKETING_SITE_URL}
+        className="absolute left-6 top-6 inline-flex items-center gap-1.5 text-xs font-medium text-muted transition hover:text-ink"
+      >
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+          <path d="m15 18-6-6 6-6" />
+        </svg>
+        Back to {MARKETING_SITE_LABEL}
+      </a>
       <div className="w-full max-w-md bg-white border border-surface-dim rounded-2xl p-8 text-center">
         {children}
       </div>

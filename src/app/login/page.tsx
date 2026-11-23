@@ -2,6 +2,17 @@
 
 import { useState, useTransition } from "react";
 import { login, signup, signInWithGoogle, resetPassword } from "@/app/actions/auth";
+import { MARKETING_SITE_URL, MARKETING_SITE_LABEL } from "@/lib/access-constants";
+import { curriculum } from "@/data/curriculum";
+
+// Counted from the curriculum rather than typed in, so the sign-in page can
+// never again advertise a smaller programme than the one being sold.
+const MODULE_COUNT = curriculum.length;
+const DAY_COUNT = curriculum.reduce((n, w) => n + w.days.length, 0);
+const LESSON_COUNT = curriculum.reduce(
+  (n, w) => n + w.days.reduce((d, day) => d + day.lessons.length, 0),
+  0,
+);
 
 export default function LoginPage() {
   const [mode, setMode] = useState<"login" | "signup" | "forgot">("login");
@@ -94,22 +105,35 @@ export default function LoginPage() {
         {/* Stats */}
         <div className="relative z-10 flex gap-8">
           <div>
-            <p className="text-2xl font-bold text-white">3</p>
+            <p className="text-2xl font-bold text-white">{MODULE_COUNT}</p>
             <p className="text-xs text-purple-300/50 uppercase tracking-wider">Modules</p>
           </div>
           <div>
-            <p className="text-2xl font-bold text-white">12</p>
+            <p className="text-2xl font-bold text-white">{DAY_COUNT}</p>
             <p className="text-xs text-purple-300/50 uppercase tracking-wider">Days</p>
           </div>
           <div>
-            <p className="text-2xl font-bold text-white">50+</p>
+            <p className="text-2xl font-bold text-white">{LESSON_COUNT}</p>
             <p className="text-xs text-purple-300/50 uppercase tracking-wider">Lessons</p>
           </div>
         </div>
       </div>
 
       {/* ─── Right panel: form ─── */}
-      <div className="flex-1 flex items-center justify-center px-6 py-12 bg-surface">
+      <div className="relative flex-1 flex items-center justify-center px-6 py-12 bg-surface">
+        {/* Back to the public site. The training platform is a separate app
+            on a separate deploy, so without this a visitor who clicked
+            "Training" is stranded on a sign-in page with no way home. */}
+        <a
+          href={MARKETING_SITE_URL}
+          className="absolute left-6 top-6 inline-flex items-center gap-1.5 text-xs font-medium text-muted transition hover:text-ink"
+        >
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+            <path d="m15 18-6-6 6-6" />
+          </svg>
+          Back to {MARKETING_SITE_LABEL}
+        </a>
+
         <div className="w-full max-w-sm">
           {/* Mobile logo */}
           <div className="lg:hidden flex items-center gap-3 mb-10">

@@ -47,3 +47,16 @@ export function isAdmin(email: string | null): boolean {
 export const PAYMENT_AMOUNT_KOBO = 10_000_000;
 export const PAYMENT_AMOUNT_NAIRA = 100_000;
 export const PAYMENT_CURRENCY = "NGN";
+
+/**
+ * The public marketing site. The training platform is a separate app on a
+ * separate deploy, so a trainee who lands on the sign-in page has no way
+ * back unless we give them one.
+ *
+ * Override with NEXT_PUBLIC_SITE_URL if the marketing site moves.
+ */
+export const MARKETING_SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://remoteroles.online";
+
+/** What we show rather than the raw URL. */
+export const MARKETING_SITE_LABEL = "remoteroles.online";

@@ -56,7 +56,7 @@ export const PAYMENT_CURRENCY = "NGN";
  * Override with NEXT_PUBLIC_SITE_URL if the marketing site moves.
  */
 export const MARKETING_SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://remoteroles.online";
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://remoteroleshub.com";
 
 /** What we show rather than the raw URL. */
-export const MARKETING_SITE_LABEL = "remoteroles.online";
+export const MARKETING_SITE_LABEL = "remoteroleshub.com";
